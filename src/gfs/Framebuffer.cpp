@@ -37,3 +37,9 @@ void dan::Framebuffer::attachTexture(Texture &tex) {
 void dan::Framebuffer::bind() const {
     glBindFramebuffer(GL_FRAMEBUFFER, handle);
 }
+
+// Static member
+
+void dan::Framebuffer::bindDefault() {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}

@@ -19,6 +19,7 @@ namespace dan {
         void attachTexture(Texture &tex);
 
         void bind() const;
+        static void bindDefault();
     };
 }
 
