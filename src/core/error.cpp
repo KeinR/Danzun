@@ -3,19 +3,19 @@
 #include <stdexcept>
 #include <iostream>
 
-#include "opengl.h"
+#include "../lib/opengl.h"
 
-err::err(const std::string &location, bool severe): location(location), severe(severe) {
+dan::err::err(const std::string &location, bool severe): location(location), severe(severe) {
     *this << '@' << location << ": ";
 }
-err::~err() {
+dan::err::~err() {
     doRaise();
 }
-void err::doRaise() {
+void dan::err::doRaise() {
     raise(str(), severe);
 }
 
-void err::raise(const std::string &message, bool severe) {
+void dan::err::raise(const std::string &message, bool severe) {
     if (severe) {
         throw std::runtime_error("SEVERE: " + message);
     } else {
@@ -23,7 +23,7 @@ void err::raise(const std::string &message, bool severe) {
     }
 }
 
-const char *err::glErrStr(int err) {
+const char *dan::err::glErrStr(int err) {
     switch (err) {
         case GL_NO_ERROR: return "GL_NO_ERROR";
         case GL_INVALID_ENUM: return "GL_INVALID_ENUM";

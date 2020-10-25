@@ -2,7 +2,7 @@
 #define DANZUN_COLOR_H_INCLUDED
 
 namespace dan {
-    class Engine;
+    class Context;
 }
 
 namespace dan {
@@ -33,7 +33,8 @@ namespace dan {
 
         prop_t *get();
 
-        void load(const Engine &c, int channels = 4) const;
+        // NOTE: ATM loads all 4 channels!
+        void load(Context &c) const;
 
         Color brighten(float percent) const;
     };

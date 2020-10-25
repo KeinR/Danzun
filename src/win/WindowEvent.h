@@ -1,7 +1,7 @@
 #ifndef DANZUN_WINDOWEVENT_H_INCLUDED
 #define DANZUN_WINDOWEVENT_H_INCLUDED
 
-namespace ne {
+namespace dan {
     class WindowEvent {
     public:
         virtual ~WindowEvent() = 0;

@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-namespace eng {
+namespace dan {
     class err: public std::stringstream {
         bool severe;
         std::string location;

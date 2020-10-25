@@ -1,7 +1,7 @@
 #include "Framebuffer.h"
 
 #include "Texture.h"
-#include "opengl.h"
+#include "../lib/opengl.h"
 
 dan::Framebuffer::Framebuffer() {
     glGenFramebuffers(1, &handle);

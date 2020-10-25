@@ -1,7 +1,7 @@
 #ifndef NOREN_IMAGE_H_INCLUDED
 #define NOREN_IMAGE_H_INCLUDED
 
-namespace ne {
+namespace dan {
     class Image {
     public:
         virtual ~Image() = 0;

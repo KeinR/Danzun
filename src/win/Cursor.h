@@ -3,7 +3,7 @@
 
 struct GLFWcursor;
 
-namespace ne {
+namespace dan {
     class Cursor {
         GLFWcursor *handle;
         void steal(Cursor &other);

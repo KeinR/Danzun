@@ -2,10 +2,11 @@
 #define DANZUN_MATRIX_H_INCLUDED
 
 namespace dan {
-    class Engine;
+    class Context;
 }
 
 namespace dan {
+    /// @TODO: Getters and setters
     class Matrix {
     public:
         // [In screen coords]
@@ -13,7 +14,6 @@ namespace dan {
         // Translation
         float x;
         float y;
-        float z;
         // Scaling
         float width;
         float height;
@@ -23,9 +23,9 @@ namespace dan {
         float rotation;
 
         bool reflectAcrossYAxis;
+        Matrix(float x = 0.0f, float y = 0.0f, float width = 0.0f, float height = 0.0f, float rotation = 0.0f, bool reflectAcrossYAxis = false);
 
-        Matrix(float x = 0.0f, float y = 0.0f, float z = 0.0f, float width = 0.0f, float height = 0.0f, float rotation = 0.0f, bool reflectAcrossYAxis = false);
-        void load(const RenderContext &info);
+        void load(Context &c);
     };
 };
 

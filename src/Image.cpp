@@ -1,4 +1,4 @@
 #include "Image.h"
 
-ne::Image::~Image() {
+dan::Image::~Image() {
 }

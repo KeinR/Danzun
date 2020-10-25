@@ -3,6 +3,8 @@
 #include <iostream>
 #include "../lib/opengl.h"
 
+#include "error.h"
+
 bool dan::db::checkGLError() {
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
@@ -12,13 +14,5 @@ bool dan::db::checkGLError() {
     return false;
 }
 const char *dan::db::getGLErrorStr(int error) {
-    switch (error) {
-        case GL_NO_ERROR: return "GL_NO_ERROR";
-        case GL_INVALID_ENUM: return "GL_INVALID_ENUM";
-        case GL_INVALID_VALUE: return "GL_INVALID_VALUE";
-        case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
-        case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
-        case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
-        default: return "-Unknown error-";
-    }
+    return err::glErrStr(error);
 }

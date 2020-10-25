@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-#include "opengl.h"
+#include "../lib/opengl.h"
 
 dan::Mesh::Mesh() {
     init();

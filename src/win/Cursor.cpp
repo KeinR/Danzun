@@ -27,12 +27,12 @@ dan::Cursor::Cursor(cursorType type) {
             t = GLFW_VRESIZE_CURSOR;
             break;
         default:
-            err("Cursor::Cursor") << "Invalid enum";
+            err("Cursor::Cursor(cursorType)") << "Invalid enum";
             return;
     }
     handle = glfwCreateStandardCursor(t);
     if (handle == NULL) {
-        err("Cursor::Cursor") << "Failed to create standard cursor";
+        err("Cursor::Cursor(cursorType)") << "Failed to create standard cursor";
     }
 }
 dan::Cursor::Cursor(GLFWcursor *handle): handle(handle) {

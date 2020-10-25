@@ -3,8 +3,9 @@
 #include <algorithm>
 #include <cmath>
 
-#include "opengl.h"
-#include "../Engine.h"
+#include "../lib/opengl.h"
+#include "../core/Context.h"
+#include "../Shader.h"
 
 static constexpr int LENGTH = 4;
 
@@ -75,22 +76,8 @@ dan::Color::prop_t *dan::Color::get() {
     return color;
 }
 
-void dan::Color::load(const RenderContext &info, int channels) const {
-    switch (channels) {
-        default: // Fallthrough
-        case 4:
-            glUniform4fv(info.getColorLocation(), 1, color);
-            break;
-        case 3:
-            glUniform3fv(info.getColorLocation(), 1, color);
-            break;
-        case 2:
-            glUniform2fv(info.getColorLocation(), 1, color);
-            break;
-        case 1:
-            glUniform1fv(info.getColorLocation(), 1, color);
-            break;
-    }
+void dan::Color::load(Context &c) const {
+    c.getShader().set4fv(c, "color", color);
 }
 
 dan::Color dan::Color::brighten(float percent) const {

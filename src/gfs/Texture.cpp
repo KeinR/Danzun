@@ -1,9 +1,9 @@
 #include "Texture.h"
 
-#include "ManImage.h"
-#include "Image.h"
-#include "opengl.h"
-#include "error.h"
+#include "../ManImage.h"
+#include "../Image.h"
+#include "../lib/opengl.h"
+#include "../core/error.h"
 
 // In-use enum values for Texture.
 // def'd to be extra safe.
@@ -78,7 +78,7 @@ void dan::Texture::setImage(const Image &image) {
         case 2: f = GL_RG; break;
         case 1: f = GL_RED; break;
         default:
-            err::raise(err::INVALID_ARG, "dan::Texture::setImage(const Image&)", "Invalid image channels");
+            err("Texture::setImage") << "Invalid image channels [" << image.getChannels() << "]; channels must be > 0 and <= 4 ";
             return;
     }
 
@@ -99,7 +99,7 @@ void dan::Texture::setData(format fmt, unsigned int width, unsigned int height, 
         case RED: f = GL_RED; break;
         case INVALID_FORMAT: // Fallthrough
         default:
-            err::raise(err::INVALID_ARG, "dan::Texture::setData(format,unsigned int,unsigned int,const data_t*)", "Invalid format enum");
+            err("Texture::setData(format...)") << "Invalid format enum";
             return;
     }
 
@@ -114,7 +114,8 @@ void dan::Texture::setData(format fmt, unsigned int width, unsigned int height, 
 void dan::Texture::setData(int channels, unsigned int width, unsigned int height, const data_t *data) {
     format f = getFormat(channels);
     if (f == INVALID_FORMAT) {
-        err::raise(err::INVALID_ARG, "dan::Texture::setData(int,unsigned int,unsigned int,const data_t*)", "Invalid number of channels");
+        err("Texture::setData(int...)") << "Invalid number of channels [" << channels << "]; channels must be > 0 and <= 4 ";
+        return;
     }
     setData(f, width, height, data);
 }

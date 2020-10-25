@@ -4,12 +4,19 @@
 #include <string>
 #include <map>
 
-#include "glfw.h"
+#include "../lib/glfw.h"
 #include "WindowEvent.h"
-#include "debug.h"
-#include "error.h"
+#include "../core/debug.h"
+#include "../core/error.h"
 #include "Cursor.h"
-#include "Color.h"
+#include "../gfs/Color.h"
+
+struct winparams {
+    const char *title;
+    int width;
+    int height;
+    int MSAASamples;
+};
 
 static void errorCallback(int error, const char* description);
 static GLFWwindow *init(const winparams &p);
@@ -25,22 +32,12 @@ static void mouseClick(GLFWwindow *window, int button, int action, int mods);
 static void mouseScroll(GLFWwindow *window, double xOffset, double yOffset);
 static void charCallback(GLFWwindow* window, unsigned int codepoint);
 
-struct winparams {
-    const char *title = "";
-    int width = 300;
-    int height = 300;
-    int MSAASamples = 0;
-};
-
 typedef std::map<GLFWwindow*, dan::WindowEvent*> eventRoots_t;
 typedef eventRoots_t::iterator eventRoots_loc_t;
 
 static int contextCount = 0;
 static eventRoots_t eventRoots;
-static dan::Window *currentWindow = nullptr;
 
-dan::Window::Window(): handle(nullptr) {
-}
 dan::Window::Window(const char *title, int width, int height, int MSAASamples):
     handle(makeWindow(winparams{title, width, height, MSAASamples}))
 {
@@ -63,9 +60,6 @@ void dan::Window::free() {
     clearEventCallback();
     if (handle != nullptr) {
         destroyWindow(handle);
-        if (currentWindow == this) {
-            currentWindow = nullptr;
-        }
     }
 }
 void dan::Window::steal(Window &other) {
@@ -141,7 +135,6 @@ void dan::Window::swapBuffers() {
 }
 void dan::Window::makeCurrent() {
     glfwMakeContextCurrent(handle);
-    currentWindow = this;
 }
 
 void dan::Window::setEventCallback(WindowEvent &e) {
@@ -236,24 +229,19 @@ void dan::Window::setVSyncLevel(int level) {
     glfwSwapInterval(level);
 }
 
-dan::Window &dan::Window::current() {
-    DAN_ASSERT(currentWindow != nullptr);
-    return *currentWindow;
-}
-
 // Internal members
 
 void errorCallback(int error, const char* description) {
-    dan::err::raise(dan::err::GLFW, "Window.cpp:errorCallback(int,const char*)", description, error);
+    dan::err("Window.cpp:errorCallback") << "GLFW Error [0x" << std::hex << error << std::dec << "]: " << description << '\n';
 }
 
 GLFWwindow *init(const winparams &p) {
-    #define FUNC_SIG "Window.cpp:init(int,int,const char*)"
+    #define FUNC_SIG "Window.cpp:init"
 
     glfwSetErrorCallback(errorCallback);
 
     if (glfwInit() == GLFW_FALSE) {
-        dan::err::raise(dan::err::GLFW, FUNC_SIG, "CRITICAL: Failed to init GLFW");
+        dan::err(FUNC_SIG, true) << "Failed to init GLFW";
         return nullptr;
     }
     // A glfw window is required to properly initialize GLAD
@@ -261,14 +249,14 @@ GLFWwindow *init(const winparams &p) {
     if (window == NULL) {
         deInit();
         contextCount = 0;
-        dan::err::raise(dan::err::GLFW, FUNC_SIG, "CRITICAL: Failed to make GLFW window");
+        dan::err(FUNC_SIG, true) << "Failed to make GLFW window (just after init)";
         return nullptr;
     }
     glfwMakeContextCurrent(window);
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         deInit();
         contextCount = 0;
-        dan::err::raise(dan::err::GLFW, FUNC_SIG, "CRITICAL: Failed to initialize OpenGL loader (GLAD)");
+        dan::err(FUNC_SIG, true) << "Failed to initialize OpenGL loader (GLAD)";
         return nullptr;
     }
     contextCount = 1;
@@ -296,8 +284,9 @@ GLFWwindow *doCreateWindow(const winparams &p) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, p.MSAASamples);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-    // glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_BOOL(p.scaleToMonitor));
+    // glfwWindowHint(GLFW_SCALE_TO_MONITOR, ...);
 
     return glfwCreateWindow(p.width, p.height, p.title, NULL, NULL);
 }
@@ -310,7 +299,7 @@ GLFWwindow *makeWindow(const winparams &p) {
         contextCount++;
         window = doCreateWindow(p);
         if (window == NULL) {
-            dan::err::raise(dan::err::GLFW, "Window.cpp:makeWindow(int,int,const char*)", "CRITICAL: Failed to make GLFW window");
+            dan::err("Window.cpp:makeWindow") << "Failed to make GLFW window";
             return nullptr;
         }
     }
