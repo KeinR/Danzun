@@ -1,12 +1,12 @@
-#ifndef DANZUN_HB_POLYGON_H_INCLUDED
-#define DANZUN_HB_POLYGON_H_INCLUDED
+#ifndef DANZUN_POLYGON_H_INCLUDED
+#define DANZUN_POLYGON_H_INCLUDED
 
 #include <vector>
 
 #include "Hitbox.h"
-#include "../math/Line.h"
+#include "Line.h"
 
-namespace dan::hb {
+namespace dan {
     class Polygon: public Hitbox {
     public:
         typedef std::vector<float> points_t;

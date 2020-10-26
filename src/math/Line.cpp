@@ -83,7 +83,7 @@ bool dan::math::Line<T>::isVertical() {
 }
 
 template<typename T>
-bool dan::math::Line<T>::intersects(Circle &c) {
+bool dan::math::Line<T>::intersects(const Circle &c) {
     // i(x) = c(x) - l(x)
     // If l(x) == NaN (undefined), must determine if 
     // c(x) is within the range
@@ -98,7 +98,7 @@ bool dan::math::Line<T>::intersects(Circle &c) {
     // c = (b-t_y)^2 - r^2 + t_x^2
 
     if (isVertical()) {
-        float v = std::sqrt(c.getRadius() - std::pow(getDomainMin() - c.getX(), 2));
+        float v = std::sqrt(std::pow(c.getRadius(), 2) - std::pow(getDomainMin() - c.getX(), 2));
         float y0 = c.getY() + v;
         float y1 = c.getY() - v;
         if (inRange(y0) || inRange(y1)) {

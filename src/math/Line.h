@@ -33,7 +33,7 @@ namespace dan::math {
         // Vertical line: x = domainMin / x = domainMax
         bool isVertical();
 
-        bool intersects(Circle &c);
+        bool intersects(const Circle &c);
 
         // Result is quiet NAN if line is vertical 
         T solveForY(T x);

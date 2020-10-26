@@ -1,11 +1,11 @@
-#ifndef DANZUN_HB_HITBOX_H_INCLUDED
-#define DANZUN_HB_HITBOX_H_INCLUDED
+#ifndef DANZUN_HITBOX_H_INCLUDED
+#define DANZUN_HITBOX_H_INCLUDED
 
-namespace dan::hb {
+namespace dan {
     class Circle;
 }
 
-namespace dan::hb {
+namespace dan {
     class Hitbox {
     public:
         virtual ~Hitbox() = 0;

@@ -1,13 +1,26 @@
-#ifndef DANZUN_MATH_CIRCLE_H_INCLUDED
-#define DANZUN_MATH_CIRCLE_H_INCLUDED
+#ifndef DANZUN_CIRCLE_H_INCLUDED
+#define DANZUN_CIRCLE_H_INCLUDED
 
-namespace dan::math {
-    class Circle {
+#include "Hitbox.h"
+
+namespace dan {
+    class Circle: public Hitbox {
+        float x;
+        float y;
+        float radius;
     public:
-        virtual ~Circle() = 0;
-        virtual float getRadius() = 0;
-        virtual float getX() = 0;
-        virtual float getY() = 0;
+        Circle();
+
+        float getRadius() const;
+        float getX() const;
+        float getY() const;
+
+        void setRadius(float r);
+        void setX(float x) override;
+        void setY(float y) override;
+        // Does nothing
+        void setRotation(float radians) override;
+        bool interescts(Circle &c) override;
     };
 }
 
