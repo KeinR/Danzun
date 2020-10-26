@@ -1,18 +1,43 @@
 #ifndef DANZUN_BULLETTYPE_H_INCLUDED
 #define DANZUN_BULLETTYPE_H_INCLUDED
 
+#include <vector>
+
+#include <glm/glm.hpp>
+
+#include "AbstractBulletType.h"
+#include "../Sprite.h"
+
 namespace dan {
-    class Context;
     class Game;
 }
 
 namespace dan {
-    class BulletType {
+    class BulletType: public AbstractBulletType {
     public:
-        virtual ~BulletType() = 0;
-        virtual void logic(Game &g, float deltaTime) = 0;
-        virtual void render(Game &g, Context &c) = 0;
-    };
+        struct child {
+            glm::vec3 position;
+            glm::vec3 velocity;
+            glm::vec3 initPosition;
+            float startTime;
+        };
+    private:
+        std::vector<child> children;
+        Sprite sprite;
+        float time;
+    protected:
+        virtual void moveChild(child &c, Game &g, float deltaTime) = 0;
+        virtual void renderChild(child &c, Game &g, Context &ctx) = 0;
+    public:
+        BulletType();
+        void setSprite(const Sprite &s);
+        Sprite &getSprite();
+        // Latency is the time delay, is subtracted from the current time to get the child's start time
+        void addChild(const glm::vec3 &position, const glm::vec3 &velocity, float latency = 0.0f);
+        void gc(Game &g);
+        void logic(Game &g, float deltaTime);
+        void render(Game &g, Context &ctx);
+    }
 }
 
 #endif
