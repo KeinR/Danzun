@@ -4,6 +4,8 @@
 
 #include "../math/Circle.h"
 
+#include "Game.h"
+
 dan::BulletType::BulletType():
     // Run GC every ~100 ms
     gcTimer(100),
@@ -55,9 +57,9 @@ void dan::BulletType::gc(Game &g) {
             if (
                 // Outside of viewport and not showing an intent to return
                 (viewHitbox->getMaxX() < 0 && it->velocity.x <= 0) ||
-                (viewHitbox->getMinX() > game.getWidth() && it->velocity.x >= 0) ||
+                (viewHitbox->getMinX() > g.getWidth() && it->velocity.x >= 0) ||
                 (viewHitbox->getMaxY() < 0 && it->velocity.y <= 0) ||
-                (viewHitbox->getMinY() > game.getHeight() >= 0 && it->velocity.y >= 0)
+                (viewHitbox->getMinY() > g.getHeight() && it->velocity.y >= 0)
             ) {
                 it = children.erase(it);
             } else {
@@ -70,10 +72,10 @@ void dan::BulletType::gc(Game &g) {
 }
 void dan::BulletType::logic(Game &g, float deltaTime) {
     for (child &c : children) {
-        if (!chl.gc) {
-            hitbox->setX(it->position.x);
-            hitbox->setY(it->position.y);
-            hitbox->setRotation(it->rotation);
+        if (!c.gc) {
+            hitbox->setX(c.position.x);
+            hitbox->setY(c.position.y);
+            hitbox->setRotation(c.rotation);
             hitbox->load();
             moveChild(c, g, deltaTime);
             for (unsigned int i : g.getLocalEntities(hitbox)) {
@@ -85,13 +87,13 @@ void dan::BulletType::logic(Game &g, float deltaTime) {
     }
     time += deltaTime;
     if (gcTimer.done()) {
-        gc();
+        gc(g);
         gcTimer.start();
     }
 }
 void dan::BulletType::render(Game &g, Context &ctx) {
-    for (child &chl : children) {
-        if (!chl.gc) {
+    for (child &c : children) {
+        if (!c.gc) {
             renderChild(c, g, ctx);
         }
     }

@@ -2,8 +2,9 @@
 #define GAMESCENE_H_INCLUDED
 
 #include "../../src/Node.h"
+#include "../../src/core/Context.h"
 
-class GameScene {
+class GameScene: public dan::Node {
 public:
     GameScene();
     void render(dan::Context &c);

@@ -27,8 +27,8 @@ namespace dan {
         float y;
         // In radians
         float rotation;
-        void transX(float c, float s, float x, float y);
-        void transY(float c, float s, float x, float y);
+        float transX(float c, float s, float x, float y);
+        float transY(float c, float s, float x, float y);
     public:
         Polygon();
         points_t &getPoints();
@@ -48,7 +48,7 @@ namespace dan {
         void setX(float x) override;
         void setY(float y) override;
         void setRotation(float radians) override;
-        bool intersects(Circle &c) const override;
+        bool intersects(const Circle &c) const override;
     };
 }
 

@@ -45,6 +45,6 @@ void dan::Circle::load() {
 void dan::Circle::setRotation(float radians) {
     // Do nothing
 }
-bool dan::Circle::interescts(Circle &c) const {
+bool dan::Circle::intersects(const Circle &c) const {
     return std::hypot(c.getX() - getX(), c.getY() - getY()) <= c.getRadius() + getRadius();
 }

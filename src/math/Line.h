@@ -7,7 +7,7 @@ namespace dan {
 
 namespace dan {
     template<typename T>
-    class LineTemplate {
+    class LineTpl {
         T m;
         T b;
         T domainMin;
@@ -15,8 +15,8 @@ namespace dan {
         T rangeMin;
         T rangeMax;
     public:
-        Line();
-        Line(T x0, T y0, T x1, T y1);
+        LineTpl();
+        LineTpl(T x0, T y0, T x1, T y1);
 
         void setM(T m);
         void setB(T b);
@@ -24,6 +24,13 @@ namespace dan {
         void setDomainMax(T x);
         void setRangeMin(T y);
         void setRangeMax(T y);
+
+        T getM() const;
+        T getB() const;
+        T getDomainMin() const;
+        T getDomainMax() const;
+        T getRangeMin() const;
+        T getRangeMax() const;
 
         void setPoints(T x0, T y0, T x1, T y1);
 
@@ -39,7 +46,7 @@ namespace dan {
         T solveForY(T x) const;
     };
 
-    typedef LineTemplate<float> Line;
+    typedef LineTpl<float> Line;
 }
 
 #endif

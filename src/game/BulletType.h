@@ -55,7 +55,7 @@ namespace dan {
         void gc(Game &g);
         void logic(Game &g, float deltaTime);
         void render(Game &g, Context &ctx);
-    }
+    };
 }
 
 #endif

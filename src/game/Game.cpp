@@ -21,7 +21,7 @@ int dan::Game::getHeight() {
     return height;
 }
 
-std::vector<unsigned int> dan::Game::getLocalEntities() {
+std::vector<unsigned int> dan::Game::getLocalEntities(const hitbox_t &h) {
     // TEMP SOLUTION
     std::vector<unsigned int> result;
     for (unsigned int i = 0; i < entities.size(); i++) {
@@ -30,7 +30,7 @@ std::vector<unsigned int> dan::Game::getLocalEntities() {
     return result;
 }
 dan::Entity &dan::Game::getEntity(unsigned int index) {
-    return entities[index];
+    return *entities[index];
 }
 
 void dan::Game::pushBulletType(const bulletType_t &type) {

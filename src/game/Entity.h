@@ -11,7 +11,7 @@ namespace dan {
     class Entity {
     public:
         virtual ~Entity() = 0;
-        virtual int getTeamID() = 0;
+        virtual int getTeamId() = 0;
         virtual const Circle &getHitbox() = 0;
         virtual void hit(Game &g, AbstractBulletType &culprate) = 0;
     };

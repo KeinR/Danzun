@@ -10,6 +10,8 @@
 
 #include "BulletType.h"
 
+#include "../math/Hitbox.h"
+
 namespace dan {
     class Context;
 }
@@ -17,6 +19,7 @@ namespace dan {
 namespace dan {
     class Game: public Node {
     public:
+        typedef std::shared_ptr<Hitbox> hitbox_t;
         typedef std::shared_ptr<BulletType> bulletType_t;
         typedef std::vector<bulletType_t> bullets_t;
         typedef std::shared_ptr<Entity> entity_t;
@@ -34,7 +37,7 @@ namespace dan {
 
         int getWidth();
         int getHeight();
-        std::vector<unsigned int> getLocalEntities();
+        std::vector<unsigned int> getLocalEntities(const hitbox_t &h);
         Entity &getEntity(unsigned int index);
 
 

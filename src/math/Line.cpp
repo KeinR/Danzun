@@ -6,41 +6,66 @@
 #include "Circle.h"
 
 template<typename T>
-dan::Line<T>::Line(): m(0), b(0), domainMin(0), domainMax(0) {
+dan::LineTpl<T>::LineTpl(): m(0), b(0), domainMin(0), domainMax(0) {
 }
 
 template<typename T>
-dan::Line<T>::Line(T x0, T y0, T x1, T y1) {
+dan::LineTpl<T>::LineTpl(T x0, T y0, T x1, T y1) {
     setPoints(x0, y0, x1, y1);
 }
 
 template<typename T>
-void dan::Line<T>::setM(T m) {
+void dan::LineTpl<T>::setM(T m) {
     this->m = m;
 }
 template<typename T>
-void dan::Line<T>::setB(T b) {
+void dan::LineTpl<T>::setB(T b) {
     this->b = b;
 }
 template<typename T>
-void dan::Line<T>::setDomainMin(T x) {
+void dan::LineTpl<T>::setDomainMin(T x) {
     domainMin = x;
 }
 template<typename T>
-void dan::Line<T>::setDomainMax(T x) {
+void dan::LineTpl<T>::setDomainMax(T x) {
     domainMax = x;
 }
 template<typename T>
-void dan::Line<T>::setRangeMin(T y) {
+void dan::LineTpl<T>::setRangeMin(T y) {
     rangeMin = y;
 }
 template<typename T>
-void dan::Line<T>::setRangeMax(T y) {
+void dan::LineTpl<T>::setRangeMax(T y) {
     rangeMax = y;
 }
 
 template<typename T>
-void dan::Line<T>::setPoints(T x0, T y0, T x1, T y1) {
+T dan::LineTpl<T>::getM() const {
+    return m;
+}
+template<typename T>
+T dan::LineTpl<T>::getB() const {
+    return b;
+}
+template<typename T>
+T dan::LineTpl<T>::getDomainMin() const {
+    return domainMin;
+}
+template<typename T>
+T dan::LineTpl<T>::getDomainMax() const {
+    return domainMax;
+}
+template<typename T>
+T dan::LineTpl<T>::getRangeMin() const {
+    return rangeMin;
+}
+template<typename T>
+T dan::LineTpl<T>::getRangeMax() const {
+    return rangeMax;
+}
+
+template<typename T>
+void dan::LineTpl<T>::setPoints(T x0, T y0, T x1, T y1) {
     T xDiff = x0 - x1;
     if (xDiff == 0) {
         m = std::numeric_limits<T>::quiet_NaN();
@@ -68,22 +93,22 @@ void dan::Line<T>::setPoints(T x0, T y0, T x1, T y1) {
 }
 
 template<typename T>
-bool dan::Line<T>::inDomain(T x) const {
+bool dan::LineTpl<T>::inDomain(T x) const {
     return domainMin <= x && x <= domainMax;
 }
 
 template<typename T>
-bool dan::Line<T>::inRange(T y) const {
+bool dan::LineTpl<T>::inRange(T y) const {
     return rangeMin <= y && y <= rangeMax;
 }
 
 template<typename T>
-bool dan::Line<T>::isVertical() const {
+bool dan::LineTpl<T>::isVertical() const {
     return m == std::numeric_limits<T>::quiet_NaN();
 }
 
 template<typename T>
-bool dan::Line<T>::intersects(const Circle &c) const {
+bool dan::LineTpl<T>::intersects(const Circle &pc) const {
     // i(x) = c(x) - l(x)
     // If l(x) == NaN (undefined), must determine if 
     // c(x) is within the range
@@ -98,16 +123,16 @@ bool dan::Line<T>::intersects(const Circle &c) const {
     // c = (b-t_y)^2 - r^2 + t_x^2
 
     if (isVertical()) {
-        float v = std::sqrt(std::pow(c.getRadius(), 2) - std::pow(getDomainMin() - c.getX(), 2));
-        float y0 = c.getY() + v;
-        float y1 = c.getY() - v;
+        float v = std::sqrt(std::pow(pc.getRadius(), 2) - std::pow(getDomainMin() - pc.getX(), 2));
+        float y0 = pc.getY() + v;
+        float y1 = pc.getY() - v;
         if (inRange(y0) || inRange(y1)) {
             return true;
         }
     } else {
         float a = std::pow(getM(), 2) + 1;
-        float b = 2 * (getM() * (getB() - c.getY()) - c.getX());
-        float c = std::pow(getB() - c.getY(), 2) - std::pow(c.getRadius(), 2) + std::pow(c.getX(), 2);
+        float b = 2 * (getM() * (getB() - pc.getY()) - pc.getX());
+        float c = std::pow(getB() - pc.getY(), 2) - std::pow(pc.getRadius(), 2) + std::pow(pc.getX(), 2);
         float v = std::pow(b, 2) - 4 * a * c;
         if (v >= 0) {
             v = std::sqrt(v);
@@ -123,8 +148,8 @@ bool dan::Line<T>::intersects(const Circle &c) const {
 }
 
 template<typename T>
-T dan::Line<T>::solveForY(T x) const {
+T dan::LineTpl<T>::solveForY(T x) const {
     return x * m + b;
 }
 
-template class LineTemplate<float>;
+template class dan::LineTpl<float>;

@@ -28,7 +28,7 @@ namespace dan {
         void load() override;
         // Does nothing
         void setRotation(float radians) override;
-        bool interescts(Circle &c) const override;
+        bool intersects(const Circle &c) const override;
     };
 }
 
