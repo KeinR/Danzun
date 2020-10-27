@@ -6,6 +6,7 @@
 
 #include "../Node.h"
 #include "../Target.h"
+#include "Entity.h"
 
 #include "BulletType.h"
 
@@ -18,16 +19,24 @@ namespace dan {
     public:
         typedef std::shared_ptr<BulletType> bulletType_t;
         typedef std::vector<bulletType_t> bullets_t;
+        typedef std::shared_ptr<Entity> entity_t;
+        typedef std::vector<entity_t> entities_t;
     private:
         bullets_t bullets;
+        entities_t entities;
         int width;
         int height;
     public:
         Game();
         void setWidth(int w);
         void setHeight(int h);
+        void addEntity(const entity_t &e);
+
         int getWidth();
         int getHeight();
+        std::vector<unsigned int> getLocalEntities();
+        Entity &getEntity(unsigned int index);
+
 
         void pushBulletType(const bulletType_t &type);
         void logic(float deltaTime);

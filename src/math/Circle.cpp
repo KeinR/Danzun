@@ -25,16 +25,16 @@ void dan::Circle::setY(float y) {
     this->y = y;
 }
 
-float dan::Circle::getMinX() {
+float dan::Circle::getMinX() const {
     return x - radius;
 }
-float dan::Circle::getMinY() {
+float dan::Circle::getMinY() const {
     return y - radius;
 }
-float dan::Circle::getMaxX() {
+float dan::Circle::getMaxX() const {
     return x + radius;
 }
-float dan::Circle::getMaxY() {
+float dan::Circle::getMaxY() const {
     return y + radius;
 }
 
@@ -45,6 +45,6 @@ void dan::Circle::load() {
 void dan::Circle::setRotation(float radians) {
     // Do nothing
 }
-bool dan::Circle::interescts(Circle &c) {
+bool dan::Circle::interescts(Circle &c) const {
     return std::hypot(c.getX() - getX(), c.getY() - getY()) <= c.getRadius() + getRadius();
 }

@@ -30,16 +30,16 @@ void dan::Polygon::detectCenter() {
     setCenterY((minY + maxY) / 2.0f);
 }
 
-float dan::Polygon::getMinX() {
+float dan::Polygon::getMinX() const {
     return minX;
 }
-float dan::Polygon::getMinY() {
+float dan::Polygon::getMinY() const {
     return minY;
 }
-float dan::Polygon::getMaxX() {
+float dan::Polygon::getMaxX() const {
     return maxX;
 }
-float dan::Polygon::getMaxY() {
+float dan::Polygon::getMaxY() const {
     return maxY;
 }
 
@@ -105,7 +105,7 @@ void dan::Polygon::setRotation(float radians) {
     this->rotation = radians;
 }
 
-bool dan::Polygon::intersects(Circle &c) {
+bool dan::Polygon::intersects(Circle &c) const {
     for (Line &l : lines) {
         if (l.intersects(c)) {
             return true;

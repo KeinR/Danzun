@@ -19,16 +19,16 @@ namespace dan {
         void setX(float x) override;
         void setY(float y) override;
 
-        float getMinX() override;
-        float getMinY() override;
-        float getMaxX() override;
-        float getMaxY() override;
+        float getMinX() const override;
+        float getMinY() const override;
+        float getMaxX() const override;
+        float getMaxY() const override;
 
         // Does nothing
         void load() override;
         // Does nothing
         void setRotation(float radians) override;
-        bool interescts(Circle &c) override;
+        bool interescts(Circle &c) const override;
     };
 }
 

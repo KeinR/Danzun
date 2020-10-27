@@ -27,16 +27,16 @@ namespace dan {
 
         void setPoints(T x0, T y0, T x1, T y1);
 
-        bool inDomain(T x);
-        bool inRange(T y);
+        bool inDomain(T x) const;
+        bool inRange(T y) const;
 
         // Vertical line: x = domainMin / x = domainMax
-        bool isVertical();
+        bool isVertical() const;
 
-        bool intersects(const Circle &c);
+        bool intersects(const Circle &c) const;
 
         // Result is quiet NAN if line is vertical 
-        T solveForY(T x);
+        T solveForY(T x) const;
     };
 
     typedef LineTemplate<float> Line;

@@ -68,22 +68,22 @@ void dan::Line<T>::setPoints(T x0, T y0, T x1, T y1) {
 }
 
 template<typename T>
-bool dan::Line<T>::inDomain(T x) {
+bool dan::Line<T>::inDomain(T x) const {
     return domainMin <= x && x <= domainMax;
 }
 
 template<typename T>
-bool dan::Line<T>::inRange(T y) {
+bool dan::Line<T>::inRange(T y) const {
     return rangeMin <= y && y <= rangeMax;
 }
 
 template<typename T>
-bool dan::Line<T>::isVertical() {
+bool dan::Line<T>::isVertical() const {
     return m == std::numeric_limits<T>::quiet_NaN();
 }
 
 template<typename T>
-bool dan::Line<T>::intersects(const Circle &c) {
+bool dan::Line<T>::intersects(const Circle &c) const {
     // i(x) = c(x) - l(x)
     // If l(x) == NaN (undefined), must determine if 
     // c(x) is within the range
@@ -123,7 +123,7 @@ bool dan::Line<T>::intersects(const Circle &c) {
 }
 
 template<typename T>
-T dan::Line<T>::solveForY(T x) {
+T dan::Line<T>::solveForY(T x) const {
     return x * m + b;
 }
 

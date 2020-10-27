@@ -39,16 +39,16 @@ namespace dan {
         // Automatically detects center x/y from points
         void detectCenter();
 
-        float getMinX() override;
-        float getMinY() override;
-        float getMaxX() override;
-        float getMaxY() override;
+        float getMinX() const override;
+        float getMinY() const override;
+        float getMaxX() const override;
+        float getMaxY() const override;
 
         void load() override;
         void setX(float x) override;
         void setY(float y) override;
         void setRotation(float radians) override;
-        bool intersects(Circle &c) override;
+        bool intersects(Circle &c) const override;
     };
 }
 
