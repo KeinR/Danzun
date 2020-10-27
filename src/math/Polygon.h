@@ -16,11 +16,38 @@ namespace dan {
         points_t points;
         // Derived from points
         lines_t lines;
+        float minX;
+        float minY;
+        float maxX;
+        float maxY;
+        // Center of rotation relative to untranslated points.
+        float centerX;
+        float centerY;
+        float x;
+        float y;
+        // In radians
+        float rotation;
+        void transX(float c, float s, float x, float y);
+        void transY(float c, float s, float x, float y);
     public:
         Polygon();
         points_t &getPoints();
         void setPoints(const std::vector<float> &p);
-        void loadLines();
+
+        void setCenterX(float x);
+        void setCenterY(float y);
+        // Automatically detects center x/y from points
+        void detectCenter();
+
+        float getMinX() override;
+        float getMinY() override;
+        float getMaxX() override;
+        float getMaxY() override;
+
+        void load() override;
+        void setX(float x) override;
+        void setY(float y) override;
+        void setRotation(float radians) override;
         bool intersects(Circle &c) override;
     };
 }

@@ -18,6 +18,14 @@ namespace dan {
         void setRadius(float r);
         void setX(float x) override;
         void setY(float y) override;
+
+        float getMinX() override;
+        float getMinY() override;
+        float getMaxX() override;
+        float getMaxY() override;
+
+        // Does nothing
+        void load() override;
         // Does nothing
         void setRotation(float radians) override;
         bool interescts(Circle &c) override;

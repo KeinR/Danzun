@@ -24,6 +24,24 @@ void dan::Circle::setX(float x) {
 void dan::Circle::setY(float y) {
     this->y = y;
 }
+
+float dan::Circle::getMinX() {
+    return x - radius;
+}
+float dan::Circle::getMinY() {
+    return y - radius;
+}
+float dan::Circle::getMaxX() {
+    return x + radius;
+}
+float dan::Circle::getMaxY() {
+    return y + radius;
+}
+
+void dan::Circle::load() {
+    // Do nothing; there's nothing to load...
+}
+
 void dan::Circle::setRotation(float radians) {
     // Do nothing
 }

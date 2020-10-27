@@ -7,6 +7,7 @@
 
 #include "AbstractBulletType.h"
 #include "../Sprite.h"
+#include "../math/Hitbox.h"
 
 namespace dan {
     class Game;
@@ -15,6 +16,7 @@ namespace dan {
 namespace dan {
     class BulletType: public AbstractBulletType {
     public:
+        typedef std::shared_ptr<Hitbox> hitbox_t;
         struct child {
             glm::vec3 position;
             glm::vec3 velocity;
@@ -23,6 +25,7 @@ namespace dan {
         };
     private:
         std::vector<child> children;
+        hitbox_t hitbox;
         Sprite sprite;
         float time;
     protected:

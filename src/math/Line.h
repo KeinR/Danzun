@@ -1,11 +1,11 @@
-#ifndef DANZUN_MATH_LINE_H_INCLUDED
-#define DANZUN_MATH_LINE_H_INCLUDED
+#ifndef DANZUN_LINE_H_INCLUDED
+#define DANZUN_LINE_H_INCLUDED
 
-namespace dan::math {
+namespace dan {
     class Circle;
 }
 
-namespace dan::math {
+namespace dan {
     template<typename T>
     class LineTemplate {
         T m;

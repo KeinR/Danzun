@@ -6,41 +6,41 @@
 #include "Circle.h"
 
 template<typename T>
-dan::math::Line<T>::Line(): m(0), b(0), domainMin(0), domainMax(0) {
+dan::Line<T>::Line(): m(0), b(0), domainMin(0), domainMax(0) {
 }
 
 template<typename T>
-dan::math::Line<T>::Line(T x0, T y0, T x1, T y1) {
+dan::Line<T>::Line(T x0, T y0, T x1, T y1) {
     setPoints(x0, y0, x1, y1);
 }
 
 template<typename T>
-void dan::math::Line<T>::setM(T m) {
+void dan::Line<T>::setM(T m) {
     this->m = m;
 }
 template<typename T>
-void dan::math::Line<T>::setB(T b) {
+void dan::Line<T>::setB(T b) {
     this->b = b;
 }
 template<typename T>
-void dan::math::Line<T>::setDomainMin(T x) {
+void dan::Line<T>::setDomainMin(T x) {
     domainMin = x;
 }
 template<typename T>
-void dan::math::Line<T>::setDomainMax(T x) {
+void dan::Line<T>::setDomainMax(T x) {
     domainMax = x;
 }
 template<typename T>
-void dan::math::Line<T>::setRangeMin(T y) {
+void dan::Line<T>::setRangeMin(T y) {
     rangeMin = y;
 }
 template<typename T>
-void dan::math::Line<T>::setRangeMax(T y) {
+void dan::Line<T>::setRangeMax(T y) {
     rangeMax = y;
 }
 
 template<typename T>
-void dan::math::Line<T>::setPoints(T x0, T y0, T x1, T y1) {
+void dan::Line<T>::setPoints(T x0, T y0, T x1, T y1) {
     T xDiff = x0 - x1;
     if (xDiff == 0) {
         m = std::numeric_limits<T>::quiet_NaN();
@@ -68,22 +68,22 @@ void dan::math::Line<T>::setPoints(T x0, T y0, T x1, T y1) {
 }
 
 template<typename T>
-bool dan::math::Line<T>::inDomain(T x) {
+bool dan::Line<T>::inDomain(T x) {
     return domainMin <= x && x <= domainMax;
 }
 
 template<typename T>
-bool dan::math::Line<T>::inRange(T y) {
+bool dan::Line<T>::inRange(T y) {
     return rangeMin <= y && y <= rangeMax;
 }
 
 template<typename T>
-bool dan::math::Line<T>::isVertical() {
+bool dan::Line<T>::isVertical() {
     return m == std::numeric_limits<T>::quiet_NaN();
 }
 
 template<typename T>
-bool dan::math::Line<T>::intersects(const Circle &c) {
+bool dan::Line<T>::intersects(const Circle &c) {
     // i(x) = c(x) - l(x)
     // If l(x) == NaN (undefined), must determine if 
     // c(x) is within the range
@@ -123,7 +123,7 @@ bool dan::math::Line<T>::intersects(const Circle &c) {
 }
 
 template<typename T>
-T dan::math::Line<T>::solveForY(T x) {
+T dan::Line<T>::solveForY(T x) {
     return x * m + b;
 }
 
