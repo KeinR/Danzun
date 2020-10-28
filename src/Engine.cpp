@@ -39,6 +39,8 @@ void dan::Engine::run() {
         return;
     }
 
+    window.makeCurrent();
+
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -46,9 +48,9 @@ void dan::Engine::run() {
     glDisable(GL_CULL_FACE);
 
     while (!window.shouldClose()) {
-        glClearColor(0.4, 0.4, 0.4, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
         glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
+        glClearColor(0, 0.4, 0.4, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         scene->render(rc);
 

@@ -6,8 +6,8 @@
 
 namespace dan {
     class err: public std::stringstream {
-        bool severe;
         std::string location;
+        bool severe;
         void doRaise();
     public:
         err(const std::string &location, bool severe = false);

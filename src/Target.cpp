@@ -10,6 +10,7 @@ dan::Target::Target():
 {
     setSize(100, 100);
     target.attachTexture(result);
+    Framebuffer::bindDefault();
 }
 void dan::Target::setSize(int w, int h) {
     width = w;
