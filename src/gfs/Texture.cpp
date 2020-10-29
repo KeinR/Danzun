@@ -4,6 +4,7 @@
 #include "../Image.h"
 #include "../lib/opengl.h"
 #include "../core/error.h"
+#include "../core/Context.h"
 
 // In-use enum values for Texture.
 // def'd to be extra safe.
@@ -157,6 +158,11 @@ int dan::Texture::getWidth() {
 }
 int dan::Texture::getHeight() {
     return iHeight;
+}
+
+void dan::Texture::render(Context &c) {
+    bind();
+    c.renderQuad();
 }
 
 dan::Texture::format dan::Texture::getFormat(int channels) {

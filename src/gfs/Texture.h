@@ -5,6 +5,7 @@
 
 namespace dan {
     class Image;
+    class Context;
 }
 
 namespace dan {
@@ -152,6 +153,8 @@ namespace dan {
 
         int getWidth();
         int getHeight();
+
+        void render(Context &c);
 
         // Returns INVALID_FORMAT if `channels` < 1 or > 4
         static format getFormat(int channels);

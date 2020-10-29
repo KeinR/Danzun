@@ -1,6 +1,10 @@
 #ifndef DANZUN_CONTEXT_H_INCLUDED
 #define DANZUN_CONTEXT_H_INCLUDED
 
+#include <string>
+
+#include "../gfs/Mesh.h"
+
 namespace dan {
     class Engine;
     class Shader;
@@ -8,6 +12,7 @@ namespace dan {
 
 namespace dan {
     class Context {
+        Mesh quad_;
         Engine *engine;
         Shader *currentShader;
         int fWidth;
@@ -27,6 +32,8 @@ namespace dan {
         int getFHeight() const;
         Shader &getShader() const;
         Engine &getEngine() const;
+
+        void renderQuad() const;
     };
 }
 

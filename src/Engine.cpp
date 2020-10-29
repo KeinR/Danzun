@@ -15,6 +15,10 @@ dan::Engine::Engine():
     setGameSize(400, 400);
 }
 
+dan::Context &dan::Engine::getContext() {
+    return rc;
+}
+
 void dan::Engine::setScene(Node &s) {
     scene = &s;
 }
@@ -48,9 +52,12 @@ void dan::Engine::run() {
     glDisable(GL_CULL_FACE);
 
     while (!window.shouldClose()) {
-        glViewport(0, 0, window.getFramebufferWidth(), window.getFramebufferHeight());
+        glViewport(0, 0, window.getWidth(), window.getHeight());
+        rc.setFWidth(window.getWidth());
+        rc.setFHeight(window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
+
 
         scene->render(rc);
 

@@ -4,6 +4,11 @@
 #include <memory>
 
 #include "gfs/Texture.h"
+#include "gfs/Matrix.h"
+
+namespace dan {
+    class Context;
+}
 
 namespace dan {
     class Sprite {
@@ -11,13 +16,16 @@ namespace dan {
         typedef std::shared_ptr<Texture> texture_t;
     private:
         texture_t texture;
-        int width; // pixels
-        int height; // pixels
+        // pixels
+        Matrix mat;
     public:
         Sprite();
         void setTexture(const texture_t &tex);
-        void setWidth(int w);
-        void setHeight(int h);
+        void setWidth(float w);
+        void setHeight(float h);
+        void setX(float x);
+        void setY(float y);
+        void render(Context &c);
     };
 }
 

@@ -1,6 +1,9 @@
 #ifndef DANZUN_ENGINE_H_INCLUDED
 #define DANZUN_ENGINE_H_INCLUDED
 
+#include <unordered_map>
+#include <string>
+
 #include "win/Window.h"
 #include "win/WindowEvent.h"
 #include "core/Context.h"
@@ -21,6 +24,7 @@ namespace dan {
         Target gameTarget;
     public:
         Engine();
+        Context &getContext();
         void setScene(Node &s);
         void setGameSize(int w, int h);
         void renderGameTarget();
