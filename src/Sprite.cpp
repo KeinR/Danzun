@@ -19,7 +19,28 @@ void dan::Sprite::setX(float x) {
 void dan::Sprite::setY(float y) {
     mat.y = y;
 }
+int dan::Sprite::getWidth() const {
+    return mat.width;
+}
+int dan::Sprite::getHeight() const {
+    return mat.height;
+}
+int dan::Sprite::getX() const {
+    return mat.x;
+}
+int dan::Sprite::getY() const {
+    return mat.y;
+}
+
+
+void dan::Sprite::setShader(const shader_t &s) {
+    shader = s;
+}
+
 void dan::Sprite::render(Context &c) {
+    if (shader) {
+        c.setShader(shader);
+    }
     mat.load(c);
     texture->render(c);
 }

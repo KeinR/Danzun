@@ -77,7 +77,7 @@ dan::Color::prop_t *dan::Color::get() {
 }
 
 void dan::Color::load(Context &c) const {
-    c.getShader().set4fv(c, "color", color);
+    c.getShader()->set4fv("color", color);
 }
 
 dan::Color dan::Color::brighten(float percent) const {

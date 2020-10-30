@@ -12,6 +12,17 @@
 #include "core/error.h"
 #include "core/Context.h"
 
+#ifndef NDEBUG
+static void assertBound(GLint thisShader) {
+    GLint currentShaderProgram;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &currentShaderProgram);
+    DANZUN_ASSERT(currentShaderProgram == thisShader);
+}
+#   define DANZUN_ASSERT_IS_BOUND assertBound(this->handle)
+#else
+#   define DANZUN_ASSERT_IS_BOUND ((void)0)
+#endif
+
 static constexpr unsigned int LOG_BUFFER_SIZE = 512;
 
 /**
@@ -143,16 +154,16 @@ dan::Shader::program_t dan::Shader::getHandle() const {
     return handle;
 }
 
-void dan::Shader::setMatrix4fv(Context &c, const std::string &name, const float *data) {
-    c.setShader(*this);
+void dan::Shader::setMatrix4fv(const std::string &name, const float *data) {
+    DANZUN_ASSERT_IS_BOUND;
     glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, data);
 }
-void dan::Shader::setInt1(Context &c, const std::string &name, int value) {
-    c.setShader(*this);
+void dan::Shader::setInt1(const std::string &name, int value) {
+    DANZUN_ASSERT_IS_BOUND;
     glUniform1i(getUniform(name), value);
 }
-void dan::Shader::set4fv(Context &c, const std::string &name, const float *values) {
-    c.setShader(*this);
+void dan::Shader::set4fv(const std::string &name, const float *values) {
+    DANZUN_ASSERT_IS_BOUND;
     glUniform4fv(getUniform(name), 1, values);
 }
 

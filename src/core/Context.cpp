@@ -30,15 +30,17 @@ dan::Context::Context(Engine &e):
     quad_.setParam(1, 2, 4, 2);
 }
 
-void dan::Context::setShader(Shader &s) {
-    if (currentShader != &s) {
-        currentShader = &s;
+void dan::Context::setShader(const shader_t &s) {
+    DANZUN_ASSERT(s);
+    if (currentShader != s) {
+        currentShader = s;
         currentShader->use();
     }
 }
 
 void dan::Context::clearShader() {
-    currentShader = nullptr;
+    currentShader.reset();
+    Shader::disuse();
 }
 
 void dan::Context::setFWidth(int w) {
@@ -55,9 +57,9 @@ int dan::Context::getFHeight() const {
     return fHeight;
 }
 
-dan::Shader &dan::Context::getShader() const {
-    DANZUN_ASSERT(currentShader != nullptr);
-    return *currentShader;
+const dan::Context::shader_t &dan::Context::getShader() const {
+    DANZUN_ASSERT(currentShader);
+    return currentShader;
 }
 dan::Engine &dan::Context::getEngine() const {
     DANZUN_ASSERT(engine != nullptr);

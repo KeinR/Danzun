@@ -1,18 +1,63 @@
 #include "Engine.h"
 
 #include "lib/opengl.h"
-
+#include "lib/glfw.h"
 #include "core/error.h"
+
+#include "EventCallback.h"
 
 dan::Engine::Engine():
     window("Danzun", 500, 500, 0),
     rc(*this),
-    scene(nullptr)
+    scene(nullptr),
+    windowEventCallback(nullptr),
+    eventCallback(nullptr)
 {
     window.setEventCallback(*this);
     gameTarget.setNode(game);
 
     setGameSize(400, 400);
+}
+
+void dan::Engine::keyPressed(int key, int action, int mods) {
+    if (windowEventCallback != nullptr) {
+        windowEventCallback->keyPressed(key, action, mods);
+    }
+}
+void dan::Engine::mouseMoved(float mouseX, float mouseY) {
+    if (windowEventCallback != nullptr) {
+        windowEventCallback->mouseMoved(mouseX, mouseY);
+    }
+}
+void dan::Engine::mouseClicked(int button, bool pressed, int mods) {
+    if (windowEventCallback != nullptr) {
+        windowEventCallback->mouseClicked(button, pressed, mods);
+    }
+}
+void dan::Engine::mouseScrolled(double xOffset, double yOffset) {
+    if (windowEventCallback != nullptr) {
+        windowEventCallback->mouseScrolled(xOffset, yOffset);
+    }
+}
+void dan::Engine::charInput(unsigned int codepoint) {
+    if (windowEventCallback != nullptr) {
+        windowEventCallback->charInput(codepoint);
+    }
+}
+
+void dan::Engine::setWindowEventCallback(WindowEvent *e) {
+    windowEventCallback = e;
+}
+
+void dan::Engine::setEventCallback(EventCallback *e) {
+    eventCallback = e;
+}
+
+dan::Window &dan::Engine::getWindow() {
+    return window;
+}
+dan::Game &dan::Engine::getGame() {
+    return game;
 }
 
 dan::Context &dan::Engine::getContext() {
@@ -51,6 +96,8 @@ void dan::Engine::run() {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
+    float start = glfwGetTime();
+
     while (!window.shouldClose()) {
         glViewport(0, 0, window.getWidth(), window.getHeight());
         rc.setFWidth(window.getWidth());
@@ -64,5 +111,12 @@ void dan::Engine::run() {
         window.swapBuffers();
 
         Window::pollEvents();
+
+        const float time = glfwGetTime();
+        const float deltaTime = time - start;
+        start = time;
+        if (eventCallback != nullptr) {
+            eventCallback->onFrame(*this, deltaTime);
+        }
     }
 }

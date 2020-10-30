@@ -37,9 +37,11 @@ namespace dan {
 
         program_t getHandle() const;
 
-        void setMatrix4fv(Context &c, const std::string &name, const float *data);
-        void setInt1(Context &c, const std::string &name, int value);
-        void set4fv(Context &c, const std::string &name, const float *values);
+        // REQUIRES THAT SHADER IS CURRENTLY BOUND!!!!
+        // Checked with assertions...
+        void setMatrix4fv(const std::string &name, const float *data);
+        void setInt1(const std::string &name, int value);
+        void set4fv(const std::string &name, const float *values);
     };
 }
 
