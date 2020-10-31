@@ -5,15 +5,18 @@ namespace dan {
     class Circle;
     class Game;
     class AbstractBulletType;
+    class Context;
 }
 
 namespace dan {
     class Entity {
     public:
         virtual ~Entity() = 0;
-        virtual int getTeamId() = 0;
         virtual const Circle &getHitbox() = 0;
+        virtual void logic(Game &g, float deltaTime) = 0;
         virtual void hit(Game &g, AbstractBulletType &culprate) = 0;
+        virtual bool shouldDelete() = 0;
+        virtual void render(Context &c) = 0;
     };
 }
 

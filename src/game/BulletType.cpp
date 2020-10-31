@@ -70,7 +70,7 @@ void dan::BulletType::gc(Game &g) {
         }
     }    
 }
-void dan::BulletType::logic(Game &g, float deltaTime) {
+void dan::BulletType::logic(Game &g, float deltaTime, bool allied) {
     for (child &c : children) {
         if (!c.gc) {
             hitbox->setX(c.position.x);
@@ -78,8 +78,8 @@ void dan::BulletType::logic(Game &g, float deltaTime) {
             hitbox->setRotation(c.rotation);
             hitbox->load();
             moveChild(c, g, deltaTime);
-            for (unsigned int i : g.getLocalEntities(hitbox)) {
-                if (g.getEntity(i).getTeamId() != teamId && hitbox->intersects(g.getEntity(i).getHitbox())) {
+            for (unsigned int i : g.getLocalEntities(hitbox, allied)) {
+                if (hitbox->intersects(g.getEntity(i).getHitbox())) {
                     g.getEntity(i).hit(g, *this);
                 }
             }

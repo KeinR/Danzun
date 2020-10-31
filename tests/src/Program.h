@@ -5,7 +5,7 @@
 
 #include "../../src/Engine.h"
 #include "../../src/Shader.h"
-#include "../../src/Player.h"
+#include "../../src/game/Player.h"
 #include "../../src/EventCallback.h"
 #include "../../src/win/WindowEvent.h"
 
@@ -15,7 +15,7 @@ class Program: private dan::WindowEvent, private dan::EventCallback {
     dan::Engine engine;
     GameScene scene;
     std::shared_ptr<dan::Shader> shader;
-    dan::Player player;
+    std::shared_ptr<dan::Player> player;
     void processInput(float deltaTime);
 public:
     Program();

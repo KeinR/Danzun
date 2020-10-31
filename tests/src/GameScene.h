@@ -6,7 +6,6 @@
 #include "../../src/Sprite.h"
 
 class GameScene: public dan::Node {
-    dan::Sprite testSprite;
 public:
     GameScene();
     void render(dan::Context &c);

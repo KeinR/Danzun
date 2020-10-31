@@ -53,7 +53,7 @@ namespace dan {
         // Latency is the time delay, is subtracted from the current time to get the child's start time
         void addChild(const glm::vec2 &position, const glm::vec2 &velocity, float rotation = 0.0f);
         void gc(Game &g);
-        void logic(Game &g, float deltaTime);
+        void logic(Game &g, float deltaTime, bool allied);
         void render(Game &g, Context &ctx);
     };
 }

@@ -6,6 +6,12 @@
 #include "Node.h"
 
 dan::Target::Target():
+    result(Texture::tparam{
+        GL_CLAMP_TO_EDGE,
+        GL_CLAMP_TO_EDGE,
+        GL_NEAREST,
+        GL_NEAREST,
+    }),
     node(nullptr)
 {
     setSize(100, 100);

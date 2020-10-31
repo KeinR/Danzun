@@ -11,7 +11,7 @@ namespace dan {
     public:
         virtual ~AbstractBulletType() = 0;
         virtual void gc(Game &g) = 0;
-        virtual void logic(Game &g, float deltaTime) = 0;
+        virtual void logic(Game &g, float deltaTime, bool allied) = 0;
         virtual void render(Game &g, Context &c) = 0;
     };
 }

@@ -1,10 +1,11 @@
 #include "Player.h"
 
 #include <cmath>
+#include <iostream>
 
-#include "game/Game.h"
+#include "Game.h"
 
-dan::Player::Player(): speed(1), x(0), y(0) {
+dan::Player::Player(): speed(100), x(0), y(0) {
 }
 void dan::Player::move(Game &g, dir d, float deltaTime, bool combo) {
     float p = speed * deltaTime;
@@ -36,7 +37,7 @@ void dan::Player::move(Game &g, dir d, float deltaTime, bool combo) {
         case RIGHT:
             x += p;
             if (x + sprite.getWidth() > g.getWidth()) {
-                x = sprite.getWidth() - sprite.getWidth();
+                x = g.getWidth() - sprite.getWidth();
             }
             break;
     }
@@ -49,11 +50,37 @@ void dan::Player::setY(float ny) {
     y = ny;
 }
 
+void dan::Player::setSpeed(float s) {
+    speed = s;
+}
+
 void dan::Player::setSprite(const Sprite &s) {
     sprite = s;
+}
+void dan::Player::setHitbox(const Circle &h) {
+    hitbox = h;
 }
 void dan::Player::render(Context &c) {
     sprite.setX(x);
     sprite.setY(y);
     sprite.render(c);
+}
+
+void dan::Player::logic(Game &g, float deltaTime) {
+    // .. shoot bullets ..
+}
+
+const dan::Circle &dan::Player::getHitbox() {
+    hitbox.setX(x);
+    hitbox.setY(y);
+    return hitbox;
+}
+void dan::Player::hit(Game &g, AbstractBulletType &culprate) {
+    std::cout << "PLAYER HIT" << '\n'; // TEMP
+}
+bool dan::Player::shouldDelete() {
+    // Player always stays alive.
+    // However, since it's always in the first index of game entities,
+    // this function is never called...
+    return false;
 }
