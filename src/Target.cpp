@@ -1,5 +1,6 @@
 #include "Target.h"
 
+#include "core/Context.h"
 #include "core/debug.h"
 #include "lib/opengl.h"
 
@@ -36,7 +37,7 @@ void dan::Target::render(Context &c) {
 
     glClearColor(0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
-    glViewport(0, 0, width, height);
+    c.setViewport(width, height);
 
     node->render(c);
 

@@ -10,9 +10,9 @@
 GameScene::GameScene() {
 }
 void GameScene::render(dan::Context &c) {
-    // c.getEngine().renderGameTarget();
-    // c.getEngine().bindGameTexture();
-    // dan::Matrix(0, 0, 400, 400).load(c);
-    // c.renderQuad();
-    c.getEngine().getGame().getPlayer()->render(c);
+    c.getEngine().renderGameTarget();
+    c.getEngine().bindGameTexture();
+    dan::Matrix(0, 0, 400, 400).load(c);
+    c.renderQuad();
+    // c.getEngine().getGame().getPlayer()->render(c);
 }

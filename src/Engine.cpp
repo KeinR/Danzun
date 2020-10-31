@@ -76,6 +76,7 @@ void dan::Engine::setGameSize(int w, int h) {
 
 void dan::Engine::renderGameTarget() {
     gameTarget.render(rc);
+    rc.setViewport(window.getWidth(), window.getHeight());
 }
 
 void dan::Engine::bindGameTexture() {
@@ -99,9 +100,7 @@ void dan::Engine::run() {
     float start = glfwGetTime();
 
     while (!window.shouldClose()) {
-        glViewport(0, 0, window.getWidth(), window.getHeight());
-        rc.setFWidth(window.getWidth());
-        rc.setFHeight(window.getHeight());
+        rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 

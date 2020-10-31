@@ -6,12 +6,13 @@
 
 #include "../Shader.h"
 #include "../Engine.h"
+#include "../lib/opengl.h"
 
 dan::Context::Context(Engine &e):
     engine(&e),
     currentShader(nullptr),
-    fWidth(50),
-    fHeight(50)
+    vWidth(50),
+    vHeight(50)
 {
     std::array<float, 16> v = {
         -1, -1, 0, 0,
@@ -43,18 +44,17 @@ void dan::Context::clearShader() {
     Shader::disuse();
 }
 
-void dan::Context::setFWidth(int w) {
-    fWidth = w;
-}
-void dan::Context::setFHeight(int h) {
-    fHeight = h;
+void dan::Context::setViewport(int w, int h) {
+    vWidth = w;
+    vHeight = h;
+    glViewport(0, 0, vWidth, vHeight);
 }
 
-int dan::Context::getFWidth() const {
-    return fWidth;
+int dan::Context::getVPWidth() const {
+    return vWidth;
 }
-int dan::Context::getFHeight() const {
-    return fHeight;
+int dan::Context::getVPHeight() const {
+    return vHeight;
 }
 
 const dan::Context::shader_t &dan::Context::getShader() const {

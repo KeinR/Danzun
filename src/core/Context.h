@@ -19,8 +19,8 @@ namespace dan {
         Mesh quad_;
         Engine *engine;
         shader_t currentShader;
-        int fWidth;
-        int fHeight;
+        int vWidth;
+        int vHeight;
 
     public:
         Context(Engine &e);
@@ -29,11 +29,10 @@ namespace dan {
         // Sets shader to nullptr
         void clearShader();
 
-        void setFWidth(int w);
-        void setFHeight(int h);
+        void setViewport(int w, int h);
 
-        int getFWidth() const;
-        int getFHeight() const;
+        int getVPWidth() const;
+        int getVPHeight() const;
         const shader_t &getShader() const;
         Engine &getEngine() const;
 

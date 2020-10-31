@@ -20,13 +20,13 @@ dan::Matrix::Matrix(float x, float y, float width, float height, float rotation,
 void dan::Matrix::load(Context &c) {
     glm::mat4 model(1.0f);
 
-    const float s = ndcX(x + width / 2, c.getFWidth());
-    const float t = ndcY(y + height / 2, c.getFHeight());
+    const float s = ndcX(x + width / 2, c.getVPWidth());
+    const float t = ndcY(y + height / 2, c.getVPHeight());
 
     model = glm::translate(model, glm::vec3(s, t, 0));
 
-    const float xScale = width / c.getFWidth();
-    const float yScale = height / c.getFHeight();
+    const float xScale = width / c.getVPWidth();
+    const float yScale = height / c.getVPHeight();
 
     model = glm::scale(model, glm::vec3(xScale, yScale, 0));
 

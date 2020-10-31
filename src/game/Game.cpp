@@ -78,7 +78,7 @@ void dan::Game::logic(float deltaTime) {
     }
 }
 void dan::Game::render(Context &c) {
-    DANZUN_ASSERT(entities[0]); // Make sure player is set
+    DANZUN_ASSERT(entities[playeri]); // Make sure player is set
 
     for (entity_t &e : entities) {
         e->render(c);
