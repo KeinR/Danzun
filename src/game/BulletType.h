@@ -8,7 +8,7 @@
 #include "AbstractBulletType.h"
 #include "../Sprite.h"
 #include "../math/Hitbox.h"
-#include "../Timer.h"
+#include "../RealTimer.h"
 #include "Entity.h"
 
 namespace dan {
@@ -34,12 +34,9 @@ namespace dan {
         hitbox_t hitbox;
         hitbox_t viewHitbox;
         Sprite sprite;
-        Timer gcTimer;
+        RealTimer gcTimer;
         float time;
         bool autoGC;
-        // The team it's a part of - will hurt other team(s).
-        // Defaults to 0
-        int teamId;
     protected:
         virtual void moveChild(child &c, Game &g, float deltaTime) = 0;
         virtual void renderChild(child &c, Game &g, Context &ctx) = 0;
@@ -49,7 +46,6 @@ namespace dan {
         Sprite &getSprite();
         void setHitbox(const hitbox_t &hb);
         void setViewHitbox(const hitbox_t &hb);
-        void setTeamID(int id);
         // Latency is the time delay, is subtracted from the current time to get the child's start time
         void addChild(const glm::vec2 &position, const glm::vec2 &velocity, float rotation = 0.0f);
         void gc(Game &g);

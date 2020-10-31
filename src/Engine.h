@@ -25,6 +25,8 @@ namespace dan {
 
         Game game;
         Target gameTarget;
+        bool gameActive;
+        float gameSpeed;
     public:
         Engine();
 
@@ -41,6 +43,12 @@ namespace dan {
 
         Window &getWindow();
         Game &getGame();
+
+        void setGameActive(bool flag);
+        bool isGameActive() const;
+
+        void setGameSpeed(float s);
+        float getGameSpeed() const;
 
         Context &getContext();
         void setScene(Node &s);

@@ -1,19 +1,19 @@
-#ifndef DANZUN_TIMER_H_INLCUDED
-#define DANZUN_TIMER_H_INLCUDED
+#ifndef DANZUN_TIMER_H_INCLUDED
+#define DANZUN_TIMER_H_INCLUDED
 
-#include <chrono>
+// Measures game time.
+// All units are in seconds.
 
 namespace dan {
     class Timer {
-        typedef std::chrono::steady_clock clock;
-        clock::duration time;
-        clock::time_point end;
+        float progress;
+        float goal;
     public:
         Timer();
-        Timer(unsigned int ms);
-        void setTime(unsigned int ms);
-        void start();
-        bool done();
+        void advance(float s);
+        void set(float duration);
+        void reset();
+        bool done() const;
     };
 }
 

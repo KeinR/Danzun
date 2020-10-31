@@ -1,5 +1,7 @@
 #include "BulletType.h"
 
+#include <iostream>
+
 #include "../lib/glfw.h"
 
 #include "../math/Circle.h"
@@ -7,11 +9,10 @@
 #include "Game.h"
 
 dan::BulletType::BulletType():
-    // Run GC every ~100 ms
-    gcTimer(100),
+    // Run GC every ~500 ms
+    gcTimer(500),
     time(0.0f),
-    autoGC(true),
-    teamId(0)
+    autoGC(true)
 {
 }
 
@@ -29,10 +30,6 @@ void dan::BulletType::setViewHitbox(const hitbox_t &hb) {
     viewHitbox = hb;
 }
 
-void dan::BulletType::setTeamID(int id) {
-    teamId = id;
-}
-
 void dan::BulletType::addChild(const glm::vec2 &position, const glm::vec2 &velocity, float rotation) {
     children.push_back(child{
         position,
@@ -44,6 +41,8 @@ void dan::BulletType::addChild(const glm::vec2 &position, const glm::vec2 &veloc
     });
 }
 void dan::BulletType::gc(Game &g) {
+    unsigned int startBullets = children.size();
+    std::cout << "Running GC, total bullets = " << startBullets << '\n';
     typedef children_t::iterator iterator;
     // TODO: Batch deletions, or just run infrequently
     for (iterator it = children.begin(); it < children.end();) {
@@ -68,7 +67,8 @@ void dan::BulletType::gc(Game &g) {
         } else {
             ++it;
         }
-    }    
+    }
+    std::cout << "GC finished, total bullets = " << children.size() << ", diff = " << (static_cast<int>(children.size()) - static_cast<int>(startBullets)) << '\n';
 }
 void dan::BulletType::logic(Game &g, float deltaTime, bool allied) {
     for (child &c : children) {

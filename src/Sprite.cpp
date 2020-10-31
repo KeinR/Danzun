@@ -19,6 +19,10 @@ void dan::Sprite::setX(float x) {
 void dan::Sprite::setY(float y) {
     mat.y = y;
 }
+void dan::Sprite::setRotation(float r) {
+    mat.rotation = r;
+}
+
 int dan::Sprite::getWidth() const {
     return mat.width;
 }
@@ -30,6 +34,9 @@ int dan::Sprite::getX() const {
 }
 int dan::Sprite::getY() const {
     return mat.y;
+}
+float dan::Sprite::getRotation() const {
+    return mat.rotation;
 }
 
 

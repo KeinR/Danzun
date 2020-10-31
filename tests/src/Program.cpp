@@ -27,7 +27,7 @@ Program::Program() {
         GL_NEAREST,
         GL_NEAREST,
     });
-    tex->setImage(dan::ManImage("data/test.png"));
+    tex->setImage(dan::ManImage("data/player.png"));
     // tex->genMipmap();
 
     dan::Sprite playerSprite;
@@ -35,8 +35,8 @@ Program::Program() {
     playerSprite.setTexture(tex);
     playerSprite.setX(50);
     playerSprite.setY(50);
-    playerSprite.setWidth(200);
-    playerSprite.setHeight(200);
+    playerSprite.setWidth(50);
+    playerSprite.setHeight(50);
 
     player = std::make_shared<dan::Player>();
     player->setSprite(playerSprite);
@@ -46,25 +46,47 @@ Program::Program() {
 
     engine.getGame().setPlayer(player);
 
+    std::shared_ptr<dan::Texture> bulletImg = std::make_shared<dan::Texture>(dan::Texture::tparam{
+        GL_CLAMP_TO_EDGE,
+        GL_CLAMP_TO_EDGE,
+        GL_NEAREST,
+        GL_NEAREST,
+    });
+    bulletImg->setImage(dan::ManImage("data/bullet.png"));
+    bullet = std::make_shared<Bullet>(bulletImg);
+
+    engine.getGame().pushAllyBulletType(bullet);
+    engine.setGameActive(true);
+
     glfwSwapInterval(1);
+
+    bulletCooldown.set(0.05);
 }
 void Program::processInput(float deltaTime) {
-    bool up = engine.getWindow().keyPressed(GLFW_KEY_UP);
-    bool down = engine.getWindow().keyPressed(GLFW_KEY_DOWN);
-    bool left = engine.getWindow().keyPressed(GLFW_KEY_LEFT);
-    bool right = engine.getWindow().keyPressed(GLFW_KEY_RIGHT);
+    dan::Window &window = engine.getWindow();
+    dan::Game &game = engine.getGame();
+    bool up = window.keyPressed(GLFW_KEY_UP);
+    bool down = window.keyPressed(GLFW_KEY_DOWN);
+    bool left = window.keyPressed(GLFW_KEY_LEFT);
+    bool right = window.keyPressed(GLFW_KEY_RIGHT);
     bool combine = (up ^ down) && (left ^ right);
+    bool shoot = window.keyPressed(GLFW_KEY_Z);
     if (up) {
-        player->move(engine.getGame(), dan::Player::UP, deltaTime, combine);
+        player->move(game, dan::Player::UP, deltaTime, combine);
     }
     if (down) {
-        player->move(engine.getGame(), dan::Player::DOWN, deltaTime, combine);
+        player->move(game, dan::Player::DOWN, deltaTime, combine);
     }
     if (left) {
-        player->move(engine.getGame(), dan::Player::LEFT, deltaTime, combine);
+        player->move(game, dan::Player::LEFT, deltaTime, combine);
     }
     if (right) {
-        player->move(engine.getGame(), dan::Player::RIGHT, deltaTime, combine);
+        player->move(game, dan::Player::RIGHT, deltaTime, combine);
+    }
+    bulletCooldown.advance(deltaTime);
+    if (shoot && bulletCooldown.done()) {
+        bullet->addChild({player->getX(), player->getY()}, {0, -600});
+        bulletCooldown.reset();
     }
 }
 void Program::onFrame(dan::Engine &e, float deltaTime) {

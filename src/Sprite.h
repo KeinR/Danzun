@@ -31,11 +31,14 @@ namespace dan {
         void setHeight(float h);
         void setX(float x);
         void setY(float y);
+        // radians
+        void setRotation(float r);
 
         int getWidth() const;
         int getHeight() const;
         int getX() const;
         int getY() const;
+        float getRotation() const;
 
         // nullptr for no preference / use the one currently bound.
         // nullptr by default

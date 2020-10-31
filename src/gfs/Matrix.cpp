@@ -30,9 +30,7 @@ void dan::Matrix::load(Context &c) {
 
     model = glm::scale(model, glm::vec3(xScale, yScale, 0));
 
-    const float radians = glm::radians(rotation);
-
-    model = glm::rotate(model, radians, glm::vec3(0, 0, 1));
+    model = glm::rotate(model, rotation, glm::vec3(0, 0, 1));
 
     if (reflectAcrossYAxis) {
         model = reflectYAxis(model);

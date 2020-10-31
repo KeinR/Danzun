@@ -11,7 +11,9 @@ dan::Engine::Engine():
     rc(*this),
     scene(nullptr),
     windowEventCallback(nullptr),
-    eventCallback(nullptr)
+    eventCallback(nullptr),
+    gameActive(false),
+    gameSpeed(1)
 {
     window.setEventCallback(*this);
     gameTarget.setNode(game);
@@ -58,6 +60,20 @@ dan::Window &dan::Engine::getWindow() {
 }
 dan::Game &dan::Engine::getGame() {
     return game;
+}
+
+void dan::Engine::setGameActive(bool flag) {
+    gameActive = flag;
+}
+bool dan::Engine::isGameActive() const {
+    return gameActive;
+}
+
+void dan::Engine::setGameSpeed(float s) {
+    gameSpeed = s;
+}
+float dan::Engine::getGameSpeed() const {
+    return gameSpeed;
 }
 
 dan::Context &dan::Engine::getContext() {
@@ -112,8 +128,11 @@ void dan::Engine::run() {
         Window::pollEvents();
 
         const float time = glfwGetTime();
-        const float deltaTime = time - start;
+        const float deltaTime = (time - start) * gameSpeed;
         start = time;
+        if (gameActive) {
+            game.logic(deltaTime);
+        }
         if (eventCallback != nullptr) {
             eventCallback->onFrame(*this, deltaTime);
         }

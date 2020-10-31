@@ -60,6 +60,14 @@ void dan::Player::setSprite(const Sprite &s) {
 void dan::Player::setHitbox(const Circle &h) {
     hitbox = h;
 }
+
+float dan::Player::getX() const {
+    return x;
+}
+float dan::Player::getY() const {
+    return y;
+}
+
 void dan::Player::render(Context &c) {
     sprite.setX(x);
     sprite.setY(y);

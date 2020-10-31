@@ -34,6 +34,9 @@ namespace dan {
         void setSprite(const Sprite &s);
         void setHitbox(const Circle &h);
 
+        float getX() const;
+        float getY() const;
+
         void render(Context &c) override;
         // TODO: This should be pure virtual
         void logic(Game &g, float deltaTime) override;

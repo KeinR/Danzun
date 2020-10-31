@@ -19,7 +19,7 @@ namespace dan {
         float height;
 
         // Rotation
-        // [In degrees]
+        // [In radians]
         float rotation;
 
         bool reflectAcrossYAxis;
