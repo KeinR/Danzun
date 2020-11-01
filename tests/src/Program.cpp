@@ -7,6 +7,7 @@
 #include "../../src/gfs/Texture.h"
 #include "../../src/ManImage.h"
 #include "../../src/lib/opengl.h"
+#include "Enemy.h"
 
 Program::Program() {
     shader = std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag");
@@ -19,20 +20,9 @@ Program::Program() {
 
     engine.setGameSize(400, 400);
 
-    std::shared_ptr<dan::Texture> tex = std::make_shared<dan::Texture>(dan::Texture::tparam{
-        GL_CLAMP_TO_EDGE,
-        GL_CLAMP_TO_EDGE,
-        // GL_LINEAR_MIPMAP_LINEAR,
-        // GL_LINEAR
-        GL_NEAREST,
-        GL_NEAREST,
-    });
-    tex->setImage(dan::ManImage("data/player.png"));
-    // tex->genMipmap();
-
     dan::Sprite playerSprite;
 
-    playerSprite.setTexture(tex);
+    playerSprite.setTexture(loadTex("data/player.png"));
     playerSprite.setX(50);
     playerSprite.setY(50);
     playerSprite.setWidth(50);
@@ -45,15 +35,7 @@ Program::Program() {
     player->setSpeed(100);
 
     engine.getGame().setPlayer(player);
-
-    std::shared_ptr<dan::Texture> bulletImg = std::make_shared<dan::Texture>(dan::Texture::tparam{
-        GL_CLAMP_TO_EDGE,
-        GL_CLAMP_TO_EDGE,
-        GL_NEAREST,
-        GL_NEAREST,
-    });
-    bulletImg->setImage(dan::ManImage("data/bullet.png"));
-    bullet = std::make_shared<Bullet>(bulletImg);
+    bullet = std::make_shared<Bullet>(loadTex("data/bullet.png"));
 
     engine.getGame().pushAllyBulletType(bullet);
     engine.setGameActive(true);
@@ -61,7 +43,22 @@ Program::Program() {
     glfwSwapInterval(1);
 
     bulletCooldown.set(0.05);
+
+    std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>(loadTex("data/player.png"));
+    engine.getGame().addEntity(enemy);
 }
+
+Program::tex_t Program::loadTex(const std::string &path) {
+    tex_t tex = std::make_shared<dan::Texture>(dan::Texture::tparam{
+        GL_CLAMP_TO_EDGE,
+        GL_CLAMP_TO_EDGE,
+        GL_NEAREST,
+        GL_NEAREST,
+    });
+    tex->setImage(dan::ManImage(path));
+    return tex;
+}
+
 void Program::processInput(float deltaTime) {
     dan::Window &window = engine.getWindow();
     dan::Game &game = engine.getGame();
