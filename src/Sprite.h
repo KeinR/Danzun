@@ -21,7 +21,7 @@ namespace dan {
         // pixels
         Matrix mat;
         // The preferred shader
-        std::shared_ptr<Shader> shader;
+        shader_t shader;
     public:
         Sprite();
 
@@ -31,6 +31,8 @@ namespace dan {
         void setHeight(float h);
         void setX(float x);
         void setY(float y);
+        void setCenterX(float x);
+        void setCenterY(float y);
         // radians
         void setRotation(float r);
 

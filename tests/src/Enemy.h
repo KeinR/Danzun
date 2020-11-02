@@ -8,9 +8,9 @@
 class Enemy: public dan::Entity {
     dan::Sprite sprite;
     dan::Circle hitbox;
-    bool dead;
     float x;
     float y;
+    long health;
 public:
     Enemy(const dan::Sprite::texture_t &texture);
     const dan::Circle &getHitbox() override;

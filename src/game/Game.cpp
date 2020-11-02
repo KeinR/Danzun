@@ -9,7 +9,11 @@ static constexpr unsigned int playeri = 0;
 
 dan::Game::Game():
     // Player is stored in index 1
-    entities(eofs)
+    entities(eofs),
+    // Clean up entities every ~5 seconds
+    // (Not happening much, as there aren't many entities...)
+    gcTimer(5000),
+    autoGC(true)
 {
 }
 
@@ -45,7 +49,9 @@ std::vector<unsigned int> dan::Game::getLocalEntities(const hitbox_t &, bool all
     std::vector<unsigned int> result;
     if (allied) {
         for (unsigned int i = eofs; i < entities.size(); i++) {
-            result.push_back(i);
+            if (!entities[i]->shouldDelete()) {
+                result.push_back(i);
+            }
         }
     } else {
         result.push_back(playeri);
@@ -68,7 +74,9 @@ void dan::Game::logic(float deltaTime) {
     // ... TODO: update entity map ...
 
     for (entity_t &e : entities) {
-        e->logic(*this, deltaTime);
+        if (!e->shouldDelete()) {
+            e->logic(*this, deltaTime);
+        }
     }
     for (bulletType_t &b : enemyBullets) {
         b->logic(*this, deltaTime, false);
@@ -76,17 +84,36 @@ void dan::Game::logic(float deltaTime) {
     for (bulletType_t &b : allyBullets) {
         b->logic(*this, deltaTime, true);
     }
+
+    if (gcTimer.done()) {
+        gc();
+        gcTimer.start();
+    }
 }
+
+void dan::Game::gc() {
+    typedef entities_t::iterator iterator;
+    for (iterator it = entities.begin(); it < entities.end();) {
+        if ((*it)->shouldDelete() || (autoGC && (*it)->getHitbox().getMinY() > getHeight())) {
+            it = entities.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
 void dan::Game::render(Context &c) {
     DANZUN_ASSERT(entities[playeri]); // Make sure player is set
 
     for (entity_t &e : entities) {
-        e->render(c);
+        if (!e->shouldDelete()) {
+            e->render(c);
+        }
     }
     for (bulletType_t &b : enemyBullets) {
-        b->render(*this, c);
+        b->renderChildren(*this, c);
     }
     for (bulletType_t &b : allyBullets) {
-        b->render(*this, c);
+        b->renderChildren(*this, c);
     }
 }

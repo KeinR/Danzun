@@ -28,7 +28,7 @@ namespace dan {
         bool gameActive;
         float gameSpeed;
     public:
-        Engine();
+        Engine(const std::string &winName, int width, int height);
 
         void keyPressed(int key, int action, int mods) override;
         void mouseMoved(float mouseX, float mouseY) override;

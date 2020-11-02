@@ -24,6 +24,9 @@ class Program: private dan::WindowEvent, private dan::EventCallback {
     std::shared_ptr<dan::Player> player;
     std::shared_ptr<Bullet> bullet;
     dan::Timer bulletCooldown;
+    dan::Timer enemyCooldown;
+
+    tex_t enemyTex;
 
     tex_t loadTex(const std::string &path);
 

@@ -9,7 +9,7 @@
 #include "../../src/lib/opengl.h"
 #include "Enemy.h"
 
-Program::Program() {
+Program::Program(): engine("Danzun test", 500, 500) {
     shader = std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag");
     engine.getContext().setShader(shader);
     shader->setInt1("tex", 0);
@@ -43,9 +43,11 @@ Program::Program() {
     glfwSwapInterval(1);
 
     bulletCooldown.set(0.05);
+    enemyCooldown.set(1);
 
-    std::shared_ptr<Enemy> enemy = std::make_shared<Enemy>(loadTex("data/player.png"));
-    engine.getGame().addEntity(enemy);
+    enemyTex = loadTex("data/player.png");
+
+    engine.getGame().addEntity(std::make_shared<Enemy>(enemyTex));
 }
 
 Program::tex_t Program::loadTex(const std::string &path) {
@@ -82,9 +84,17 @@ void Program::processInput(float deltaTime) {
     }
     bulletCooldown.advance(deltaTime);
     if (shoot && bulletCooldown.done()) {
-        bullet->addChild({player->getX(), player->getY()}, {0, -600});
+        bullet->spawn({player->getX(), player->getY()}, {0, -100});
+        bullet->spawn({player->getX(), player->getY()}, {-100, 0});
+        bullet->spawn({player->getX(), player->getY()}, {0, 100});
+        bullet->spawn({player->getX(), player->getY()}, {100, 0});
         bulletCooldown.reset();
     }
+    // enemyCooldown.advance(deltaTime);
+    // if (enemyCooldown.done()) {
+    //     engine.getGame().addEntity(std::make_shared<Enemy>(enemyTex));
+    //     enemyCooldown.reset();
+    // }
 }
 void Program::onFrame(dan::Engine &e, float deltaTime) {
     processInput(deltaTime);

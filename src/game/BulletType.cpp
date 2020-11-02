@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "../lib/glfw.h"
-
 #include "../math/Circle.h"
 
 #include "Game.h"
@@ -14,6 +12,8 @@ dan::BulletType::BulletType():
     time(0.0f),
     autoGC(true)
 {
+}
+dan::BulletType::~BulletType() {
 }
 
 void dan::BulletType::setSprite(const Sprite &s) {
@@ -30,7 +30,11 @@ void dan::BulletType::setViewHitbox(const hitbox_t &hb) {
     viewHitbox = hb;
 }
 
-void dan::BulletType::addChild(const glm::vec2 &position, const glm::vec2 &velocity, float rotation) {
+bool dan::BulletType::hit(child &c, Game &g, float deltaTime, bool allied) {
+    return true;
+}
+
+void dan::BulletType::spawn(const glm::vec2 &position, const glm::vec2 &velocity, float rotation) {
     children.push_back(child{
         position,
         velocity,
@@ -77,10 +81,15 @@ void dan::BulletType::logic(Game &g, float deltaTime, bool allied) {
             hitbox->setY(c.position.y);
             hitbox->setRotation(c.rotation);
             hitbox->load();
-            moveChild(c, g, deltaTime);
+            move(c, g, deltaTime);
             for (unsigned int i : g.getLocalEntities(hitbox, allied)) {
                 if (hitbox->intersects(g.getEntity(i).getHitbox())) {
                     g.getEntity(i).hit(g, *this);
+                    // Determine if it should disappear...
+                    if (hit(c, g, deltaTime, allied)) {
+                        c.gc = true;
+                        break;
+                    }
                 }
             }
         }
@@ -91,10 +100,10 @@ void dan::BulletType::logic(Game &g, float deltaTime, bool allied) {
         gcTimer.start();
     }
 }
-void dan::BulletType::render(Game &g, Context &ctx) {
+void dan::BulletType::renderChildren(Game &g, Context &ctx) {
     for (child &c : children) {
         if (!c.gc) {
-            renderChild(c, g, ctx);
+            render(c, g, ctx);
         }
     }
 }

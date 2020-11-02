@@ -12,7 +12,8 @@ namespace dan {
         virtual ~AbstractBulletType() = 0;
         virtual void gc(Game &g) = 0;
         virtual void logic(Game &g, float deltaTime, bool allied) = 0;
-        virtual void render(Game &g, Context &c) = 0;
+        virtual void renderChildren(Game &g, Context &c) = 0;
+        virtual long getDamage() = 0;
     };
 }
 

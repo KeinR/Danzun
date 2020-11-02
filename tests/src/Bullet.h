@@ -5,10 +5,11 @@
 
 class Bullet: public dan::BulletType {
 protected:
-    void moveChild(child &c, dan::Game &g, float deltaTime) override;
-    void renderChild(child &c, dan::Game &g, dan::Context &ctx) override;
+    void move(child &c, dan::Game &g, float deltaTime) override;
+    void render(child &c, dan::Game &g, dan::Context &ctx) override;
 public:
     Bullet(const dan::Sprite::texture_t &texture);
+    long getDamage() override;
 };
 
 #endif

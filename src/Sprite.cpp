@@ -19,6 +19,12 @@ void dan::Sprite::setX(float x) {
 void dan::Sprite::setY(float y) {
     mat.y = y;
 }
+void dan::Sprite::setCenterX(float x) {
+    mat.x = x - mat.width / 2;
+}
+void dan::Sprite::setCenterY(float y) {
+    mat.y = y - mat.height / 2;
+}
 void dan::Sprite::setRotation(float r) {
     mat.rotation = r;
 }

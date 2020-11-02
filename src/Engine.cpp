@@ -6,8 +6,12 @@
 
 #include "EventCallback.h"
 
-dan::Engine::Engine():
-    window("Danzun", 500, 500, 0),
+#include <iostream>
+#include <chrono>
+#include "RealTimer.h"
+
+dan::Engine::Engine(const std::string &winName, int width, int height):
+    window(winName.c_str(), width, height, 0),
     rc(*this),
     scene(nullptr),
     windowEventCallback(nullptr),
@@ -115,6 +119,11 @@ void dan::Engine::run() {
 
     float start = glfwGetTime();
 
+    RealTimer post(500);
+    post.start();
+    float startTime = glfwGetTime();
+    int frames = 0;
+
     while (!window.shouldClose()) {
         rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
@@ -135,6 +144,14 @@ void dan::Engine::run() {
         }
         if (eventCallback != nullptr) {
             eventCallback->onFrame(*this, deltaTime);
+        }
+
+        frames++;
+        if (post.done()) {
+            std::cout << "FPS = " << (frames / (glfwGetTime() - startTime)) << '\n';
+            frames = 0;
+            post.start();
+            startTime = glfwGetTime();
         }
     }
 }

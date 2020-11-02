@@ -69,8 +69,8 @@ float dan::Player::getY() const {
 }
 
 void dan::Player::render(Context &c) {
-    sprite.setX(x);
-    sprite.setY(y);
+    sprite.setCenterX(x);
+    sprite.setCenterY(y);
     sprite.render(c);
 }
 

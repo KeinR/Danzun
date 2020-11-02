@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "../Node.h"
-#include "../Target.h"
+#include "../RealTimer.h"
 #include "Entity.h"
 
 #include "AbstractBulletType.h"
@@ -33,6 +33,15 @@ namespace dan {
         int width;
         int height;
         player_t player;
+
+        RealTimer gcTimer;
+        // If entities that are below the lower
+        // corner of the screen are automatically
+        // deleted
+        bool autoGC;
+
+        // Clean up entities
+        void gc();
     public:
         Game();
 

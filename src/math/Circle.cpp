@@ -46,6 +46,5 @@ void dan::Circle::setRotation(float radians) {
     // Do nothing
 }
 bool dan::Circle::intersects(const Circle &c) const {
-    // First do bounds check, then more granular hypot
     return std::hypot(c.getX() - getX(), c.getY() - getY()) <= c.getRadius() + getRadius();
 }
