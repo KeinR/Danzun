@@ -17,7 +17,7 @@ dan::Matrix::Matrix(float x, float y, float width, float height, float rotation,
     x(x), y(y), width(width), height(height), rotation(rotation), reflectAcrossYAxis(reflectAcrossYAxis) {
 }
 
-void dan::Matrix::load(Context &c) {
+void dan::Matrix::load(Context &c, const std::string &location) {
     glm::mat4 model(1.0f);
 
     const float s = ndcX(x + width / 2, c.getVPWidth());
@@ -36,7 +36,7 @@ void dan::Matrix::load(Context &c) {
         model = reflectYAxis(model);
     }
 
-    c.getShader()->setMatrix4fv("model", glm::value_ptr(model));
+    c.getShader()->setMatrix4fv(location, glm::value_ptr(model));
 }
 
 float ndcX(float x, int winWidth) {

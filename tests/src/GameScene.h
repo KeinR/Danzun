@@ -4,10 +4,15 @@
 #include "../../src/Node.h"
 #include "../../src/core/Context.h"
 #include "../../src/Sprite.h"
+#include "../../src/BffFont.h"
+#include "../../src/Shader.h"
+#include "../../src/core/Context.h"
 
 class GameScene: public dan::Node {
+    dan::BffFont font;
+    std::shared_ptr<dan::Shader> textShader;
 public:
-    GameScene();
+    GameScene(dan::Context &c);
     void render(dan::Context &c);
 };
 

@@ -1,6 +1,8 @@
 #ifndef DANZUN_COLOR_H_INCLUDED
 #define DANZUN_COLOR_H_INCLUDED
 
+#include <string>
+
 namespace dan {
     class Context;
 }
@@ -34,7 +36,7 @@ namespace dan {
         prop_t *get();
 
         // NOTE: ATM loads all 4 channels!
-        void load(Context &c) const;
+        void load(Context &c, const std::string &location = "color") const;
 
         Color brighten(float percent) const;
     };

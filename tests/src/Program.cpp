@@ -9,7 +9,10 @@
 #include "../../src/lib/opengl.h"
 #include "Enemy.h"
 
-Program::Program(): engine("Danzun test", 500, 500) {
+Program::Program():
+    engine("Danzun test", 500, 500),
+    scene(engine.getContext())
+{
     shader = std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag");
     engine.getContext().setShader(shader);
     shader->setInt1("tex", 0);

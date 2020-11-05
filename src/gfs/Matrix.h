@@ -1,6 +1,8 @@
 #ifndef DANZUN_MATRIX_H_INCLUDED
 #define DANZUN_MATRIX_H_INCLUDED
 
+#include <string>
+
 namespace dan {
     class Context;
 }
@@ -25,7 +27,7 @@ namespace dan {
         bool reflectAcrossYAxis;
         Matrix(float x = 0.0f, float y = 0.0f, float width = 0.0f, float height = 0.0f, float rotation = 0.0f, bool reflectAcrossYAxis = false);
 
-        void load(Context &c);
+        void load(Context &c, const std::string &location = "model");
     };
 };
 
