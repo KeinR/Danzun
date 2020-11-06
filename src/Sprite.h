@@ -6,6 +6,8 @@
 #include "gfs/Texture.h"
 #include "gfs/Matrix.h"
 
+#include "AbsTexture.h"
+
 namespace dan {
     class Context;
     class Shader;
@@ -14,7 +16,7 @@ namespace dan {
 namespace dan {
     class Sprite {
     public:
-        typedef std::shared_ptr<Texture> texture_t;
+        typedef std::shared_ptr<AbsTexture> texture_t;
         typedef std::shared_ptr<Shader> shader_t;
     private:
         texture_t texture;

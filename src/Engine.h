@@ -50,6 +50,8 @@ namespace dan {
         void setGameSpeed(float s);
         float getGameSpeed() const;
 
+        void setRefreshRate(int count);
+
         Context &getContext();
         void setScene(Node &s);
         void setGameSize(int w, int h);

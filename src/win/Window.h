@@ -81,7 +81,7 @@ namespace dan {
 
         static void pollEvents();
         static void waitEvents();
-        static void setVSyncLevel(int level);
+        static void setSwapInterval(int val);
     };
 }
 

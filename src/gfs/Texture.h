@@ -3,13 +3,15 @@
 
 #include <string>
 
+#include "../AbsTexture.h"
+
 namespace dan {
     class Image;
     class Context;
 }
 
 namespace dan {
-    class Texture {
+    class Texture: public AbsTexture {
     public:
         /// Type of data accepted by the Texture
         /// @see setData(int format, unsigned int width, unsigned int height, const data_t *data)
@@ -118,7 +120,7 @@ namespace dan {
         * Sets this texture as current, so that it'll be used in
         * whatever texture slot is active (via glActiveTexture(...))
         */
-        void bind() const;
+        void bind() override;
         static void unbind();
 
         /**
@@ -154,7 +156,7 @@ namespace dan {
         int getWidth();
         int getHeight();
 
-        void render(Context &c);
+        void render(Context &c) override;
 
         // Returns INVALID_FORMAT if `channels` < 1 or > 4
         static format getFormat(int channels);

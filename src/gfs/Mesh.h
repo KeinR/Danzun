@@ -27,9 +27,9 @@ namespace dan {
         static void unbind();
 
         // Set verticies for array buffer
-        void setVertices(int count, float *data);
+        void setVertices(int count, const float *data);
         // Set indices for element array buffer
-        void setIndices(int count, unsigned int *data);
+        void setIndices(int count, const unsigned int *data);
         // Set parameter for vertex array object
         void setParam(unsigned int index, int size, int stride, int offset);
 

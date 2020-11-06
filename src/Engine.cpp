@@ -80,6 +80,10 @@ float dan::Engine::getGameSpeed() const {
     return gameSpeed;
 }
 
+void dan::Engine::setRefreshRate(int count) {
+    glfwSwapInterval(count);
+}
+
 dan::Context &dan::Engine::getContext() {
     return rc;
 }

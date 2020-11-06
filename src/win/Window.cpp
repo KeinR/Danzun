@@ -225,8 +225,8 @@ void dan::Window::waitEvents() {
     glfwWaitEvents();    
 }
 
-void dan::Window::setVSyncLevel(int level) {
-    glfwSwapInterval(level);
+void dan::Window::setSwapInterval(int val) {
+    glfwSwapInterval(val);
 }
 
 // Internal members

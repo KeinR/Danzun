@@ -59,7 +59,7 @@ unsigned int dan::Texture::getHandle() {
     return buffer;
 }
 
-void dan::Texture::bind() const {
+void dan::Texture::bind() {
     glBindTexture(TEXTURE_TYPE, buffer);
 }
 void dan::Texture::unbind() {

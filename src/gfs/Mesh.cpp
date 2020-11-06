@@ -58,12 +58,12 @@ void dan::Mesh::unbind() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void dan::Mesh::setVertices(int count, float *data) {
+void dan::Mesh::setVertices(int count, const float *data) {
     glBindBuffer(GL_ARRAY_BUFFER, vertices);
     glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
-void dan::Mesh::setIndices(int count, unsigned int *data) {
+void dan::Mesh::setIndices(int count, const unsigned int *data) {
     countIndices = count;
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);

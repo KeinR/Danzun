@@ -17,6 +17,8 @@ namespace dan {
         typedef std::shared_ptr<Shader> shader_t;
     private:
         Mesh quad_;
+        // Is only for use by client code - The engine has
+        // no use for this
         Engine *engine;
         shader_t currentShader;
         int vWidth;
