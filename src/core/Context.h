@@ -23,7 +23,7 @@ namespace dan {
         int vHeight;
 
     public:
-        Context(Engine &e);
+        Context(Engine *e);
 
         void setShader(const shader_t &s);
         // Sets shader to nullptr

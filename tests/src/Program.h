@@ -19,9 +19,9 @@ class Program: private dan::WindowEvent, private dan::EventCallback {
     typedef std::shared_ptr<dan::Texture> tex_t;
 
     dan::Engine engine;
-    GameScene scene;
     std::shared_ptr<dan::Shader> shader;
     std::shared_ptr<dan::Player> player;
+    GameScene scene;
     std::shared_ptr<Bullet> bullet;
     dan::Timer bulletCooldown;
     dan::Timer enemyCooldown;

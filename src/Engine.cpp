@@ -12,7 +12,7 @@
 
 dan::Engine::Engine(const std::string &winName, int width, int height):
     window(winName.c_str(), width, height, 0),
-    rc(*this),
+    rc(this),
     scene(nullptr),
     windowEventCallback(nullptr),
     eventCallback(nullptr),

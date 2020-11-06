@@ -11,9 +11,10 @@
 
 Program::Program():
     engine("Danzun test", 500, 500),
-    scene(engine.getContext())
+    shader(std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag")),
+    scene(engine.getContext(), shader)
 {
-    shader = std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag");
+    // shader = std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag");
     engine.getContext().setShader(shader);
     shader->setInt1("tex", 0);
 

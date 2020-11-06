@@ -8,8 +8,8 @@
 #include "../Engine.h"
 #include "../lib/opengl.h"
 
-dan::Context::Context(Engine &e):
-    engine(&e),
+dan::Context::Context(Engine *e):
+    engine(e),
     currentShader(nullptr),
     vWidth(50),
     vHeight(50)

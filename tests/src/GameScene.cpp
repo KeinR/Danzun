@@ -9,7 +9,9 @@
 #include "../../src/game/Player.h"
 #include "../../src/gfs/Color.h"
 
-GameScene::GameScene(dan::Context &c): font("data/consolas18.bff") {
+GameScene::GameScene(dan::Context &c, const std::shared_ptr<dan::Shader> &defShader):
+    font("data/consolas18.bff"), defShader(defShader)
+{
     textShader = std::make_shared<dan::Shader>("data/shaders/text.vert", "data/shaders/text.frag");
     c.setShader(textShader);
     textShader->setInt1("atlas", 0);
@@ -33,6 +35,8 @@ void GameScene::render(dan::Context &c) {
     ).load(c);
     font.bindAtlas();
     font.genMesh(text, 0xFF0000).render();
-    // c.getEngine().getGame().render(c);
-    // c.getEngine().getGame().getPlayer()->render(c);
+
+    c.setShader(defShader);
+    c.getEngine().getGame().render(c);
+    c.getEngine().getGame().getPlayer()->render(c);
 }
