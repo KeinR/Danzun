@@ -1,12 +1,12 @@
 #include "Bullet.h"
 
-#include <memory>
 
 #include "../../src/math/Circle.h"
+#include "../../src/ImgDisp.h"
 
-Bullet::Bullet(const dan::Sprite::texture_t &texture) {
+Bullet::Bullet(const std::shared_ptr<dan::AbsTexture> &texture) {
     dan::Sprite sprite;
-    sprite.setTexture(texture);
+    sprite.setConf(std::make_shared<dan::ImgDisp>(texture));
     sprite.setWidth(30);
     sprite.setHeight(30);
     setSprite(sprite);

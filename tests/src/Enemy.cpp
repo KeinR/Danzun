@@ -1,15 +1,17 @@
 #include "Enemy.h"
 
+#include <memory>
 #include <iostream>
 
 #include "../../src/game/AbstractBulletType.h"
+#include "../../src/ImgDisp.h"
 
-Enemy::Enemy(const dan::Sprite::texture_t &texture):
+Enemy::Enemy(const std::shared_ptr<dan::AbsTexture> &texture):
     x(100),
     y(200),
     health(100)
 {
-    sprite.setTexture(texture);
+    sprite.setConf(std::make_shared<dan::ImgDisp>(texture));
     sprite.setWidth(50);
     sprite.setHeight(50);
     hitbox.setRadius(25);

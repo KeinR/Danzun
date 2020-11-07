@@ -1,11 +1,12 @@
 #include "Sprite.h"
 
 #include "core/Context.h"
+#include "core/debug.h"
 
 dan::Sprite::Sprite() {
 }
-void dan::Sprite::setTexture(const texture_t &tex) {
-    texture = tex;
+void dan::Sprite::setConf(const conf_t &cf) {
+    conf = cf;
 }
 void dan::Sprite::setWidth(float w) {
     mat.width = w;
@@ -45,15 +46,9 @@ float dan::Sprite::getRotation() const {
     return mat.rotation;
 }
 
-
-void dan::Sprite::setShader(const shader_t &s) {
-    shader = s;
-}
-
 void dan::Sprite::render(Context &c) {
-    if (shader) {
-        c.setShader(shader);
-    }
+    DANZUN_ASSERT(conf);
+    conf->setup(c);
     mat.load(c);
-    texture->render(c);
+    conf->render(c);
 }

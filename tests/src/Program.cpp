@@ -6,6 +6,7 @@
 #include "../../src/win/Window.h"
 #include "../../src/gfs/Texture.h"
 #include "../../src/ManImage.h"
+#include "../../src/ImgDisp.h"
 #include "../../src/lib/opengl.h"
 #include "Enemy.h"
 
@@ -26,7 +27,7 @@ Program::Program():
 
     dan::Sprite playerSprite;
 
-    playerSprite.setTexture(loadTex("data/player.png"));
+    playerSprite.setConf(std::make_shared<dan::ImgDisp>(loadTex("data/player.png")));
     playerSprite.setX(50);
     playerSprite.setY(50);
     playerSprite.setWidth(50);

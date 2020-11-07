@@ -3,10 +3,9 @@
 
 #include <memory>
 
-#include "gfs/Texture.h"
 #include "gfs/Matrix.h"
 
-#include "AbsTexture.h"
+#include "AbsRenderConf.h"
 
 namespace dan {
     class Context;
@@ -16,18 +15,15 @@ namespace dan {
 namespace dan {
     class Sprite {
     public:
-        typedef std::shared_ptr<AbsTexture> texture_t;
-        typedef std::shared_ptr<Shader> shader_t;
+        typedef std::shared_ptr<AbsRenderConf> conf_t;
     private:
-        texture_t texture;
+        conf_t conf;
         // pixels
         Matrix mat;
-        // The preferred shader
-        shader_t shader;
     public:
         Sprite();
 
-        void setTexture(const texture_t &tex);
+        void setConf(const conf_t &cf);
 
         void setWidth(float w);
         void setHeight(float h);
@@ -43,10 +39,6 @@ namespace dan {
         int getX() const;
         int getY() const;
         float getRotation() const;
-
-        // nullptr for no preference / use the one currently bound.
-        // nullptr by default
-        void setShader(const shader_t &s);
 
         void render(Context &c);
     };
