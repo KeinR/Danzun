@@ -2,12 +2,14 @@
 
 #include <memory>
 #include <string>
+#include <iostream>
 
 #include "../../src/gfs/Matrix.h"
 #include "../../src/Engine.h"
 #include "../../src/core/Context.h"
 #include "../../src/game/Player.h"
 #include "../../src/gfs/Color.h"
+#include "../../src/IndexedTex.h"
 
 GameScene::GameScene(dan::Context &c, const std::shared_ptr<dan::Shader> &defShader):
     font("data/consolas18.bff"), defShader(defShader)
@@ -15,6 +17,21 @@ GameScene::GameScene(dan::Context &c, const std::shared_ptr<dan::Shader> &defSha
     textShader = std::make_shared<dan::Shader>("data/shaders/text.vert", "data/shaders/text.frag");
     c.setShader(textShader);
     textShader->setInt1("atlas", 0);
+    atlas.loadAse("data/bow-animation.json");
+    for (int i = 0; i < 5; i++) {
+        ani.pushFrame(dan::Frame(
+            std::make_shared<dan::IndexedTex>(
+                atlas.getFrame(i).coords,
+                atlas.getTexture()
+            ),
+            atlas.getFrame(i).duration
+        ));
+        // std::cout << "atlas.getFrame(i).duration = " << atlas.getFrame(i).duration << '\n';
+        // std::cout << "atlas.getFrame(i).width = " << atlas.getFrame(i).width << '\n';
+        // std::cout << "atlas.getFrame(i).height = " << atlas.getFrame(i).height << '\n';
+    }
+
+    inst = ani.newInstance();
 }
 void GameScene::render(dan::Context &c) {
     c.getEngine().renderGameTarget();
@@ -39,4 +56,16 @@ void GameScene::render(dan::Context &c) {
     c.setShader(defShader);
     c.getEngine().getGame().render(c);
     c.getEngine().getGame().getPlayer()->render(c);
+
+    inst.advance(1);
+
+    inst.setup(c);
+    dan::Matrix(
+        50, 50,
+        100, 100
+    ).load(c);
+    inst.render(c);
+
+    // atlas.getTexture()->bind();
+    // c.renderQuad();
 }

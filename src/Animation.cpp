@@ -6,6 +6,12 @@ static void defaultCallback(dan::Animation::Instance &inst) {
     inst.restart();
 }
 
+dan::Animation::Instance::Instance():
+    parent(nullptr),
+    timeToFlip(0),
+    index(0) {
+}
+
 dan::Animation::Instance::Instance(Animation &parent):
     parent(&parent),
     timeToFlip(0),
@@ -14,10 +20,14 @@ dan::Animation::Instance::Instance(Animation &parent):
     restart();
 }
 void dan::Animation::Instance::restart() {
+    DANZUN_ASSERT(parent != nullptr);
+
     index = 0;
     timeToFlip = parent->getFrame(0).getLength();
 }
 void dan::Animation::Instance::advance(float deltaTime) {
+    DANZUN_ASSERT(parent != nullptr);
+
     timeToFlip -= deltaTime;
     if (timeToFlip <= 0) {
         index++;
@@ -31,10 +41,14 @@ void dan::Animation::Instance::advance(float deltaTime) {
 }
 
 void dan::Animation::Instance::setup(Context &c) {
+    DANZUN_ASSERT(parent != nullptr);
+
     parent->getFrame(index).setup(c);
 }
 
 void dan::Animation::Instance::render(Context &c) {
+    DANZUN_ASSERT(parent != nullptr);
+
     parent->getFrame(index).render(c);
 }
 

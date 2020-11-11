@@ -3,7 +3,7 @@
 #include <vector>
 
 dan::IndexedTex::IndexedTex(const std::array<float, 8> &texCoords, const texture_t &texture):
-    texCoords(texCoords) {
+    texture(texture), texCoords(texCoords) {
 
     const std::array<float, 8> coords = {
         -1, -1,
@@ -25,6 +25,8 @@ dan::IndexedTex::IndexedTex(const std::array<float, 8> &texCoords, const texture
 
     mesh.setIndices(indices.size(), indices.data());
     mesh.setVertices(vertices.size(), vertices.data());
+    mesh.setParam(0, 2, 2, 0);
+    mesh.setParam(1, 2, 2, coords.size());
 }
 
 const std::array<float, 8> &dan::IndexedTex::getTexCoords() const {

@@ -19,8 +19,9 @@ namespace dan {
             float timeToFlip;
             unsigned int index;
         public:
+            // Ill formed
+            Instance();
             Instance(Animation &parent);
-            Matrix &getMat();
             void restart();
             void advance(float deltaTime);
 

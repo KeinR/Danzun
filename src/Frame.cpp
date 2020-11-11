@@ -12,6 +12,7 @@ void dan::Frame::setup(Context &c) {
     if (shader) {
         c.setShader(shader);
     }
+    texture->bind();
 }
 void dan::Frame::render(Context &c) {
     texture->render(c);
