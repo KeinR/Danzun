@@ -5,12 +5,11 @@
 #include <fstream>
 #include <iostream>
 
-#include "lib/opengl.h"
-
-#include "gfs/Color.h"
-#include "gfs/Mesh.h"
-#include "core/error.h"
-#include "core/debug.h"
+#include "../core/error.h"
+#include "../core/debug.h"
+#include "../render/Color.h"
+#include "../render/Mesh.h"
+#include "../lib/opengl.h"
 
 static constexpr int VERTEX_SIZE = 8;
 

@@ -1,6 +1,7 @@
 #include "debug.h"
 
 #include <iostream>
+
 #include "../lib/opengl.h"
 
 #include "error.h"

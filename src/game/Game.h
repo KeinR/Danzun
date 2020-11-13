@@ -4,12 +4,11 @@
 #include <memory>
 #include <vector>
 
-#include "../Node.h"
-#include "../RealTimer.h"
 #include "Entity.h"
+#include "AbsBulletType.h"
 
-#include "AbstractBulletType.h"
-
+#include "../ui/Node.h"
+#include "../time/RealTimer.h"
 #include "../math/Hitbox.h"
 
 namespace dan {
@@ -21,7 +20,7 @@ namespace dan {
     class Game: public Node {
     public:
         typedef std::shared_ptr<Hitbox> hitbox_t;
-        typedef std::shared_ptr<AbstractBulletType> bulletType_t;
+        typedef std::shared_ptr<AbsBulletType> bulletType_t;
         typedef std::vector<bulletType_t> bullets_t;
         typedef std::shared_ptr<Entity> entity_t;
         typedef std::vector<entity_t> entities_t;

@@ -83,7 +83,7 @@ const dan::Circle &dan::Player::getHitbox() {
     hitbox.setY(y);
     return hitbox;
 }
-void dan::Player::hit(Game &g, AbstractBulletType &culprate) {
+void dan::Player::hit(Game &g, AbsBulletType &culprate) {
     std::cout << "PLAYER HIT" << '\n'; // TEMP
 }
 bool dan::Player::shouldDelete() {

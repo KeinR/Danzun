@@ -1,16 +1,10 @@
 #ifndef DANZUN_BASICENEMY_H_INCLUDED
 #define DANZUN_BASICENEMY_H_INCLUDED
 
-#include "../Sprite.h"
+#include "../sprite/Sprite.h"
 #include "../math/Circle.h"
 
 #include "Entity.h"
-
-// namespace dan {
-//     class Game;
-//     class AbstractBulletType;
-//     class Context;
-// }
 
 namespace dan {
     class BasicEnemy: public Entity {
@@ -34,7 +28,7 @@ namespace dan {
 
         const Circle &getHitbox() override;
         virtual void logic(Game &g, float deltaTime) override;
-        virtual void hit(Game &g, AbstractBulletType &culprate) override;
+        virtual void hit(Game &g, AbsBulletType &culprate) override;
         virtual bool shouldDelete() override;
         virtual void render(Context &c) override;
     };

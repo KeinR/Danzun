@@ -1,6 +1,6 @@
 #include "ImgDisp.h"
 
-#include "core/Context.h"
+#include "../core/Context.h"
 
 dan::ImgDisp::ImgDisp(const texture_t &texture, const shader_t &shader):
     texture(texture), shader(shader)

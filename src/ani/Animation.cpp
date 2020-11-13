@@ -1,7 +1,7 @@
 #include "Animation.h"
 
-#include "core/debug.h"
-#include "core/Context.h"
+#include "../core/debug.h"
+#include "../core/Context.h"
 #include "AniControl.h"
 
 static void defaultCallback(dan::Animation::Instance &inst) {

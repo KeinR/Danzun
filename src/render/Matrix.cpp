@@ -5,9 +5,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 
+#include "Shader.h"
+
 #include "../lib/opengl.h"
 #include "../core/Context.h"
-#include "../Shader.h"
 
 inline static float ndcX(float x, int winWidth);
 inline static float ndcY(float y, int winHeight);

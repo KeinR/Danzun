@@ -2,7 +2,7 @@
 
 #include <stb/stb_image.h>
 
-#include "core/error.h"
+#include "../core/error.h"
 
 dan::ManImage::ManImage(): data(nullptr), width(0), height(0), channels(0) {
 }

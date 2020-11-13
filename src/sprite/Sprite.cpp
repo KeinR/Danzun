@@ -1,7 +1,7 @@
 #include "Sprite.h"
 
-#include "core/Context.h"
-#include "core/debug.h"
+#include "../core/Context.h"
+#include "../core/debug.h"
 
 dan::Sprite::Sprite() {
 }

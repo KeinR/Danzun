@@ -7,10 +7,10 @@
 #include <stdexcept>
 #include <array>
 
-#include "lib/opengl.h"
-#include "core/debug.h"
-#include "core/error.h"
-#include "core/Context.h"
+#include "../core/Context.h"
+#include "../core/debug.h"
+#include "../core/error.h"
+#include "../lib/opengl.h"
 
 #ifndef NDEBUG
 static void assertBound(GLint thisShader) {

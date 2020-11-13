@@ -3,9 +3,9 @@
 #include <array>
 
 #include "debug.h"
+#include "Engine.h"
 
-#include "../Shader.h"
-#include "../Engine.h"
+#include "../render/Shader.h"
 #include "../lib/opengl.h"
 
 dan::Context::Context(Engine *e):

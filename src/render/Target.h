@@ -1,8 +1,8 @@
 #ifndef DANZUN_TARGET_H_INCLUDED
 #define DANZUN_TARGET_H_INCLUDED
 
-#include "gfs/Framebuffer.h"
-#include "gfs/Texture.h"
+#include "Framebuffer.h"
+#include "Texture.h"
 
 namespace dan {
     class Context;

@@ -1,10 +1,9 @@
 #include "Target.h"
 
-#include "core/Context.h"
-#include "core/debug.h"
-#include "lib/opengl.h"
-
-#include "Node.h"
+#include "../core/Context.h"
+#include "../core/debug.h"
+#include "../lib/opengl.h"
+#include "../ui/Node.h"
 
 dan::Target::Target():
     result(Texture::tparam{

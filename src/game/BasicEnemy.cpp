@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "AbstractBulletType.h"
+#include "AbsBulletType.h"
 
 dan::BasicEnemy::BasicEnemy(): health(0) {
 }
@@ -47,7 +47,7 @@ const dan::Circle &dan::BasicEnemy::getHitbox() {
 void dan::BasicEnemy::logic(Game &g, float deltaTime) {
     // Do nothing...
 }
-void dan::BasicEnemy::hit(Game &g, AbstractBulletType &culprate) {
+void dan::BasicEnemy::hit(Game &g, AbsBulletType &culprate) {
     long newHealth = getHealth() - culprate.getDamage();
     setHealth(std::max(newHealth, 0l));
 }

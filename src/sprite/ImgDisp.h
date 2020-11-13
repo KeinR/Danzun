@@ -5,7 +5,8 @@
 
 #include "AbsRenderConf.h"
 #include "AbsTexture.h"
-#include "Shader.h"
+
+#include "../render/Shader.h"
 
 namespace dan {
     class ImgDisp: public AbsRenderConf {

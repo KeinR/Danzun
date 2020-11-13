@@ -4,15 +4,15 @@
 #include <memory>
 #include <string>
 
-#include "../../src/Engine.h"
-#include "../../src/Shader.h"
+#include "../../src/core/Engine.h"
+#include "../../src/render/Shader.h"
 #include "../../src/game/Player.h"
-#include "../../src/EventCallback.h"
-#include "../../src/Timer.h"
-#include "../../src/gfs/Texture.h"
+#include "../../src/core/EventCallback.h"
+#include "../../src/time/Timer.h"
+#include "../../src/render/Texture.h"
 #include "../../src/win/WindowEvent.h"
-#include "../../src/Animation.h"
-#include "../../src/AniControl.h"
+#include "../../src/ani/Animation.h"
+#include "../../src/ani/AniControl.h"
 
 #include "Bullet.h"
 #include "GameScene.h"

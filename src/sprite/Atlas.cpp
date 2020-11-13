@@ -4,12 +4,13 @@
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
-#include "core/debug.h"
-#include "core/error.h"
 #include "ManImage.h"
-#include "util.h"
-#include "Frame.h"
 #include "IndexedTex.h"
+
+#include "../core/util.h"
+#include "../core/debug.h"
+#include "../core/error.h"
+#include "../ani/Frame.h"
 
 static constexpr int CHANNELS = 4;
 

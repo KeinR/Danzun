@@ -5,10 +5,10 @@
 #include <vector>
 #include <functional>
 
-#include "AbsTexture.h"
-#include "AbsRenderConf.h"
+#include "../sprite/AbsTexture.h"
+#include "../sprite/AbsRenderConf.h"
 #include "Frame.h"
-#include "gfs/Matrix.h"
+#include "../render/Matrix.h"
 
 namespace dan {
     class AniControl;

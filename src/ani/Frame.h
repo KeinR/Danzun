@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "AbsTexture.h"
-#include "Shader.h"
+#include "../sprite/AbsTexture.h"
+#include "../render/Shader.h"
 
 namespace dan {
     class Context;

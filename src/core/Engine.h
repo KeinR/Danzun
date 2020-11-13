@@ -4,11 +4,11 @@
 #include <unordered_map>
 #include <string>
 
-#include "win/Window.h"
-#include "win/WindowEvent.h"
-#include "core/Context.h"
-#include "game/Game.h"
-#include "Target.h"
+#include "Context.h"
+#include "../win/Window.h"
+#include "../win/WindowEvent.h"
+#include "../game/Game.h"
+#include "../render/Target.h"
 
 namespace dan {
     class Group;

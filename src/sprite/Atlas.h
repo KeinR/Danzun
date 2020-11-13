@@ -6,8 +6,8 @@
 #include <array>
 #include <map>
 
-#include "gfs/Texture.h"
-#include "Animation.h"
+#include "../render/Texture.h"
+#include "../ani/Animation.h"
 
 namespace dan {
     class AniControl;

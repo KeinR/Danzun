@@ -4,8 +4,8 @@
 #include <string>
 #include <memory>
 
-#include "../gfs/Mesh.h"
-#include "../Clock.h"
+#include "../render/Mesh.h"
+#include "../time/Clock.h"
 
 namespace dan {
     class Engine;

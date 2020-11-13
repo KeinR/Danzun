@@ -3,11 +3,10 @@
 
 #include <string>
 
+#include "../render/Mesh.h"
+
 namespace dan {
-    class Texture;
     class Color;
-    class Context;
-    class Mesh;
 }
 
 namespace dan {

@@ -2,7 +2,8 @@
 #define DANZUN_PLAYER_H_INCLUDED
 
 #include "Entity.h"
-#include "../Sprite.h"
+
+#include "../sprite/Sprite.h"
 #include "../math/Circle.h"
 
 namespace dan {
@@ -41,7 +42,7 @@ namespace dan {
         // TODO: This should be pure virtual
         void logic(Game &g, float deltaTime) override;
         const Circle &getHitbox() override;
-        void hit(Game &g, AbstractBulletType &culprate) override;
+        void hit(Game &g, AbsBulletType &culprate) override;
         bool shouldDelete() override;
     };
 }

@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "../../src/game/BulletType.h"
-#include "../../src/AbsTexture.h"
+#include "../../src/sprite/AbsTexture.h"
 
 class Bullet: public dan::BulletType {
 protected:

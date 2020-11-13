@@ -3,8 +3,8 @@
 #include <memory>
 #include <iostream>
 
-#include "../../src/game/AbstractBulletType.h"
-#include "../../src/ImgDisp.h"
+#include "../../src/game/AbsBulletType.h"
+#include "../../src/sprite/ImgDisp.h"
 
 Enemy::Enemy(const std::shared_ptr<dan::AbsTexture> &texture):
     x(100),
@@ -25,7 +25,7 @@ void Enemy::logic(dan::Game &g, float deltaTime) {
     // y += deltaTime * 3;
     // x += deltaTime * 2;
 }
-void Enemy::hit(dan::Game &g, dan::AbstractBulletType &culprate) {
+void Enemy::hit(dan::Game &g, dan::AbsBulletType &culprate) {
     health -= culprate.getDamage();
     std::cout << "Health reduced to " << health << '\n';
 }

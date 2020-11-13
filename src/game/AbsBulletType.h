@@ -1,5 +1,5 @@
-#ifndef DANZUN_ABTRACTBULLETTYPE_H_INCLUDED
-#define DANZUN_ABTRACTBULLETTYPE_H_INCLUDED
+#ifndef DANZUN_ABSBULLETTYPE_H_INCLUDED
+#define DANZUN_ABSBULLETTYPE_H_INCLUDED
 
 namespace dan {
     class Context;
@@ -7,9 +7,9 @@ namespace dan {
 }
 
 namespace dan {
-    class AbstractBulletType {
+    class AbsBulletType {
     public:
-        virtual ~AbstractBulletType() = 0;
+        virtual ~AbsBulletType() = 0;
         virtual void gc(Game &g) = 0;
         virtual void logic(Game &g, float deltaTime, bool allied) = 0;
         virtual void renderChildren(Game &g, Context &c) = 0;

@@ -6,8 +6,8 @@
 
 #include "AbsTexture.h"
 
-#include "gfs/Texture.h"
-#include "gfs/Mesh.h"
+#include "../render/Texture.h"
+#include "../render/Mesh.h"
 
 namespace dan {
     class IndexedTex: public AbsTexture {

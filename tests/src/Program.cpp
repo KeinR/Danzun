@@ -4,11 +4,11 @@
 
 #include "../../src/lib/glfw.h"
 #include "../../src/win/Window.h"
-#include "../../src/gfs/Texture.h"
-#include "../../src/ManImage.h"
-#include "../../src/ImgDisp.h"
+#include "../../src/render/Texture.h"
+#include "../../src/sprite/ManImage.h"
+#include "../../src/sprite/ImgDisp.h"
 #include "../../src/lib/opengl.h"
-#include "../../src/Atlas.h"
+#include "../../src/sprite/Atlas.h"
 #include "Enemy.h"
 
 Program::Program():

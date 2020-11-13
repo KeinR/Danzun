@@ -2,7 +2,7 @@
 
 
 #include "../../src/math/Circle.h"
-#include "../../src/ImgDisp.h"
+#include "../../src/sprite/ImgDisp.h"
 
 Bullet::Bullet(const std::shared_ptr<dan::AbsTexture> &texture) {
     dan::Sprite sprite;

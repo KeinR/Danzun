@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../AbsTexture.h"
+#include "../sprite/AbsTexture.h"
 
 namespace dan {
     class Image;

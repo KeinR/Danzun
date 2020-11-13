@@ -3,9 +3,9 @@
 
 #include <memory>
 
-#include "gfs/Matrix.h"
-
 #include "AbsRenderConf.h"
+
+#include "../render/Matrix.h"
 
 namespace dan {
     class Context;

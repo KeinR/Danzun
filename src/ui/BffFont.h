@@ -5,8 +5,9 @@
 #include <string>
 #include <vector>
 
-#include "gfs/Texture.h"
 #include "Font.h"
+
+#include "../render/Texture.h"
 
 namespace dan {
     class Mesh;

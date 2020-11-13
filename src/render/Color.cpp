@@ -3,9 +3,10 @@
 #include <algorithm>
 #include <cmath>
 
+#include "Shader.h"
+
 #include "../lib/opengl.h"
 #include "../core/Context.h"
-#include "../Shader.h"
 
 static constexpr int LENGTH = 4;
 

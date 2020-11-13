@@ -5,18 +5,19 @@
 
 #include <glm/glm.hpp>
 
-#include "AbstractBulletType.h"
-#include "../Sprite.h"
-#include "../math/Hitbox.h"
-#include "../RealTimer.h"
+#include "AbsBulletType.h"
 #include "Entity.h"
+
+#include "../sprite/Sprite.h"
+#include "../math/Hitbox.h"
+#include "../time/RealTimer.h"
 
 namespace dan {
     class Game;
 }
 
 namespace dan {
-    class BulletType: public AbstractBulletType {
+    class BulletType: public AbsBulletType {
     public:
         typedef std::shared_ptr<Hitbox> hitbox_t;
         struct child {

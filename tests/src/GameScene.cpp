@@ -4,12 +4,12 @@
 #include <string>
 #include <iostream>
 
-#include "../../src/gfs/Matrix.h"
-#include "../../src/Engine.h"
+#include "../../src/render/Matrix.h"
+#include "../../src/core/Engine.h"
 #include "../../src/core/Context.h"
 #include "../../src/game/Player.h"
-#include "../../src/gfs/Color.h"
-#include "../../src/IndexedTex.h"
+#include "../../src/render/Color.h"
+#include "../../src/sprite/IndexedTex.h"
 
 GameScene::GameScene(dan::Context &c, const std::shared_ptr<dan::Shader> &defShader):
     font("data/consolas18.bff"), defShader(defShader)

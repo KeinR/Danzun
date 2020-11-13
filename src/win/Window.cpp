@@ -4,12 +4,13 @@
 #include <string>
 #include <map>
 
-#include "../lib/glfw.h"
 #include "WindowEvent.h"
+#include "Cursor.h"
+
 #include "../core/debug.h"
 #include "../core/error.h"
-#include "Cursor.h"
-#include "../gfs/Color.h"
+#include "../lib/glfw.h"
+#include "../render/Color.h"
 
 struct winparams {
     const char *title;

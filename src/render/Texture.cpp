@@ -1,7 +1,7 @@
 #include "Texture.h"
 
-#include "../ManImage.h"
-#include "../Image.h"
+#include "../sprite/ManImage.h"
+#include "../sprite/Image.h"
 #include "../lib/opengl.h"
 #include "../core/error.h"
 #include "../core/Context.h"

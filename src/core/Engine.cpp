@@ -1,14 +1,14 @@
 #include "Engine.h"
 
-#include "lib/opengl.h"
-#include "lib/glfw.h"
-#include "core/error.h"
+#include "../lib/opengl.h"
+#include "../lib/glfw.h"
+#include "error.h"
 
 #include "EventCallback.h"
 
 #include <iostream>
 #include <chrono>
-#include "RealTimer.h"
+#include "../time/RealTimer.h"
 
 dan::Engine::Engine(const std::string &winName, int width, int height):
     window(winName.c_str(), width, height, 0),
