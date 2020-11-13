@@ -9,6 +9,8 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
 file(GLOB_RECURSE sources src/*.cpp)
 file(GLOB_RECURSE libs extern/*.c)
 
+file(COPY "devel/scripts/mkheads" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+
 add_library(danzun ${sources} ${libs})
 
 find_package(glm REQUIRED)
