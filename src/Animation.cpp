@@ -1,6 +1,7 @@
 #include "Animation.h"
 
 #include "core/debug.h"
+#include "core/Context.h"
 
 static void defaultCallback(dan::Animation::Instance &inst) {
     inst.restart();
@@ -42,6 +43,8 @@ void dan::Animation::Instance::advance(float deltaTime) {
 
 void dan::Animation::Instance::setup(Context &c) {
     DANZUN_ASSERT(parent != nullptr);
+
+    advance(c.getClock().getDeltaTime());
 
     parent->getFrame(index).setup(c);
 }

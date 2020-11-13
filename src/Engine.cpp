@@ -143,6 +143,7 @@ void dan::Engine::run() {
         const float time = glfwGetTime();
         const float deltaTime = (time - start) * gameSpeed;
         start = time;
+        rc.getClock().pushDeltaTime(deltaTime);
         if (gameActive) {
             game.logic(deltaTime);
         }

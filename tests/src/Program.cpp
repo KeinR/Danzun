@@ -13,7 +13,9 @@
 Program::Program():
     engine("Danzun test", 500, 500),
     shader(std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag")),
-    scene(engine.getContext(), shader)
+    scene(engine.getContext(), shader),
+    bulletCooldown(engine.getContext().getClock()),
+    enemyCooldown(engine.getContext().getClock())
 {
     // shader = std::make_shared<dan::Shader>("data/shaders/basic.vert", "data/shaders/basic.frag");
     engine.getContext().setShader(shader);
@@ -87,7 +89,6 @@ void Program::processInput(float deltaTime) {
     if (right) {
         player->move(game, dan::Player::RIGHT, deltaTime, combine);
     }
-    bulletCooldown.advance(deltaTime);
     if (shoot && bulletCooldown.done()) {
         bullet->spawn({player->getX(), player->getY()}, {0, -100});
         bullet->spawn({player->getX(), player->getY()}, {-100, 0});

@@ -18,12 +18,12 @@ namespace dan {
             // In seconds / game time 
             float timeToFlip;
             unsigned int index;
+            void advance(float deltaTime);
         public:
             // Ill formed
             Instance();
             Instance(Animation &parent);
             void restart();
-            void advance(float deltaTime);
 
             void setup(Context &c) override;
             void render(Context &c) override;

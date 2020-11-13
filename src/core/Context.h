@@ -40,7 +40,6 @@ namespace dan {
         int getVPHeight() const;
         const shader_t &getShader() const;
         Engine &getEngine() const;
-
         Clock &getClock();
 
         void renderQuad() const;

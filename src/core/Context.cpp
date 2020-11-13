@@ -62,13 +62,13 @@ const dan::Context::shader_t &dan::Context::getShader() const {
     return currentShader;
 }
 
-dan::Clock &dan::Context::getClock() {
-    return clock;
-}
-
 dan::Engine &dan::Context::getEngine() const {
     DANZUN_ASSERT(engine != nullptr);
     return *engine;
+}
+
+dan::Clock &dan::Context::getClock() {
+    return clock;
 }
 
 void dan::Context::renderQuad() const {

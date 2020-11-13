@@ -5,13 +5,17 @@
 // All units are in seconds.
 
 namespace dan {
+    class Clock;
+}
+
+namespace dan {
     class Timer {
-        float progress;
-        float goal;
+        Clock *clock;
+        float end;
+        float duration;
     public:
-        Timer();
-        void advance(float s);
-        void set(float duration);
+        Timer(Clock &clock);
+        void set(float s);
         void reset();
         bool done() const;
     };

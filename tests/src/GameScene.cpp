@@ -18,7 +18,7 @@ GameScene::GameScene(dan::Context &c, const std::shared_ptr<dan::Shader> &defSha
     c.setShader(textShader);
     textShader->setInt1("atlas", 0);
     atlas.loadAse("data/bow-animation.json");
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 9; i++) {
         ani.pushFrame(dan::Frame(
             std::make_shared<dan::IndexedTex>(
                 atlas.getFrame(i).coords,
@@ -56,8 +56,6 @@ void GameScene::render(dan::Context &c) {
     c.setShader(defShader);
     c.getEngine().getGame().render(c);
     c.getEngine().getGame().getPlayer()->render(c);
-
-    inst.advance(1);
 
     inst.setup(c);
     dan::Matrix(
