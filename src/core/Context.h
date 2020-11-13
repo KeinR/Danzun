@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "../gfs/Mesh.h"
+#include "../Clock.h"
 
 namespace dan {
     class Engine;
@@ -24,6 +25,8 @@ namespace dan {
         int vWidth;
         int vHeight;
 
+        Clock clock;
+
     public:
         Context(Engine *e);
 
@@ -37,6 +40,8 @@ namespace dan {
         int getVPHeight() const;
         const shader_t &getShader() const;
         Engine &getEngine() const;
+
+        Clock &getClock();
 
         void renderQuad() const;
     };

@@ -61,6 +61,11 @@ const dan::Context::shader_t &dan::Context::getShader() const {
     DANZUN_ASSERT(currentShader);
     return currentShader;
 }
+
+dan::Clock &dan::Context::getClock() {
+    return clock;
+}
+
 dan::Engine &dan::Context::getEngine() const {
     DANZUN_ASSERT(engine != nullptr);
     return *engine;
