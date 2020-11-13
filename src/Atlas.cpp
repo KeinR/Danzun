@@ -8,6 +8,8 @@
 #include "core/error.h"
 #include "ManImage.h"
 #include "util.h"
+#include "Frame.h"
+#include "IndexedTex.h"
 
 static constexpr int CHANNELS = 4;
 
@@ -16,7 +18,7 @@ static std::string stripAseExt(const std::string &in);
 dan::Atlas::Atlas(): texture(std::make_shared<Texture>()) {
 }
 
-void dan::Atlas::loadAse(const std::string &path) {
+dan::Atlas &dan::Atlas::loadAse(const std::string &path) {
     try {
         namespace fs = std::filesystem;
 
@@ -27,7 +29,7 @@ void dan::Atlas::loadAse(const std::string &path) {
         std::ifstream file(realPath);
         if (!file.good()) {
             err("Atlas::loadAse") << "\"" << path << "\" does not exist or cannot be opened";
-            return;
+            return *this;
         }
 
         using json = nlohmann::json;
@@ -74,6 +76,8 @@ void dan::Atlas::loadAse(const std::string &path) {
     } catch (std::exception &e) {
         err("Atlas::loadAse") << "Failed to load atlas as specified in \"" << path << "\": " << e.what();
     }
+
+    return *this;
 }
 
 std::shared_ptr<dan::Texture> &dan::Atlas::getTexture() {
@@ -97,4 +101,18 @@ std::string stripAseExt(const std::string &in) {
         }
     }
     return in;
+}
+
+dan::Animation dan::Atlas::asAnimation(AniControl *c) const {
+    Animation ani(c);
+    for (frame f : frames) {
+        ani.pushFrame(dan::Frame(
+            std::make_shared<dan::IndexedTex>(
+                f.coords,
+                texture
+            ),
+            f.duration
+        ));
+    }
+    return ani;
 }

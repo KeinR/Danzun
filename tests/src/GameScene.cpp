@@ -17,24 +17,26 @@ GameScene::GameScene(dan::Context &c, const std::shared_ptr<dan::Shader> &defSha
     textShader = std::make_shared<dan::Shader>("data/shaders/text.vert", "data/shaders/text.frag");
     c.setShader(textShader);
     textShader->setInt1("atlas", 0);
-    atlas.loadAse("data/bow-animation.json");
-    for (int i = 0; i < 9; i++) {
-        ani.pushFrame(dan::Frame(
-            std::make_shared<dan::IndexedTex>(
-                atlas.getFrame(i).coords,
-                atlas.getTexture()
-            ),
-            atlas.getFrame(i).duration
-        ));
-        // std::cout << "atlas.getFrame(i).duration = " << atlas.getFrame(i).duration << '\n';
-        // std::cout << "atlas.getFrame(i).width = " << atlas.getFrame(i).width << '\n';
-        // std::cout << "atlas.getFrame(i).height = " << atlas.getFrame(i).height << '\n';
-    }
+    // atlas.loadAse("data/bow-animation.json");
+    // for (int i = 0; i < 9; i++) {
+    //     ani.pushFrame(dan::Frame(
+    //         std::make_shared<dan::IndexedTex>(
+    //             atlas.getFrame(i).coords,
+    //             atlas.getTexture()
+    //         ),
+    //         atlas.getFrame(i).duration
+    //     ));
+    //     // std::cout << "atlas.getFrame(i).duration = " << atlas.getFrame(i).duration << '\n';
+    //     // std::cout << "atlas.getFrame(i).width = " << atlas.getFrame(i).width << '\n';
+    //     // std::cout << "atlas.getFrame(i).height = " << atlas.getFrame(i).height << '\n';
+    // }
 
-    inst = ani.newInstance();
+    // inst = ani.newInstance();
 }
 void GameScene::render(dan::Context &c) {
+    c.setShader(defShader);
     c.getEngine().renderGameTarget();
+    c.setShader(defShader);
     c.getEngine().bindGameTexture();
     dan::Matrix(0, 0,
         c.getEngine().getGame().getWidth(),
@@ -53,16 +55,16 @@ void GameScene::render(dan::Context &c) {
     font.bindAtlas();
     font.genMesh(text, 0xFF0000).render();
 
-    c.setShader(defShader);
-    c.getEngine().getGame().render(c);
-    c.getEngine().getGame().getPlayer()->render(c);
+    // c.setShader(defShader);
+    // c.getEngine().getGame().render(c);
+    // c.getEngine().getGame().getPlayer()->render(c);
 
-    inst.setup(c);
-    dan::Matrix(
-        50, 50,
-        100, 100
-    ).load(c);
-    inst.render(c);
+    // inst.setup(c);
+    // dan::Matrix(
+    //     50, 50,
+    //     100, 100
+    // ).load(c);
+    // inst.render(c);
 
     // atlas.getTexture()->bind();
     // c.renderQuad();

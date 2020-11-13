@@ -7,6 +7,11 @@
 #include <map>
 
 #include "gfs/Texture.h"
+#include "Animation.h"
+
+namespace dan {
+    class AniControl;
+}
 
 namespace dan {
     class Atlas {
@@ -26,11 +31,14 @@ namespace dan {
     public:
         Atlas();
         // Data MUST be formatted as json-array
-        void loadAse(const std::string &dataPath);
+        // Returns *this
+        Atlas &loadAse(const std::string &dataPath);
 
         std::shared_ptr<Texture> &getTexture();
         frame &getFrame(unsigned int index);
         frame &getFrame(const std::string &name);
+
+        Animation asAnimation(AniControl *c = nullptr) const;
     };
 }
 

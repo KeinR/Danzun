@@ -2,6 +2,7 @@
 
 #include "core/debug.h"
 #include "core/Context.h"
+#include "AniControl.h"
 
 static void defaultCallback(dan::Animation::Instance &inst) {
     inst.restart();
@@ -44,8 +45,6 @@ void dan::Animation::Instance::advance(float deltaTime) {
 void dan::Animation::Instance::setup(Context &c) {
     DANZUN_ASSERT(parent != nullptr);
 
-    advance(c.getClock().getDeltaTime());
-
     parent->getFrame(index).setup(c);
 }
 
@@ -55,11 +54,27 @@ void dan::Animation::Instance::render(Context &c) {
     parent->getFrame(index).render(c);
 }
 
-dan::Animation::Animation(): callback(defaultCallback) {
+dan::Animation::Animation(AniControl *c):
+    control(c),
+    callback(defaultCallback)
+{
 }
 
-dan::Animation::Instance dan::Animation::newInstance() {
-    return Instance(*this);
+void dan::Animation::setControl(AniControl &c) {
+    control = &c;
+}
+dan::AniControl &dan::Animation::getControl() {
+    DANZUN_ASSERT(control != nullptr);
+
+    return *control;
+}
+
+dan::Animation::instance_t dan::Animation::newInstance() {
+    DANZUN_ASSERT(control != nullptr);
+
+    instance_t inst = std::make_shared<Instance>(*this);
+    control->add(inst);
+    return inst;
 }
 
 void dan::Animation::setCallback(const callback_t &func) {

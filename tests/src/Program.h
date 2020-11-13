@@ -11,6 +11,8 @@
 #include "../../src/Timer.h"
 #include "../../src/gfs/Texture.h"
 #include "../../src/win/WindowEvent.h"
+#include "../../src/Animation.h"
+#include "../../src/AniControl.h"
 
 #include "Bullet.h"
 #include "GameScene.h"
@@ -27,6 +29,9 @@ class Program: private dan::WindowEvent, private dan::EventCallback {
     dan::Timer enemyCooldown;
 
     tex_t enemyTex;
+
+    dan::AniControl aniControl;
+    dan::Animation ani;
 
     tex_t loadTex(const std::string &path);
 

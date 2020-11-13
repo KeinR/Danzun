@@ -8,6 +8,7 @@
 #include "../../src/ManImage.h"
 #include "../../src/ImgDisp.h"
 #include "../../src/lib/opengl.h"
+#include "../../src/Atlas.h"
 #include "Enemy.h"
 
 Program::Program():
@@ -29,14 +30,14 @@ Program::Program():
 
     dan::Sprite playerSprite;
 
-    playerSprite.setConf(std::make_shared<dan::ImgDisp>(loadTex("data/player.png")));
+    // playerSprite.setConf(std::make_shared<dan::ImgDisp>(loadTex("data/player.png")));
     playerSprite.setX(50);
     playerSprite.setY(50);
     playerSprite.setWidth(50);
     playerSprite.setHeight(50);
 
     player = std::make_shared<dan::Player>();
-    player->setSprite(playerSprite);
+    // player->setSprite(playerSprite);
     player->setX(100);
     player->setY(100);
     player->setSpeed(100);
@@ -55,6 +56,11 @@ Program::Program():
     enemyTex = loadTex("data/player.png");
 
     engine.getGame().addEntity(std::make_shared<Enemy>(enemyTex));
+
+    ani = dan::Atlas().loadAse("data/bow-animation.json").asAnimation(&aniControl);
+
+    playerSprite.setConf(ani.newInstance());
+    player->setSprite(playerSprite);
 }
 
 Program::tex_t Program::loadTex(const std::string &path) {
@@ -104,6 +110,7 @@ void Program::processInput(float deltaTime) {
 }
 void Program::onFrame(dan::Engine &e, float deltaTime) {
     processInput(deltaTime);
+    aniControl.advance(deltaTime);
 }
 void Program::run() {
     engine.getContext().setShader(shader);

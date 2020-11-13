@@ -14,9 +14,6 @@ class GameScene: public dan::Node {
     dan::BffFont font;
     std::shared_ptr<dan::Shader> textShader;
     std::shared_ptr<dan::Shader> defShader;
-    dan::Atlas atlas;
-    dan::Animation ani;
-    dan::Animation::Instance inst;
 public:
     GameScene(dan::Context &c, const std::shared_ptr<dan::Shader> &defShader);
     void render(dan::Context &c);

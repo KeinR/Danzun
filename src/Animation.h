@@ -11,6 +11,10 @@
 #include "gfs/Matrix.h"
 
 namespace dan {
+    class AniControl;
+}
+
+namespace dan {
     class Animation {
     public:
         class Instance: public AbsRenderConf {
@@ -18,26 +22,31 @@ namespace dan {
             // In seconds / game time 
             float timeToFlip;
             unsigned int index;
-            void advance(float deltaTime);
         public:
             // Ill formed
             Instance();
             Instance(Animation &parent);
             void restart();
+            void advance(float deltaTime);
 
             void setup(Context &c) override;
             void render(Context &c) override;
         };
 
         typedef std::function<void(Instance &inst)> callback_t;
+        typedef std::shared_ptr<Instance> instance_t;
     private:
+        AniControl *control;
         std::vector<Frame> frames;
         callback_t callback;
     public:
 
-        Animation();
+        Animation(AniControl *c = nullptr);
 
-        Instance newInstance();
+        void setControl(AniControl &c);
+        AniControl &getControl();
+
+        instance_t newInstance();
         void setCallback(const callback_t &func);
         void callCallback(Instance &inst);
 
