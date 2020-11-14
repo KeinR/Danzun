@@ -3,6 +3,6 @@
 
 #define GLFW_DLL 1
 #include "opengl.h"
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 
 #endif

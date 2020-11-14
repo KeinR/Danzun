@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.10)
 project(test VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -11,4 +11,7 @@ file(GLOB_RECURSE sources src/*.cpp)
 
 add_executable(test ${sources})
 
-target_link_libraries(test PUBLIC danzun)
+include_directories("../extern")
+
+target_link_libraries(test PUBLIC "danzun" "stdc++fs")
+
