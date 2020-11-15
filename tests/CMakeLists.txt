@@ -13,5 +13,5 @@ add_executable(test ${sources})
 
 include_directories("../extern")
 
-target_link_libraries(test PUBLIC "danzun" "stdc++fs")
+target_link_libraries(test PUBLIC "danzun")
 

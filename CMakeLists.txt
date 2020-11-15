@@ -13,6 +13,8 @@ file(COPY "devel/scripts/mkheads" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_library(danzun ${sources} ${libs})
 
+target_link_libraries(danzun INTERFACE "stdc++fs")
+
 find_package(glm REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 target_include_directories(danzun PRIVATE "extern")

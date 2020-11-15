@@ -3,10 +3,16 @@
 function doDir {
     wd="$1"
     exclude="$2"
-    target="${wd}.h"
+    name=
+    if [[ "$3" != "" ]]; then
+        name="$3"
+    else
+        name="${wd}"
+    fi
+    target="${name}.h"
     cat <<EOF > "${target}"
-#ifndef DANZUN_${wd^^}_GROUP_INCLUDE_H_INCLUDED_H
-#define DANZUN_${wd^^}_GROUP_INCLUDE_H_INCLUDED_H
+#ifndef DANZUN_${name^^}_GROUP_INCLUDE_H_INCLUDED_H
+#define DANZUN_${name^^}_GROUP_INCLUDE_H_INCLUDED_H
 
 EOF
     for f in ${wd}/*.h; do
@@ -40,5 +46,7 @@ doDir "sprite"
 doDir "time"
 doDir "ui"
 doDir "win"
+
+doDir "." "" "danzun"
 
 popd >/dev/null
