@@ -36,15 +36,11 @@ namespace dan {
         typedef std::function<void(Instance &inst)> callback_t;
         typedef std::shared_ptr<Instance> instance_t;
     private:
-        AniControl *control;
         std::vector<Frame> frames;
         callback_t callback;
     public:
 
-        Animation(AniControl *c = nullptr);
-
-        void setControl(AniControl &c);
-        AniControl &getControl();
+        Animation();
 
         instance_t newInstance();
         void setCallback(const callback_t &func);

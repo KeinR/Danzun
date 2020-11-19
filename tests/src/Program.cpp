@@ -57,9 +57,9 @@ Program::Program():
 
     engine.getGame().addEntity(std::make_shared<Enemy>(enemyTex));
 
-    ani = dan::Atlas().loadAse("data/bow-animation.json").asAnimation(&aniControl);
+    ani = dan::Atlas::loadAnimation("data/bow-animation.json");
 
-    playerSprite.setConf(ani.newInstance());
+    playerSprite.setConf(aniControl.add(ani));
     player->setSprite(playerSprite);
 }
 

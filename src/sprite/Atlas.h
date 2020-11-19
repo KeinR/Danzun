@@ -38,7 +38,10 @@ namespace dan {
         frame &getFrame(unsigned int index);
         frame &getFrame(const std::string &name);
 
-        Animation asAnimation(AniControl *c = nullptr) const;
+        Animation asAnimation() const;
+
+        // Aseprite spritesheet animation
+        static Animation loadAnimation(const std::string &path);
     };
 }
 

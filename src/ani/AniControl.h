@@ -16,6 +16,7 @@ namespace dan {
         instances_t instances;
     public:
         AniControl();
+        instance_t add(Animation &a);
         void add(const wInstance_t &inst);
         void advance(float deltaTime);
     };

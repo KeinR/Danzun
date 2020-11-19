@@ -40,9 +40,9 @@ namespace dan {
 
         void render(Context &c) override;
         // TODO: This should be pure virtual
-        void logic(Game &g, float deltaTime) override;
+        virtual void logic(Game &g, float deltaTime) override = 0;
         const Circle &getHitbox() override;
-        void hit(Game &g, AbsBulletType &culprate) override;
+        virtual void hit(Game &g, AbsBulletType &culprate) override = 0;
         bool shouldDelete() override;
     };
 }

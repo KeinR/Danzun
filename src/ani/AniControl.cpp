@@ -2,6 +2,11 @@
 
 dan::AniControl::AniControl() {
 }
+dan::AniControl::instance_t dan::AniControl::add(Animation &a) {
+    instance_t i = a.newInstance();
+    add(i);
+    return i;
+}
 void dan::AniControl::add(const wInstance_t &inst) {
     instances.push_back(inst);
 }

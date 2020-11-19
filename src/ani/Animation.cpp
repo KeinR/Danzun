@@ -54,27 +54,13 @@ void dan::Animation::Instance::render(Context &c) {
     parent->getFrame(index).render(c);
 }
 
-dan::Animation::Animation(AniControl *c):
-    control(c),
+dan::Animation::Animation():
     callback(defaultCallback)
 {
 }
 
-void dan::Animation::setControl(AniControl &c) {
-    control = &c;
-}
-dan::AniControl &dan::Animation::getControl() {
-    DANZUN_ASSERT(control != nullptr);
-
-    return *control;
-}
-
 dan::Animation::instance_t dan::Animation::newInstance() {
-    DANZUN_ASSERT(control != nullptr);
-
-    instance_t inst = std::make_shared<Instance>(*this);
-    control->add(inst);
-    return inst;
+    return std::make_shared<Instance>(*this);
 }
 
 void dan::Animation::setCallback(const callback_t &func) {

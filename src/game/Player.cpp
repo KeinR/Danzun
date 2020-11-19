@@ -74,17 +74,10 @@ void dan::Player::render(Context &c) {
     sprite.render(c);
 }
 
-void dan::Player::logic(Game &g, float deltaTime) {
-    // .. shoot bullets ..
-}
-
 const dan::Circle &dan::Player::getHitbox() {
     hitbox.setX(x);
     hitbox.setY(y);
     return hitbox;
-}
-void dan::Player::hit(Game &g, AbsBulletType &culprate) {
-    std::cout << "PLAYER HIT" << '\n'; // TEMP
 }
 bool dan::Player::shouldDelete() {
     // Player always stays alive.

@@ -11,7 +11,9 @@ file(GLOB_RECURSE sources src/*.cpp)
 
 add_executable(test ${sources})
 
-include_directories("../extern")
+target_link_libraries(test PUBLIC danzun)
 
-target_link_libraries(test PUBLIC "danzun")
+find_package(glfw3 3.3 REQUIRED)
+target_link_libraries(test PUBLIC glfw)
+target_link_libraries(test PUBLIC stdc++fs)
 

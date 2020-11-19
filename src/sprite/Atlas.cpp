@@ -104,8 +104,8 @@ std::string stripAseExt(const std::string &in) {
     return in;
 }
 
-dan::Animation dan::Atlas::asAnimation(AniControl *c) const {
-    Animation ani(c);
+dan::Animation dan::Atlas::asAnimation() const {
+    Animation ani;
     for (frame f : frames) {
         ani.pushFrame(dan::Frame(
             std::make_shared<dan::IndexedTex>(
@@ -116,4 +116,10 @@ dan::Animation dan::Atlas::asAnimation(AniControl *c) const {
         ));
     }
     return ani;
+}
+
+// Static members
+
+dan::Animation dan::Atlas::loadAnimation(const std::string &path) {
+    return Atlas().loadAse(path).asAnimation();
 }
