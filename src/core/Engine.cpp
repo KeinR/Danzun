@@ -16,6 +16,7 @@ dan::Engine::Engine(const std::string &winName, int width, int height):
     scene(nullptr),
     windowEventCallback(nullptr),
     eventCallback(nullptr),
+    game(*this),
     gameActive(false),
     gameSpeed(1)
 {

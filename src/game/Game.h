@@ -14,6 +14,7 @@
 namespace dan {
     class Context;
     class Player;
+    class Engine;
 }
 
 namespace dan {
@@ -26,6 +27,10 @@ namespace dan {
         typedef std::vector<entity_t> entities_t;
         typedef std::shared_ptr<Player> player_t;
     private:
+        // Not used internally - exlcusively for use by
+        // client applications
+        Engine *engine;
+
         bullets_t enemyBullets;
         bullets_t allyBullets;
         entities_t entities;
@@ -42,7 +47,9 @@ namespace dan {
         // Clean up entities
         void gc();
     public:
-        Game();
+        Game(Engine &e);
+
+        Engine &getEngine() const;
 
         void setWidth(int w);
         void setHeight(int h);

@@ -7,7 +7,8 @@
 static constexpr unsigned int eofs = 1;
 static constexpr unsigned int playeri = 0;
 
-dan::Game::Game():
+dan::Game::Game(Engine &e):
+    engine(&e),
     // Player is stored in index 1
     entities(eofs),
     // Clean up entities every ~5 seconds
@@ -15,6 +16,10 @@ dan::Game::Game():
     gcTimer(5000),
     autoGC(true)
 {
+}
+
+dan::Engine &dan::Game::getEngine() const {
+    return *engine;
 }
 
 void dan::Game::setWidth(int w) {
