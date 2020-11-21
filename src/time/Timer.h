@@ -10,11 +10,11 @@ namespace dan {
 
 namespace dan {
     class Timer {
-        Clock *clock;
+        const Clock *clock;
         float end;
         float duration;
     public:
-        Timer(Clock &clock);
+        Timer(const Clock &clock);
         void set(float s);
         void reset();
         bool done() const;

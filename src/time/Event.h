@@ -17,8 +17,8 @@ namespace dan {
         callback_t callback;
         Timer timer;
     public:
-        Event(Clock &c);
-        Event(Clock &ck, float s, const callback_t &c, bool autoStart = true);
+        Event(const Clock &c);
+        Event(const Clock &ck, float s, const callback_t &c, bool autoStart = true);
         void setTask(const callback_t &c);
         void setTime(float s);
         void start();

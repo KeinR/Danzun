@@ -2,7 +2,7 @@
 
 #include "Clock.h"
 
-dan::Timer::Timer(Clock &clock): clock(&clock) {
+dan::Timer::Timer(const Clock &clock): clock(&clock) {
     set(0);
     reset();
 }
