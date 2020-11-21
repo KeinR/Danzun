@@ -6,6 +6,7 @@
 
 #include "WindowEvent.h"
 #include "Cursor.h"
+#include "Events.h"
 
 #include "../core/debug.h"
 #include "../core/error.h"
@@ -160,8 +161,8 @@ void dan::Window::setClipboardString(const char *str) {
     glfwSetClipboardString(handle, str);
 }
 
-bool dan::Window::keyPressed(int key) const {
-    return glfwGetKey(handle, key) == GLFW_PRESS;
+bool dan::Window::keyPressed(keyt key) const {
+    return glfwGetKey(handle, (int)key) == GLFW_PRESS;
 }
 dan::Window::handle_t dan::Window::getHandle() {
     return handle;
@@ -320,16 +321,20 @@ void destroyWindow(GLFWwindow *window) {
 void mouseMove(GLFWwindow *window, double mouseX, double mouseY) {
     eventRoots_loc_t loc = eventRoots.find(window);
     if (loc != eventRoots.end()) {
-        loc->second->mouseMoved(
-            static_cast<float>(mouseX),
-            static_cast<float>(mouseY)
-        );
+        dan::event::MouseMove e;
+        e.x = mouseX;
+        e.y = mouseY;
+        loc->second->mouseMoved(e);
     }
 }
 void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     eventRoots_loc_t loc = eventRoots.find(window);
     if (loc != eventRoots.end()) {
-        loc->second->keyPressed(key, action, mods);
+        dan::event::KeyPress e;
+        e.key = (dan::keyt)key;
+        e.action = (dan::keyAction)action;
+        e.mods = dan::KeyMods(mods);
+        loc->second->keyPressed(e);
     }
 }
 
@@ -337,19 +342,27 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods
 void mouseClick(GLFWwindow *window, int button, int action, int mods) {
     eventRoots_loc_t loc = eventRoots.find(window);
     if (loc != eventRoots.end()) {
-        loc->second->mouseClicked(button, action == GLFW_PRESS, mods);
+        dan::event::MouseClick e;
+        e.button = (dan::mouseButton)button;
+        e.pressed = action == GLFW_PRESS;
+        e.mods = dan::KeyMods(mods);
+        loc->second->mouseClicked(e);
     }
 }
 void mouseScroll(GLFWwindow *window, double xOffset, double yOffset) {
     eventRoots_loc_t loc = eventRoots.find(window);
     if (loc != eventRoots.end()) {
-        loc->second->mouseScrolled(xOffset, yOffset);
+        dan::event::MouseScroll e;
+        e.xOffset = xOffset;
+        e.yOffset = yOffset;
+        loc->second->mouseScrolled(e);
     }
 }
 void charCallback(GLFWwindow* window, unsigned int codepoint) {
     eventRoots_loc_t loc = eventRoots.find(window);
     if (loc != eventRoots.end()) {
-        loc->second->charInput(codepoint);
+        dan::event::CharInput e;
+        e.codepoint = codepoint;
+        loc->second->charInput(e);
     }
 }
-

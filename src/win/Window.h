@@ -1,6 +1,8 @@
 #ifndef DANZUN_WINDOW_H_INCLUDED
 #define DANZUN_WINDOW_H_INCLUDED
 
+#include "enums.h"
+
 struct GLFWwindow;
 
 namespace dan {
@@ -63,7 +65,7 @@ namespace dan {
         * Checks if the given key is pressed.
         * Takes a GLFW key enum constant.
         */
-        bool keyPressed(int key) const;
+        bool keyPressed(keyt key) const;
         handle_t getHandle();
 
         float getMouseX() const;

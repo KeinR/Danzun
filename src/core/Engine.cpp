@@ -26,29 +26,33 @@ dan::Engine::Engine(const std::string &winName, int width, int height):
     setGameSize(400, 400);
 }
 
-void dan::Engine::keyPressed(int key, int action, int mods) {
-    if (windowEventCallback != nullptr) {
-        windowEventCallback->keyPressed(key, action, mods);
+bool dan::Engine::callbackCallable() {
+    return windowEventCallback != nullptr;
+}
+
+void dan::Engine::keyPressed(const event::KeyPress &e) {
+    if (callbackCallable()) {
+        windowEventCallback->keyPressed(e);
     }
 }
-void dan::Engine::mouseMoved(float mouseX, float mouseY) {
-    if (windowEventCallback != nullptr) {
-        windowEventCallback->mouseMoved(mouseX, mouseY);
+void dan::Engine::mouseMoved(const event::MouseMove &e) {
+    if (callbackCallable()) {
+        windowEventCallback->mouseMoved(e);
     }
 }
-void dan::Engine::mouseClicked(int button, bool pressed, int mods) {
-    if (windowEventCallback != nullptr) {
-        windowEventCallback->mouseClicked(button, pressed, mods);
+void dan::Engine::mouseClicked(const event::MouseClick &e) {
+    if (callbackCallable()) {
+        windowEventCallback->mouseClicked(e);
     }
 }
-void dan::Engine::mouseScrolled(double xOffset, double yOffset) {
-    if (windowEventCallback != nullptr) {
-        windowEventCallback->mouseScrolled(xOffset, yOffset);
+void dan::Engine::mouseScrolled(const event::MouseScroll &e) {
+    if (callbackCallable()) {
+        windowEventCallback->mouseScrolled(e);
     }
 }
-void dan::Engine::charInput(unsigned int codepoint) {
-    if (windowEventCallback != nullptr) {
-        windowEventCallback->charInput(codepoint);
+void dan::Engine::charInput(const event::CharInput &e) {
+    if (callbackCallable()) {
+        windowEventCallback->charInput(e);
     }
 }
 
