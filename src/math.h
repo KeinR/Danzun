@@ -5,5 +5,6 @@
 #include "math/Hitbox.h"
 #include "math/Line.h"
 #include "math/Polygon.h"
+#include "math/Rectangle.h"
 
 #endif

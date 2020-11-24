@@ -11,6 +11,8 @@ namespace dan {
         virtual ~AbsRenderConf() = 0;
         // Bind shader, etc
         virtual void setup(Context &c) = 0;
+        // Render content, with the precondition that all
+        // bindings from setup() are still active
         virtual void render(Context &c) = 0;
     };
 }

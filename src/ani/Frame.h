@@ -13,6 +13,7 @@ namespace dan {
 namespace dan {
     class Frame {
     public:
+        // Should prob be ImgDisp but not important
         typedef std::shared_ptr<AbsTexture> texture_t;
         typedef std::shared_ptr<Shader> shader_t;
     private:

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "../sprite/AbsTexture.h"
+#include "../sprite/AbsRenderConf.h"
 
 namespace dan {
     class Image;
@@ -123,6 +124,9 @@ namespace dan {
         void bind() override;
         static void unbind();
 
+        // Does nothing
+        void setup(Context &c) override;
+
         /**
         * Set the content of the texture.
         * @param [in] format OpenGL enum value describing the data format [<a href="https://www.khronos.org/opengl/wiki/Image_Format">wiki</a>]
@@ -156,6 +160,7 @@ namespace dan {
         int getWidth();
         int getHeight();
 
+        // Calls c.renderQuad()
         void render(Context &c) override;
 
         // Returns INVALID_FORMAT if `channels` < 1 or > 4

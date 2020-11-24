@@ -66,6 +66,10 @@ void dan::Texture::unbind() {
     glBindTexture(TEXTURE_TYPE, 0);
 }
 
+void dan::Texture::setup(Context &c) {
+    bind();
+}
+
 void dan::Texture::loadImage(const std::string &imgPath, bool flipOnLoad) {
     ManImage img(imgPath, flipOnLoad);
     setImage(img);
@@ -161,7 +165,6 @@ int dan::Texture::getHeight() {
 }
 
 void dan::Texture::render(Context &c) {
-    bind();
     c.renderQuad();
 }
 

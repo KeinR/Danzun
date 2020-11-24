@@ -5,19 +5,27 @@
 
 #include "../lib/opengl.h"
 
-dan::err::err(const std::string &location, bool severe): location(location), severe(severe) {
+dan::err::err(const std::string &location, flag_t flags, bool throwOnDestruct):
+    location(location), flags(flags), throwOnDestruct(throwOnDestruct)
+{
     *this << '@' << location << ": ";
 }
 dan::err::~err() {
-    doRaise();
-}
-void dan::err::doRaise() {
-    raise(str(), severe);
+    if (throwOnDestruct) {
+        raise();
+    }
 }
 
-void dan::err::raise(const std::string &message, bool severe) {
-    if (severe) {
+bool dan::err::getFlag(flag_t f) {
+    return (flags & f) == f;
+}
+
+void dan::err::raise() {
+    std::string message = str();
+    if (getFlag(SEVERE)) {
         throw std::runtime_error("SEVERE: " + message);
+    } else if (getFlag(WARNING)) {
+        std::cerr << "Warning: " << message << '\n';
     } else {
         std::cerr << "Error: " << message << '\n';
     }

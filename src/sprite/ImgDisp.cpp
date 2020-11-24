@@ -23,9 +23,9 @@ void dan::ImgDisp::setup(Context &c) {
     if (shader) {
         c.setShader(shader);
     }
+    texture->bind();
 }
 
 void dan::ImgDisp::render(Context &c) {
-    texture->bind();
     texture->render(c);
 }
