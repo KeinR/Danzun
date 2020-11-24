@@ -1,6 +1,8 @@
 #ifndef DANZUN_PLAYER_H_INCLUDED
 #define DANZUN_PLAYER_H_INCLUDED
 
+#include <glm/glm.hpp>
+
 #include "Entity.h"
 
 #include "../sprite/Sprite.h"
@@ -16,8 +18,7 @@ namespace dan {
         Sprite sprite;
         Circle hitbox;
         float speed;
-        float x;
-        float y;
+        glm::vec2 pos;
     public:
         enum dir {
             UP,
@@ -29,14 +30,12 @@ namespace dan {
         Player();
 
         void move(Game &g, dir d, float deltaTime, bool combo);
-        void setX(float nx);
-        void setY(float ny);
+        void setPos(const glm::vec2 &npos);
         void setSpeed(float s);
         void setSprite(const Sprite &s);
         void setHitbox(const Circle &h);
 
-        float getX() const;
-        float getY() const;
+        const glm::vec2 &getPos() const;
 
         void render(Context &c) override;
         // TODO: This should be pure virtual

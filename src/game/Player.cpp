@@ -5,7 +5,7 @@
 
 #include "Game.h"
 
-dan::Player::Player(): speed(100), x(0), y(0) {
+dan::Player::Player(): speed(100), pos(0, 0) {
 }
 void dan::Player::move(Game &g, dir d, float deltaTime, bool combo) {
     float p = speed * deltaTime;
@@ -17,37 +17,34 @@ void dan::Player::move(Game &g, dir d, float deltaTime, bool combo) {
     }
     switch (d) {
         case UP:
-            y -= p;
-            if (y < 0) {
-                y = 0;
+            pos.y -= p;
+            if (pos.y < 0) {
+                pos.y = 0;
             }
             break;
         case DOWN:
-            y += p;
-            if (y + sprite.getHeight() > g.getHeight()) {
-                y = g.getHeight() - sprite.getHeight();
+            pos.y += p;
+            if (pos.y + sprite.getHeight() > g.getHeight()) {
+                pos.y = g.getHeight() - sprite.getHeight();
             }
             break;
         case LEFT:
-            x -= p;
-            if (x < 0) {
-                x = 0;
+            pos.x -= p;
+            if (pos.x < 0) {
+                pos.x = 0;
             }
             break;
         case RIGHT:
-            x += p;
-            if (x + sprite.getWidth() > g.getWidth()) {
-                x = g.getWidth() - sprite.getWidth();
+            pos.x += p;
+            if (pos.x + sprite.getWidth() > g.getWidth()) {
+                pos.x = g.getWidth() - sprite.getWidth();
             }
             break;
     }
 }
 
-void dan::Player::setX(float nx) {
-    x = nx;
-}
-void dan::Player::setY(float ny) {
-    y = ny;
+void dan::Player::setPos(const glm::vec2 &npos) {
+    pos = npos;
 }
 
 void dan::Player::setSpeed(float s) {
@@ -61,22 +58,19 @@ void dan::Player::setHitbox(const Circle &h) {
     hitbox = h;
 }
 
-float dan::Player::getX() const {
-    return x;
-}
-float dan::Player::getY() const {
-    return y;
+const glm::vec2 &dan::Player::getPos() const {
+    return pos;
 }
 
 void dan::Player::render(Context &c) {
-    sprite.setCenterX(x);
-    sprite.setCenterY(y);
+    sprite.setCenterX(pos.x);
+    sprite.setCenterY(pos.y);
     sprite.render(c);
 }
 
 const dan::Circle &dan::Player::getHitbox() {
-    hitbox.setX(x);
-    hitbox.setY(y);
+    hitbox.setX(pos.x);
+    hitbox.setY(pos.y);
     return hitbox;
 }
 bool dan::Player::shouldDelete() {

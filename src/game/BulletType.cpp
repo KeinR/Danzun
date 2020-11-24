@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "../math/Circle.h"
+#include "../core/debug.h"
 
 #include "Game.h"
 
@@ -45,6 +46,8 @@ void dan::BulletType::spawn(const glm::vec2 &position, const glm::vec2 &velocity
     });
 }
 void dan::BulletType::gc(Game &g) {
+    DANZUN_ASSERT(viewHitbox);
+
     unsigned int startBullets = children.size();
     std::cout << "Running GC, total bullets = " << startBullets << '\n';
     typedef children_t::iterator iterator;
@@ -75,6 +78,8 @@ void dan::BulletType::gc(Game &g) {
     std::cout << "GC finished, total bullets = " << children.size() << ", diff = " << (static_cast<int>(children.size()) - static_cast<int>(startBullets)) << '\n';
 }
 void dan::BulletType::logic(Game &g, float deltaTime, bool allied) {
+    DANZUN_ASSERT(hitbox);
+
     for (child &c : children) {
         if (!c.gc) {
             hitbox->setX(c.position.x);
