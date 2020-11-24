@@ -25,9 +25,9 @@ void dan::err::raise() {
     if (getFlag(SEVERE)) {
         throw std::runtime_error("SEVERE: " + message);
     } else if (getFlag(WARNING)) {
-        std::cerr << "Warning: " << message << '\n';
+        std::cerr << "\e[33mWARNING\e[00m: " << message << '\n';
     } else {
-        std::cerr << "Error: " << message << '\n';
+        std::cerr << "\e[31mERROR\e[00m: " << message << '\n';
     }
 }
 
