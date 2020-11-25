@@ -4,6 +4,7 @@
 #include <chrono>
 
 // Measures real time, as opposed to game time
+// UNITS ARE IN MILLISECONDS
 
 namespace dan {
     class RealTimer {

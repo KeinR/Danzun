@@ -10,9 +10,10 @@ namespace dan {
 }
 
 namespace dan {
+    template<class T = void()>
     class Event {
     public:
-        typedef std::function<void(Event&)> callback_t;
+        typedef std::function<T> callback_t;
     private:
         callback_t callback;
         Timer timer;
@@ -22,8 +23,11 @@ namespace dan {
         void setTask(const callback_t &c);
         void setTime(float s);
         void start();
-        void poll();
+        template<class... Args>
+        void poll(Args&&... args);
     };
 }
+
+#include "Event.inl"
 
 #endif

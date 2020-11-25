@@ -45,7 +45,7 @@ install(
 install(
     DIRECTORY "src/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/danzun"
-    FILES_MATCHING PATTERN "*.h"
+    FILES_MATCHING REGEX "^.*\\.(h|inl)$"
 )
 export(TARGETS danzun
     FILE "${CMAKE_CURRENT_BINARY_DIR}/danzunConfig.cmake"
