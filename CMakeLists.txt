@@ -29,8 +29,6 @@ find_package(glm REQUIRED)
 
 # add_dependencies(danzun glfw)
 
-message("${LUA_INCLUDE_DIRS}")
-
 target_include_directories(danzun
     PRIVATE "extern"
     PRIVATE "${GLFW_INCLUDE_DIRS}"
@@ -40,7 +38,7 @@ target_include_directories(danzun
 target_link_libraries(danzun
     glfw
     lua_static
-    # PRIVATE stdc++fs
+    stdc++fs
 )
 
 add_subdirectory(frontend)

@@ -12,7 +12,7 @@ namespace dan {
         Script(const std::string &code, const std::filesystem::path &dir);
         const std::string &getCode() const;
         const std::filesystem::path &getDir() const;
-        // Throws std::illegal_argument if failed to load
+        // Throws std::invalid_argument if failed to load
         static Script fromFile(const std::filesystem::path &path);
     };
 }

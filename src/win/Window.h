@@ -80,6 +80,8 @@ namespace dan {
         int getFramebufferWidth() const;
         int getFramebufferHeight() const;
         void getFramebufferSize(int &width, int &height) const;
+        
+        void setVisible(bool toggle);
 
         static void pollEvents();
         static void waitEvents();

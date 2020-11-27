@@ -17,17 +17,17 @@ const std::filesystem::path &dan::Script::getDir() const {
 
 // Static members
 
-dan::Script dan::Script::fromFile(const std::string &path) {
+dan::Script dan::Script::fromFile(const std::filesystem::path &path) {
     std::ifstream file(path);
     if (!file.good()) {
-        throw std::illegal_argument("Could not open file: " + path);
+        throw std::invalid_argument("Could not open file: " + path.string());
     }
 
     std::stringstream buffer;
     buffer << file.rdbuf();
 
     if (!file.good()) {
-        throw std::illegal_argument("Could not read from file: " + path);
+        throw std::invalid_argument("Could not read from file: " + path.string());
     }
 
     return Script(buffer.str(), path.parent_path());

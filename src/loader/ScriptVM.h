@@ -3,20 +3,23 @@
 
 #include <ostream>
 #include <filesystem>
+#include <functional>
 
 struct lua_State;
 
 namespace dan {
     class Script;
+    class Program;
 }
 
 namespace dan {
     class ScriptVM {
     public:
-        typedef std::function<void(ScriptVM&, const std::string&)> errorCallback_t;
+        typedef std::function<void(ScriptVM&, const std::string&)> errCallback_t;
     private:
         lua_State *L;
-        errorCallback_t errCallback;
+        Program *program;
+        errCallback_t errCallback;
         std::filesystem::path workingDir;
         bool checkState(int code);
         void steal(ScriptVM &other);
@@ -28,7 +31,9 @@ namespace dan {
         ~ScriptVM();
         ScriptVM &operator=(ScriptVM &&other);
 
-        void setErrCallback(const errorCallback_t &callback);
+        void setProgram(Program &p);
+        Program &getProgram();
+        void setErrCallback(const errCallback_t &callback);
 
         void setGlobal(const std::string &name, const std::string &val);
         void setGlobal(const std::string &name, float val);
@@ -38,12 +43,13 @@ namespace dan {
 
         void setWorkingDir(const std::filesystem::path &path);
         std::filesystem::path getWorkingDir() const;
+        std::filesystem::path getPath(const std::filesystem::path &path) const;
 
         // Throws logic_error on error
         void exec(const std::string &code);
         void exec(const Script &script);
 
-        ScriptVM &getVM(lua_State *L);
+        static ScriptVM &getVM(lua_State *L);
     };
 }
 

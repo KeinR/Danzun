@@ -1,9 +1,11 @@
 #include "ScriptVM.h"
 
-#include <map>
+#include <unordered_map>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+
+#include <lua/lua.hpp>
 
 #include "../core/debug.h"
 
@@ -13,11 +15,13 @@ void defaultErrCallback(dan::ScriptVM &vm, const std::string &msg) {
     std::clog << "LUA VM ERROR [0x" << std::hex << &vm << std::dec << "]:" << msg << '\n';
 }
 
-typedef std::map<lua_State*,ScriptVM*> vms_t;
+typedef std::unordered_map<lua_State*,dan::ScriptVM*> vms_t;
 
 static vms_t vms;
 
 dan::ScriptVM::ScriptVM():
+    L(nullptr),
+    program(nullptr),
     errCallback(defaultErrCallback),
     workingDir(".")
 {
@@ -58,19 +62,28 @@ void dan::ScriptVM::free() {
     }
 }
 
-bool eng::ScriptVM::checkState(int code) {
+bool dan::ScriptVM::checkState(int code) {
     DANZUN_ASSERT(errCallback);
 
     if (code != LUA_OK) {
-        errCallback(lua_tostring(L, -1));
+        errCallback(*this, lua_tostring(L, -1));
         lua_pop(L, 1);
         return false;
     }
     return true;
 }
 
-void dan::ScriptVM::setErrCallback(const errorCallback_t &callback) {
-    errorCallback = callback;
+void dan::ScriptVM::setProgram(Program &p) {
+    program = &p;
+}
+
+dan::Program &dan::ScriptVM::getProgram() {
+    DANZUN_ASSERT(program != nullptr);
+    return *program;
+}
+
+void dan::ScriptVM::setErrCallback(const errCallback_t &callback) {
+    errCallback = callback;
 }
 
 void dan::ScriptVM::setGlobal(const std::string &name, const std::string &val) {
@@ -90,14 +103,16 @@ void dan::ScriptVM::setWorkingDir(const std::filesystem::path &path) {
     workingDir = path;
 }
 
-std::filesystem::path dan::ScriptVM::getWorkingDir() {
+std::filesystem::path dan::ScriptVM::getPath(const std::filesystem::path &path) const {
+    return std::filesystem::relative(path, workingDir);
+}
+
+std::filesystem::path dan::ScriptVM::getWorkingDir() const {
     return workingDir;
 }
 
-void dan::ScriptVM::exec(const Script &script) {
-    currentScript = &script;
-    int status = luaL_dostring(L, script.getCode().c_str());
-    currentScript = nullptr;
+void dan::ScriptVM::exec(const std::string &code) {
+    int status = luaL_dostring(L, code.c_str());
 
     if (status != LUA_OK) {
         std::stringstream str;
