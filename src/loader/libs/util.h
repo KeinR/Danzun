@@ -1,5 +1,5 @@
-#ifndef LIBS_UTIL_H_INCLUDED
-#define LIBS_UTIL_H_INCLUDED
+#ifndef DANZUN_LIBS_UTIL_H_INCLUDED
+#define DANZUN_LIBS_UTIL_H_INCLUDED
 
 #include <string>
 

@@ -26,11 +26,8 @@ static luaL_Reg funcs[] = {
     {NULL, NULL}
 };
 
-dan::Lib dan::libs::engine() {
-    Lib lib;
-    lib.funcs = funcs;
-    lib.len = sizeof(funcs) / sizeof(luaL_Reg) - 1;
-    return lib;
+luaL_Reg *dan::libs::engine() {
+    return funcs;
 }
 
 int getPath(lua_State *L) {
@@ -75,5 +72,6 @@ int loadShader(lua_State *L) {
 }
 int scriptExit(lua_State *L) {
     // Placeholder
+    return 0;
 }
 

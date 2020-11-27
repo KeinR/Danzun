@@ -47,6 +47,10 @@ dan::ScriptVM &dan::ScriptVM::operator=(ScriptVM &&other) {
     return *this;
 }
 
+lua_State *dan::ScriptVM::getHandle() {
+    return L;
+}
+
 void dan::ScriptVM::steal(ScriptVM &other) {
     L = other.L;
     other.L = nullptr;

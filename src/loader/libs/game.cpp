@@ -14,8 +14,9 @@ static luaL_Reg funcs[] = {
     {NULL, NULL}
 };
 
-dan::Lib dan::libs::game() {
+luaL_Reg *dan::libs::game() {
     // TODO
+    return funcs;
 }
 
 

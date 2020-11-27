@@ -1,10 +1,10 @@
-#ifndef LIBS_SHADER_H_INCLUDED
-#define LIBS_SHADER_H_INCLUDED
+#ifndef DANZUN_LIBS_SHADER_H_INCLUDED
+#define DANZUN_LIBS_SHADER_H_INCLUDED
 
-#include "Lib.h"
+struct luaL_Reg;
 
 namespace dan::libs {
-    Lib shader();
+    luaL_Reg *shader();
 }
 
 #endif

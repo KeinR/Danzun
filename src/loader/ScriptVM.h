@@ -31,6 +31,8 @@ namespace dan {
         ~ScriptVM();
         ScriptVM &operator=(ScriptVM &&other);
 
+        lua_State *getHandle();
+
         void setProgram(Program &p);
         Program &getProgram();
         void setErrCallback(const errCallback_t &callback);

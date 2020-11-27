@@ -19,11 +19,8 @@ static luaL_Reg funcs[] = {
     {NULL, NULL}
 };
 
-dan::Lib dan::libs::shader() {
-    Lib lib;
-    lib.funcs = funcs;
-    lib.len = sizeof(funcs) / sizeof(luaL_Reg) - 1;
-    return lib;
+luaL_Reg *dan::libs::shader() {
+    return funcs;
 }
 
 int setInt(lua_State *L) {

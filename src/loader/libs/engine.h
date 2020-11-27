@@ -1,10 +1,10 @@
-#ifndef LIBS_ENGINE_H_INCLUDED
-#define LIBS_ENGINE_H_INCLUDED
+#ifndef DANZUN_LIBS_ENGINE_H_INCLUDED
+#define DANZUN_LIBS_ENGINE_H_INCLUDED
 
-#include "Lib.h"
+struct luaL_Reg;
 
 namespace dan::libs {
-    Lib engine();
+    luaL_Reg *engine();
 }
 
 #endif

@@ -225,6 +225,14 @@ void dan::Window::setVisible(bool toggle) {
     }
 }
 
+void dan::Window::setSize(int width, int height) {
+    glfwSetWindowSize(handle, width, height);
+}
+
+void dan::Window::setTitle(const std::string &title) {
+    glfwSetWindowTitle(handle, title.c_str());
+}
+
 // Static members
 
 void dan::Window::pollEvents() {
