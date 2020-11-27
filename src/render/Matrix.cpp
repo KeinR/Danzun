@@ -37,7 +37,7 @@ void dan::Matrix::load(Context &c, const std::string &location) {
         model = reflectYAxis(model);
     }
 
-    c.getShader()->setMatrix4fv(location, glm::value_ptr(model));
+    c.getShader().setMatrix4fv(location, glm::value_ptr(model));
 }
 
 float ndcX(float x, int winWidth) {

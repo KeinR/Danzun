@@ -1,11 +1,13 @@
 #ifndef DANZUN_SCRIPTVM_H_INCLUDED
 #define DANZUN_SCRIPTVM_H_INCLUDED
 
+#include <string>
 #include <ostream>
 #include <filesystem>
 #include <functional>
 
 struct lua_State;
+struct luaL_Reg;
 
 namespace dan {
     class Script;
@@ -40,6 +42,12 @@ namespace dan {
         void setGlobal(const std::string &name, const std::string &val);
         void setGlobal(const std::string &name, float val);
         void setGlobal(const std::string &name, int val);
+
+        void openLib(const std::string &name, luaL_Reg *funcs);
+        void closeLib(const std::string &name);
+
+        // Throws std::logic_error on failure
+        void call(const std::string &name);
 
         std::string getGlobal(const std::string &name);
 

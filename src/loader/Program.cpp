@@ -7,16 +7,20 @@
 #include "libs/shader.h"
 #include "libs/window.h"
 
-dan::Program::Program(const Script &init): engine("Danzun", 500, 500) {
+dan::Program::Program(const Script &init): engine("Danzun", 500, 500), data(engine.getContext()) {
     vm.setProgram(*this);
     vm.exec(Script::fromFile("data/lua/init.lua"));
     vm.exec(init);
-    lua_State *L = vm.getHandle();
-    lua_newtable(L);
-    luaL_setfuncs(L, libs::window(), 0);
-    lua_setglobal(L, "window");
-    lua_getglobal(L, "preInit");
-    lua_call(L, 0, 0);
+    // lua_State *L = vm.getHandle();
+
+    vm.openLib("window", libs::window());
+    vm.openLib("shader", libs::shader());
+
+    vm.call("preInit");
+
+    vm.openLib("engine", libs::engine());
+
+    vm.call("init");
 }
 dan::Data &dan::Program::getData() {
     return data;

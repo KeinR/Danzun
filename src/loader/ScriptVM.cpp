@@ -103,12 +103,38 @@ void dan::ScriptVM::setGlobal(const std::string &name, int val) {
     lua_setglobal(L, name.c_str());
 }
 
+void dan::ScriptVM::openLib(const std::string &name, luaL_Reg *funcs) {
+    // TODO: Keep track of # funcs so that can reserve table space
+    lua_newtable(L);
+    luaL_setfuncs(L, funcs, 0);
+    lua_setglobal(L, name.c_str());
+    lua_getglobal(L, name.c_str());
+    lua_pushvalue(L, -1);
+    lua_setfield(L, -2, "__index");
+    // lua_pop(L, 1);
+}
+
+void dan::ScriptVM::closeLib(const std::string &name) {
+    // Just set it to nil
+    lua_pushnil(L);
+    lua_setglobal(L, name.c_str());
+}
+
+void dan::ScriptVM::call(const std::string &name) {
+    lua_getglobal(L, name.c_str());
+    int result = lua_pcall(L, 0, 0, 0);
+    if (result != LUA_OK) {
+        throw std::logic_error(lua_tostring(L, -1));
+    }
+}
+
 void dan::ScriptVM::setWorkingDir(const std::filesystem::path &path) {
     workingDir = path;
 }
 
 std::filesystem::path dan::ScriptVM::getPath(const std::filesystem::path &path) const {
-    return std::filesystem::relative(path, workingDir);
+    // return std::filesystem::relative(path, workingDir);
+    return workingDir / path;
 }
 
 std::filesystem::path dan::ScriptVM::getWorkingDir() const {

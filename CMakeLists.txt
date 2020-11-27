@@ -13,6 +13,7 @@ set(libs
 )
 
 file(COPY "devel/scripts/mkheads" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_library(danzun ${sources} ${libs})
 

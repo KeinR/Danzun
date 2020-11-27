@@ -16,6 +16,7 @@ namespace dan {
     private:
         typedef std::map<std::string, uniform_t> uniforms_t;
 
+        Context *c;
         program_t handle;
         uniforms_t uniforms;
 
@@ -26,19 +27,19 @@ namespace dan {
 
         uniform_t getUniform(const std::string &name);
     public:
-        Shader(const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength);
-        Shader(const std::string &vertexPath, const std::string &fragmentPath);
+        Shader(Context &c, const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength);
+        Shader(Context &c, const std::string &vertexPath, const std::string &fragmentPath);
         Shader(Shader &&other);
         virtual ~Shader();
         Shader &operator=(Shader &&other);
 
-        void use() const;
+        void doUse() const;
+        void use();
         static void disuse();
 
         program_t getHandle() const;
 
-        // REQUIRES THAT SHADER IS CURRENTLY BOUND!!!!
-        // Checked with assertions...
+        // NB: Binds this shader
         void setMatrix4fv(const std::string &name, const float *data);
         void setInt1(const std::string &name, int value);
         void set4fv(const std::string &name, const float *values);

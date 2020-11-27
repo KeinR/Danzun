@@ -2,26 +2,26 @@
 
 #include "../core/Context.h"
 
-dan::ImgDisp::ImgDisp(const texture_t &texture, const shader_t &shader):
+dan::ImgDisp::ImgDisp(const texture_t &texture, Shader *shader):
     texture(texture), shader(shader)
 {
 }
 void dan::ImgDisp::setTexture(const texture_t &texture) {
     this->texture = texture;
 }
-void dan::ImgDisp::setShader(const shader_t &shader) {
+void dan::ImgDisp::setShader(Shader *shader) {
     this->shader = shader;
 }
 dan::ImgDisp::texture_t &dan::ImgDisp::getTexture() {
     return texture;
 }
-dan::ImgDisp::shader_t &dan::ImgDisp::getShader() {
+dan::Shader *dan::ImgDisp::getShader() {
     return shader;
 }
 
 void dan::ImgDisp::setup(Context &c) {
-    if (shader) {
-        c.setShader(shader);
+    if (shader != nullptr) {
+        c.setShader(*shader);
     }
     texture->bind();
 }
