@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "Shader.h"
 
 #include <lua/lua.hpp>
 
@@ -8,6 +8,7 @@
 #include "../../render/Shader.h"
 #include "../ScriptVM.h"
 #include "../../core/debug.h"
+#include "../Program.h"
 
 const char *metatable = "Shader";
 

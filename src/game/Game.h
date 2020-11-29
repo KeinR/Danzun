@@ -5,8 +5,6 @@
 #include <map>
 #include <utility>
 
-#include "Entity.h"
-
 #include "../ui/Node.h"
 #include "../time/RealTimer.h"
 

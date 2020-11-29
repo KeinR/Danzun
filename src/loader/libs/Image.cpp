@@ -1,16 +1,20 @@
 #include "Image.h"
 
+#include <lua/lua.hpp>
+
 #include "util.h"
 
 #include "../../lib/opengl.h"
 #include "../../sprite/ManImage.h"
+#include "../../render/Matrix.h"
+#include "../Program.h"
 
 using namespace dan::libs::ut;
 
-const char *metatable = "Image"
+const char *metatable = "Image";
 
 struct Image {
-    int handle;
+    unsigned int handle;
 };
 
 static int script_new(lua_State *L);
@@ -44,10 +48,11 @@ int script_new(lua_State *L) {
         case 2: format = GL_RG; break;
         case 1: format = GL_RED; break;
         default:
+            // Do long jumps result in C++ destructors being called?
+            // I mean, I don't see why not, but still...
             luaL_error(L, "Invalid # of channels in image");
-            return;
     }
-    int handle;
+    unsigned int handle;
     glGenTextures(1, &handle);
     glBindTexture(GL_TEXTURE_2D, handle);
     glTexImage2D(GL_TEXTURE_2D, 0, format, image.getWidth(), image.getHeight(), 0, format, GL_UNSIGNED_BYTE, image.getData());
@@ -80,10 +85,10 @@ int render(lua_State *L) {
     // Mesh object is not provided
     if (top < 3) {
         lua_getglobal(L, "_dan");
-        lua_getfield(L, "defaults");
+        lua_getfield(L, -1, "defaults");
     }
-    lua_getfield(L, "mesh");
-    lua_getfield(L, "render");
+    lua_getfield(L, -1, "mesh");
+    lua_getfield(L, -1, "render");
     lua_pushvalue(L, -2);
     lua_call(L, 1, 0);
 
@@ -95,6 +100,6 @@ int gc(lua_State *L) {
         luaL_error(L, "__gc expects 1 parameter");
     }
     Image *img = (Image *)luaL_checkudata(L, 1, metatable);
-    glDeleteTextures(1, &img->buffer);
+    glDeleteTextures(1, &img->handle);
     return 0;
 }

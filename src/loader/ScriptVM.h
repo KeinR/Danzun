@@ -24,7 +24,6 @@ namespace dan {
         Program *program;
         errCallback_t errCallback;
         std::filesystem::path workingDir;
-        std::unordered_map<>
         bool checkState(int code);
         void steal(ScriptVM &other);
         void free();

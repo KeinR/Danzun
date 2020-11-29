@@ -8,7 +8,7 @@
 #include <lua/lua.hpp>
 
 #include "../core/debug.h"
-
+#include "libs/Lib.h"
 #include "Script.h"
 
 void defaultErrCallback(dan::ScriptVM &vm, const std::string &msg) {

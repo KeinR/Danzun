@@ -12,17 +12,6 @@
 #include "../core/error.h"
 #include "../lib/opengl.h"
 
-#ifndef NDEBUG
-static void assertBound(GLint thisShader) {
-    GLint currentShaderProgram;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &currentShaderProgram);
-    DANZUN_ASSERT(currentShaderProgram == thisShader);
-}
-#   define DANZUN_ASSERT_IS_BOUND assertBound(this->handle)
-#else
-#   define DANZUN_ASSERT_IS_BOUND ((void)0)
-#endif
-
 static constexpr unsigned int LOG_BUFFER_SIZE = 512;
 
 /**
@@ -51,6 +40,9 @@ static void delShaders(GLuint vert, GLuint frag);
 
 static const char *getShaderTypeName(GLenum type);
 
+dan::Shader::Shader(): c(nullptr), handle(0) {
+}
+
 dan::Shader::Shader(Context &c, const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength): c(&c) {
     createShader(vertexData, vertexLength, fragmentData, fragmentLength);
 }
@@ -75,8 +67,17 @@ dan::Shader::Shader(Context &c, const std::string &vertexPath, const std::string
     }
 
 }
+dan::Shader::Shader(Shader &&other) {
+    steal(other);
+}
 dan::Shader::~Shader() {
     free();
+}
+
+dan::Shader &dan::Shader::operator=(Shader &&other) {
+    free();
+    steal(other);
+    return *this;
 }
 
 void dan::Shader::createShader(const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength) {
@@ -107,7 +108,10 @@ void dan::Shader::createShader(const char *vertexData, unsigned int vertexLength
 
 void dan::Shader::steal(Shader &other) {
     handle = other.handle;
+    c = other.c;
     other.handle = 0;
+    other.c = nullptr;
+    // Don't bother moving the uniforms
 }
 
 dan::Shader::uniform_t dan::Shader::uni(const std::string &name) {

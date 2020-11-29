@@ -12,16 +12,16 @@ namespace dan {
     class Group {
     public:
         struct circle {
-            Circle hitbox;
             int id;
+            Circle hitbox;
         };
         struct rectangle {
-            Rectangle hitbox;
             int id;
+            Rectangle hitbox;
         };
         struct polygon {
-            Polygon hitbox;
             int id;
+            Polygon hitbox;
         };
     private:
         std::vector<circle> circles;

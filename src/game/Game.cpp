@@ -20,12 +20,11 @@ dan::Group &dan::Game::getGroup(const std::string &name) {
 
 void dan::Game::resetGroups() {
     for (auto &g : groups) {
-        g->second.clear();
+        g.second.clear();
     }
 }
 void dan::Game::clearGroups() {
     groups.clear();
-    currentGroup = nullptr;
 }
 
 std::vector<std::pair<int,int>> dan::Game::testCollisions(const std::string &a, const std::string &b) {
@@ -51,12 +50,6 @@ int dan::Game::getHeight() {
 }
 
 
-void dan::Game::pushEnemyBulletType(const bulletType_t &type) {
-    enemyBullets.push_back(type);
-}
-void dan::Game::pushAllyBulletType(const bulletType_t &type) {
-    allyBullets.push_back(type);
-}
 void dan::Game::logic(float deltaTime) {
 
 

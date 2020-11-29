@@ -12,6 +12,7 @@
 #include "../../math/Polygon.h"
 #include "../../math/Circle.h"
 #include "../../math/Rectangle.h"
+#include "../Program.h"
 
 using namespace dan::libs::ut;
 
@@ -37,45 +38,51 @@ dan::Lib dan::libs::game() {
 
 int regCircleCol(lua_State *L) {
     int top = lua_gettop(L);
-    if (top < 4) {
-        luaL_error(L, "regCircleCol expects 4 parameters");
+    if (top < 5) {
+        luaL_error(L, "regCircleCol expects 5 parameters");
     }
-    std::string group = getString(L, 1);
-    dan::Circle c;
-    c.setX(lua_tonumber(L, 2));
-    c.setY(lua_tonumber(L, 3));
-    c.setRadius(lua_tonumber(L, 4));
+    // CALLBACK ID, group name, x (center), y (center), radius
+    dan::Group::circle c;
+    c.id = lua_tonumber(L, 1);
+    std::string group = getString(L, 2);
+    c.hitbox.setX(lua_tonumber(L, 3));
+    c.hitbox.setY(lua_tonumber(L, 4));
+    c.hitbox.setRadius(lua_tonumber(L, 5));
     getProgram(L).getEngine().getGame().getGroup(group).pushCircle(c);
     return 0;
 }
 int regRectCol(lua_State *L) {
     int top = lua_gettop(L);
     if (top < 4) {
-        luaL_error(L, "regRectCol expects 5 parameters");
+        luaL_error(L, "regRectCol expects 6 parameters");
     }
-    std::string group = getString(L, 1);
-    getProgram(L).getEngine().getGame().getGroup(group).pushRectangle(dan::Rectangle(
-        lua_tonumber(L, 2),
+    // CALLBACK ID, group name, x (top left), y (top left), width, height
+    int id = lua_tonumber(L, 1);
+    std::string group = getString(L, 2);
+    getProgram(L).getEngine().getGame().getGroup(group).pushRect({id, dan::Rectangle(
         lua_tonumber(L, 3),
         lua_tonumber(L, 4),
-        lua_tonumber(L, 5)
-    ));
+        lua_tonumber(L, 5),
+        lua_tonumber(L, 6)
+    )});
     return 0;
 }
 int regPolygonCol(lua_State *L) {
     int top = lua_gettop(L);
     if (top < 4) {
-        luaL_error(L, "regPolygonCol expects at least 4 parameters");
+        luaL_error(L, "regPolygonCol expects at least 5 parameters");
     }
-    std::string group = getString(L, 1);
+    // CALLBACK ID, group name, x0, y0, x1, y1, x2, y2, ... 
+    dan::Group::polygon p;
+    p.id = lua_tonumber(L, 1);
+    std::string group = getString(L, 2);
     std::vector<float> points;
-    points.reserve(top - 1);
-    for (int i = 1; i <= top; i++) {
+    points.reserve(top - 2);
+    for (int i = 2; i <= top; i++) {
         points.push_back(lua_tonumber(L, i));
     }
-    dan::Polygon p;
-    p.setPoints(points);
-    p.load();
+    p.hitbox.setPoints(points);
+    p.hitbox.load();
     getProgram(L).getEngine().getGame().getGroup(group).pushPolygon(p);
     return 0;
 }
@@ -96,8 +103,8 @@ int testCollisions(lua_State *L) {
     lua_getfield(L, -1, propName); // _dan.entityReg
 
     for (std::pair<int,int> &p : result) {
-        lua_geti(L, -1, p->first); // entitiyReg[firstId]
-        lua_geti(L, -2, p->second); // entitiyReg[secondId]
+        lua_geti(L, -1, p.first); // entitiyReg[firstId]
+        lua_geti(L, -2, p.second); // entitiyReg[secondId]
         lua_getfield(L, -2, "hit"); // entitiyReg[firstId].hit(... ->
         lua_pushvalue(L, -3); // First param: self (entitiyReg[firstId])
         lua_pushvalue(L, -3); // Second param: other (entitiyReg[secondId])

@@ -20,17 +20,17 @@ void dan::Group::test(Group &other, std::vector<std::pair<int,int>> &output) {
     // TODO: Add code to hitboxes to allow them to test each-other
     for (circle c : other.circles) {
         for (circle c1 : circles) {
-            if (c1.interects(c)) {
+            if (c1.hitbox.intersects(c.hitbox)) {
                 output.emplace_back(c1.id, c.id);
             }
         }
         for (rectangle r : rectangles) {
-            if (r.interects(c)) {
+            if (r.hitbox.intersects(c.hitbox)) {
                 output.emplace_back(r.id, c.id);
             }
         }
         for (polygon p : polygons) {
-            if (p.interects(c)) {
+            if (p.hitbox.intersects(c.hitbox)) {
                 output.emplace_back(p.id, c.id);
             }
         }

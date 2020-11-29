@@ -24,7 +24,7 @@ namespace dan {
         std::map<std::string, texture_t> textures;
         std::map<std::string, animation_t> animations;
         int shaderId;
-        std::map<std::string, Shader> shaders;
+        std::map<int, Shader> shaders;
         std::map<std::string, font_t> fonts;
     public:
         Data(Context &c);

@@ -27,6 +27,8 @@ namespace dan {
 
         uniform_t getUniform(const std::string &name);
     public:
+        // Malformed state
+        Shader();
         Shader(Context &c, const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength);
         Shader(Context &c, const std::string &vertexPath, const std::string &fragmentPath);
         Shader(Shader &&other);

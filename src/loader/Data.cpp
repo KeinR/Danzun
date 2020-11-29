@@ -18,7 +18,7 @@ void dan::Data::loadAseprite(const std::string &name, const std::string &path) {
     }
 }
 int dan::Data::loadShader(const std::string &vert, const std::string &frag) {
-    shaders[++shaderId] = Shader(*c, vert, frag);
+    shaders.emplace(++shaderId, Shader(*c, vert, frag));
     return shaderId;
 }
 

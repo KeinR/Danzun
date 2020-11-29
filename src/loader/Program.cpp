@@ -4,7 +4,7 @@
 
 #include "libs/engine.h"
 #include "libs/game.h"
-#include "libs/shader.h"
+#include "libs/Shader.h"
 #include "libs/window.h"
 
 dan::Program::Program(const Script &init): engine("Danzun", 500, 500), data(engine.getContext()) {
@@ -13,12 +13,12 @@ dan::Program::Program(const Script &init): engine("Danzun", 500, 500), data(engi
     vm.exec(init);
     // lua_State *L = vm.getHandle();
 
-    vm.openLib("window", libs::window());
-    vm.openLib("shader", libs::shader());
+    vm.openLib(libs::window());
+    vm.openLib(libs::shader());
 
     vm.call("preInit");
 
-    vm.openLib("engine", libs::engine());
+    vm.openLib(libs::engine());
 
     vm.call("init");
 

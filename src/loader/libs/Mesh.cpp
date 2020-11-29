@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <lua/lua.hpp>
+
 #include "util.h"
 
 #include "../../lib/opengl.h"
@@ -47,7 +49,7 @@ int script_new(lua_State *L) {
     lua_getfield(L, -1, "vertices");
     luaL_getmetafield(L, -1, "__len");
     lua_pushvalue(L, -2); // self
-    lua_pcall(L, 1, 1); // length // TODO: err handling
+    lua_pcall(L, 1, 1, 0); // length // TODO: err handling
     vertices.reserve(lua_tointeger(L, -1));
     lua_pop(L, 1); // Remove return
     lua_pushnil(L);
@@ -66,7 +68,7 @@ int script_new(lua_State *L) {
         std::vector<unsigned int> indices;
         luaL_getmetafield(L, -1, "__len");
         lua_pushvalue(L, -2); // self
-        lua_pcall(L, 1, 1); // length // TODO: err handling
+        lua_pcall(L, 1, 1, 0); // length // TODO: err handling
         indices.reserve(lua_tointeger(L, -1));
         lua_pop(L, 1);
         lua_pushnil(L);
@@ -103,7 +105,7 @@ int script_new(lua_State *L) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    *lua_newuserdatauv(L, sizeof(Mesh), 0) = mesh;
+    *((Mesh *)lua_newuserdatauv(L, sizeof(Mesh), 0)) = mesh;
     lua_getglobal(L, metatable);
     lua_setmetatable(L, -2);
     return 1;
@@ -119,7 +121,7 @@ int render(lua_State *L) {
     if (mesh->elementBuffer == 0) {
         glDrawArrays(GL_TRIANGLES, 0, mesh->count);
     } else {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->elementBuffer);
         glDrawElements(GL_TRIANGLES, mesh->count, GL_UNSIGNED_INT, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
