@@ -89,9 +89,9 @@ int script_new(lua_State *L) {
     while (lua_next(L, -2) != 0) {
         int index = lua_tointeger(L, -2) - 1; // The key, -1 bc lua arrays aren't zero index'd
 
-        int size = getIntField(L, "size");
-        int stride = getIntField(L, "stride");
-        int offset = getIntField(L, "offset");
+        int size = getIntField(L, -1, "size");
+        int stride = getIntField(L, -1, "stride");
+        int offset = getIntField(L, -1, "offset");
 
         lua_pop(L, 1);
 

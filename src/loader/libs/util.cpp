@@ -18,9 +18,9 @@ dan::Program &dan::libs::ut::getProgram(lua_State *L) {
     return getVM(L).getProgram();
 }
 
-int dan::libs::ut::getIntField(lua_State *L, const char *name) {
-    lua_getfield(L, -1, name);
-    int result = lua_tointeger(L, -2);
+int dan::libs::ut::getIntField(lua_State *L, int tableIndex, const char *name) {
+    lua_getfield(L, tableIndex, name);
+    int result = lua_tointeger(L, -1);
     lua_pop(L, 1);
     return result;
 }

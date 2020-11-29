@@ -7,6 +7,8 @@
 
 using namespace dan::libs::ut;
 
+const char *metatable = "Image"
+
 struct Image {
     int handle;
 };
@@ -23,7 +25,7 @@ static luaL_Reg funcs[] = {
 };
 
 dan::Lib dan::libs::image() {
-    return Lib("Image", funcs);
+    return Lib(metatable, funcs);
 }
 
 int script_new(lua_State *L) {
@@ -65,22 +67,25 @@ int render(lua_State *L) {
     }
     // self, object{x,y,w,h}, [mesh]
 
-    Image *img = (Image *)lua_touserdata(L, 1);
-    lua_getfield(L, 2, "x");
-    int x = lua_tonumber(L, -1);
-    lua_getfield(L, 2, "y");
-    int y = lua_tonumber(L, -1);
-    lua_getfield(L, 2, "width");
-    int width = lua_tonumber(L, -1);
-    lua_getfield(L, 2, "height");
-    int height = lua_tonumber(L, -1);
-    lua_getfield(L, 2, "rotation");
-    int height = lua_tonumber(L, -1);
-    lua_pop(L, 5);
+    Image *img = (Image *)luaL_checkudata(L, 1, metatable);
+    int x = getIntField(L, 2, "x");
+    int y = getIntField(L, 2, "y");
+    int width = getIntField(L, 2, "width");
+    int height = getIntField(L, 2, "height");
+
+    dan::Matrix(x, y, width, height).load(getProgram(L).getEngine().getContext());
 
     glBindTexture(GL_TEXTURE_2D, img->handle);
 
-    getProgram(L).getEngine().getContext().renderQuad();
+    // Mesh object is not provided
+    if (top < 3) {
+        lua_getglobal(L, "_dan");
+        lua_getfield(L, "defaults");
+    }
+    lua_getfield(L, "mesh");
+    lua_getfield(L, "render");
+    lua_pushvalue(L, -2);
+    lua_call(L, 1, 0);
 
     return 0;
 }
@@ -89,7 +94,7 @@ int gc(lua_State *L) {
     if (top != 2) {
         luaL_error(L, "__gc expects 1 parameter");
     }
-    Image *img = (Image *)lua_touserdata(L, 1);
+    Image *img = (Image *)luaL_checkudata(L, 1, metatable);
     glDeleteTextures(1, &img->buffer);
     return 0;
 }
