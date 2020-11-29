@@ -9,23 +9,56 @@
 #include "../ScriptVM.h"
 #include "../../core/debug.h"
 
+const char *metatable = "Shader";
+
+struct Shader {
+    int id;
+};
+
+static int script_new(lua_State *L);
 static int setInt(lua_State *L);
 static int set(lua_State *L);
 static int use(lua_State *L);
+static int gc(lua_State *L);
+
+static dan::Shader &getShader(lua_State *L, int index);
 
 typedef dan::ScriptVM vm_t;
 
 using namespace dan::libs::ut;
 
 static luaL_Reg funcs[] = {
+    {"new", script_new},
     {"setInt", setInt},
     {"set", set},
     {"use", use},
+    {"__gc", gc},
     {NULL, NULL}
 };
 
 dan::Lib dan::libs::shader() {
-    return Lib("shader", funcs);
+    return Lib(metatable, funcs);
+}
+
+dan::Shader &getShader(lua_State *L, int index) {
+    Shader *sh = (Shader *)luaL_checkudata(L, 1, metatable);
+    return getProgram(L).getData().getShader(sh->id);
+}
+
+int script_new(lua_State *L) {
+    int top = lua_gettop(L);
+    if (top != 2) {
+        luaL_error(L, "new expects at least 2 arguments");
+    }
+    std::string vert = getString(L, 1);
+    std::string frag = getString(L, 2);
+
+    Shader *s = (Shader *)lua_newuserdatauv(L, sizeof(Shader), 0);
+    s->id = getProgram(L).getData().loadShader(vert, frag);
+
+    lua_getglobal(L, metatable);
+    lua_setmetatable(L, -2);
+    return 1;
 }
 
 int setInt(lua_State *L) {
@@ -33,14 +66,13 @@ int setInt(lua_State *L) {
     if (top < 3 || top > 6) {
         luaL_error(L, "shader:setInt expects at least 3 arguments and no more than 6");
     }
-    lua_getfield(L, 1, "handle");
-    dan::Shader *s = (dan::Shader *)lua_touserdata(L, -1);
+    dan::Shader &s = getShader(L, 1);
     std::string name = getString(L, 2);
 
     int count = top - 2;
     switch (count) {
         case 1:
-            s->setInt1(name, lua_tointeger(L, 3));
+            s.setInt1(name, lua_tointeger(L, 3));
             std::cout << "  SET INT " << name << '\n';
             break;
         case 2:
@@ -64,7 +96,7 @@ int set(lua_State *L) {
     if (top < 3) {
         luaL_error(L, "set expects at least 3 arguments");
     }
-    dan::Shader *s = (dan::Shader *)lua_touserdata(L, 1);
+    dan::Shader &s = getShader(L, 1);
     std::string name = getString(L, 2);
 
     int count = top - 2;
@@ -93,6 +125,18 @@ int use(lua_State *L) {
     if (top < 3) {
         luaL_error(L, "use expects 1 argument");
     }
-    dan::Shader *s = (dan::Shader *)lua_touserdata(L, 1);
+    dan::Shader &s = getShader(L, 1);
+    s.use();
     return 0;
 }
+
+int gc(lua_State *L) {
+    int top = lua_gettop(L);
+    if (top != 1) {
+        luaL_error(L, "__gc expects 1 argument");
+    }
+    Shader *sh = (Shader *)luaL_checkudata(L, 1, metatable);
+    getProgram(L).getData().deleteShader(sh->id);
+    return 0;
+}
+

@@ -3,7 +3,7 @@
 #include "../render/Texture.h"
 #include "../sprite/Atlas.h"
 
-dan::Data::Data(Context &c): c(&c) {
+dan::Data::Data(Context &c): c(&c), shaderId(0) {
 }
 void dan::Data::loadImage(const std::string &name, const std::string &path) {
     if (textures.find(name) == textures.end()) {
@@ -17,12 +17,15 @@ void dan::Data::loadAseprite(const std::string &name, const std::string &path) {
         animations[name] = std::make_shared<Animation>(Atlas::loadAnimation(path));
     }
 }
-void dan::Data::loadShader(const std::string &name, const std::string &vert, const std::string &frag) {
-    if (shaders.find(name) == shaders.end()) {
-        shaders[name] = std::make_shared<Shader>(*c, vert, frag);
-    }
+int dan::Data::loadShader(const std::string &vert, const std::string &frag) {
+    shaders[++shaderId] = Shader(*c, vert, frag);
+    return shaderId;
 }
 
-dan::Shader &dan::Data::getShader(const std::string &name) {
-    return *shaders[name];
+dan::Shader &dan::Data::getShader(int id) {
+    return shaders[id];
+}
+
+void dan::Data::deleteShader(int id) {
+    shaders.erase(id);
 }

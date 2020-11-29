@@ -30,7 +30,7 @@ static luaL_Reg funcs[] = {
 };
 
 dan::Lib dan::libs::mesh() {
-    return Lib("Mesh", funcs);
+    return Lib(metatable, funcs);
 }
 
 int script_new(lua_State *L) {
@@ -104,6 +104,8 @@ int script_new(lua_State *L) {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     *lua_newuserdatauv(L, sizeof(Mesh), 0) = mesh;
+    lua_getglobal(L, metatable);
+    lua_setmetatable(L, -2);
     return 1;
 }
 int render(lua_State *L) {
