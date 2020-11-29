@@ -22,8 +22,8 @@ static luaL_Reg funcs[] = {
     {NULL, NULL}
 };
 
-luaL_Reg *dan::libs::window() {
-    return funcs;
+dan::Lib dan::libs::window() {
+    return Lib("window", funcs);
 }
 
 int setTitle(lua_State *L) {

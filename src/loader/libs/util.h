@@ -13,6 +13,7 @@ namespace dan::libs::ut {
     std::string getString(lua_State *L, int index);
     ScriptVM &getVM(lua_State *L);
     Program &getProgram(lua_State *L);
+    int getIntField(lua_State *L, const char *name);
 }
 
 #endif

@@ -11,6 +11,7 @@
 
 static int setInt(lua_State *L);
 static int set(lua_State *L);
+static int use(lua_State *L);
 
 typedef dan::ScriptVM vm_t;
 
@@ -19,11 +20,12 @@ using namespace dan::libs::ut;
 static luaL_Reg funcs[] = {
     {"setInt", setInt},
     {"set", set},
+    {"use", use},
     {NULL, NULL}
 };
 
-luaL_Reg *dan::libs::shader() {
-    return funcs;
+dan::Lib dan::libs::shader() {
+    return Lib("shader", funcs);
 }
 
 int setInt(lua_State *L) {
@@ -60,7 +62,7 @@ int setInt(lua_State *L) {
 int set(lua_State *L) {
     int top = lua_gettop(L);
     if (top < 3) {
-        luaL_error(L, "shader:set expects at least 3 arguments");
+        luaL_error(L, "set expects at least 3 arguments");
     }
     dan::Shader *s = (dan::Shader *)lua_touserdata(L, 1);
     std::string name = getString(L, 2);
@@ -83,5 +85,14 @@ int set(lua_State *L) {
             luaL_error(L, "shader:set expects at minimum 1 and at max 3 uniform values");
             break;
     }
+    return 0;
+}
+
+int use(lua_State *L) {
+    int top = lua_gettop(L);
+    if (top < 3) {
+        luaL_error(L, "use expects 1 argument");
+    }
+    dan::Shader *s = (dan::Shader *)lua_touserdata(L, 1);
     return 0;
 }

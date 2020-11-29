@@ -12,6 +12,7 @@ struct luaL_Reg;
 namespace dan {
     class Script;
     class Program;
+    class Lib;
 }
 
 namespace dan {
@@ -23,6 +24,7 @@ namespace dan {
         Program *program;
         errCallback_t errCallback;
         std::filesystem::path workingDir;
+        std::unordered_map<>
         bool checkState(int code);
         void steal(ScriptVM &other);
         void free();
@@ -43,8 +45,8 @@ namespace dan {
         void setGlobal(const std::string &name, float val);
         void setGlobal(const std::string &name, int val);
 
-        void openLib(const std::string &name, luaL_Reg *funcs);
-        void closeLib(const std::string &name);
+        void openLib(const Lib &lib);
+        void closeLib(const Lib &lib);
 
         // Throws std::logic_error on failure
         void call(const std::string &name);

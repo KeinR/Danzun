@@ -103,21 +103,21 @@ void dan::ScriptVM::setGlobal(const std::string &name, int val) {
     lua_setglobal(L, name.c_str());
 }
 
-void dan::ScriptVM::openLib(const std::string &name, luaL_Reg *funcs) {
+void dan::ScriptVM::openLib(const Lib &lib) {
     // TODO: Keep track of # funcs so that can reserve table space
     lua_newtable(L);
-    luaL_setfuncs(L, funcs, 0);
-    lua_setglobal(L, name.c_str());
-    lua_getglobal(L, name.c_str());
+    luaL_setfuncs(L, lib.funcs, 0);
+    lua_setglobal(L, lib.name);
+    lua_getglobal(L, lib.name);
     lua_pushvalue(L, -1);
     lua_setfield(L, -2, "__index");
     // lua_pop(L, 1);
 }
 
-void dan::ScriptVM::closeLib(const std::string &name) {
+void dan::ScriptVM::closeLib(const Lib &lib) {
     // Just set it to nil
     lua_pushnil(L);
-    lua_setglobal(L, name.c_str());
+    lua_setglobal(L, lib.name);
 }
 
 void dan::ScriptVM::call(const std::string &name) {

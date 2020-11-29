@@ -4,7 +4,7 @@
 struct luaL_Reg;
 
 namespace dan::libs {
-    luaL_Reg *game();
+    Lib game();
 }
 
 #endif

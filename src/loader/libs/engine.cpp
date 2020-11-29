@@ -17,6 +17,7 @@ static int loadImage(lua_State *L);
 static int getPath(lua_State *L);
 static int loadAseprite(lua_State *L);
 static int loadShader(lua_State *L);
+static int addStage(lua_State *L);
 static int scriptExit(lua_State *L);
 
 typedef dan::ScriptVM vm_t;
@@ -31,12 +32,13 @@ static luaL_Reg funcs[] = {
     {"loadImage", loadImage},
     {"loadAseprite", loadAseprite},
     {"loadShader", loadShader},
+    {"addStage", addStage},
     {"exit", scriptExit},
     {NULL, NULL}
 };
 
-luaL_Reg *dan::libs::engine() {
-    return funcs;
+dan::Lib dan::libs::engine() {
+    return Lib("engine", funcs);
 }
 
 int getPath(lua_State *L) {
@@ -114,6 +116,18 @@ int loadShader(lua_State *L) {
     lua_setmetatable(L, -2);
     return 1;
 }
+
+int addStage(lua_State *L) {
+    int top = lua_gettop(L);
+    if (top != 3) {
+        luaL_error(L, "addStage expects 2 string parameters");
+    }
+    std::string name = getString(L, 1);
+    std::string path = getString(L, 2);
+    getProgram(L).getEngine().getGame().addStage(name, path);
+    return 0;
+}
+
 int scriptExit(lua_State *L) {
     // Placeholder
     return 0;

@@ -21,6 +21,10 @@ dan::Program::Program(const Script &init): engine("Danzun", 500, 500), data(engi
     vm.openLib("engine", libs::engine());
 
     vm.call("init");
+
+    vm.exec(Script::fromFile("data/lua/game.lua"));
+
+    vm.call("run");
 }
 dan::Data &dan::Program::getData() {
     return data;
