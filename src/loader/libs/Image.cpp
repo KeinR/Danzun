@@ -1,5 +1,7 @@
 #include "Image.h"
 
+#include <iostream>
+
 #include <lua/lua.hpp>
 
 #include "util.h"
@@ -11,7 +13,7 @@
 
 using namespace dan::libs::ut;
 
-const char *metatable = "Image";
+static const char *const metatable = "Image";
 
 struct Image {
     unsigned int handle;
@@ -55,6 +57,10 @@ int script_new(lua_State *L) {
     unsigned int handle;
     glGenTextures(1, &handle);
     glBindTexture(GL_TEXTURE_2D, handle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, format, image.getWidth(), image.getHeight(), 0, format, GL_UNSIGNED_BYTE, image.getData());
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -72,13 +78,14 @@ int render(lua_State *L) {
     }
     // self, object{x,y,w,h}, [mesh]
 
-    Image *img = (Image *)luaL_checkudata(L, 1, metatable);
+    // TODO: Type safety
+    Image *img = (Image *)lua_touserdata(L, 1);
     int x = getIntField(L, 2, "x");
     int y = getIntField(L, 2, "y");
     int width = getIntField(L, 2, "width");
     int height = getIntField(L, 2, "height");
 
-    dan::Matrix(x, y, width, height).load(getProgram(L).getEngine().getContext());
+    // dan::Matrix(x, y, width, height).load(getProgram(L).getEngine().getContext());
 
     glBindTexture(GL_TEXTURE_2D, img->handle);
 

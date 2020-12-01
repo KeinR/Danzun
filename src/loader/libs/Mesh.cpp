@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
 #include <vector>
+#include <iostream>
 
 #include <lua/lua.hpp>
 
@@ -8,6 +9,10 @@
 
 #include "../../lib/opengl.h"
 // #include "../../sprite/ManImage.h"
+
+
+#include "../Program.h"
+
 
 using namespace dan::libs::ut;
 
@@ -18,7 +23,7 @@ struct Mesh {
     unsigned int count;
 };
 
-static const char *metatable = "Mesh";
+static const char *const metatable = "Mesh";
 
 static int script_new(lua_State *L);
 static int render(lua_State *L);
@@ -43,15 +48,13 @@ int script_new(lua_State *L) {
     Mesh mesh;
     glGenVertexArrays(1, &mesh.array);
     glGenBuffers(1, &mesh.vertexBuffer);
+
     glBindVertexArray(mesh.array);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBuffer);
 
     std::vector<float> vertices;
     lua_getfield(L, -1, "vertices");
-    luaL_getmetafield(L, -1, "__len");
-    lua_pushvalue(L, -2); // self
-    lua_pcall(L, 1, 1, 0); // length // TODO: err handling
-    vertices.reserve(lua_tointeger(L, -1));
-    lua_pop(L, 1); // Remove return
+    vertices.reserve(lua_rawlen(L, -1));
     lua_pushnil(L);
     while (lua_next(L, -2) != 0) {
         vertices.push_back(lua_tointeger(L, -1));
@@ -59,18 +62,12 @@ int script_new(lua_State *L) {
     }
     lua_pop(L, 1);
 
-    glGenBuffers(1, &mesh.vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, mesh.vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
     const bool drawIndices = lua_getfield(L, -1, "indices") != LUA_TNIL;
     if (drawIndices) {
         std::vector<unsigned int> indices;
-        luaL_getmetafield(L, -1, "__len");
-        lua_pushvalue(L, -2); // self
-        lua_pcall(L, 1, 1, 0); // length // TODO: err handling
-        indices.reserve(lua_tointeger(L, -1));
-        lua_pop(L, 1);
+        indices.reserve(lua_rawlen(L, -1));
         lua_pushnil(L);
         while (lua_next(L, -2) != 0) {
             indices.push_back(lua_tointeger(L, -1));
@@ -101,6 +98,8 @@ int script_new(lua_State *L) {
         glEnableVertexAttribArray(index);
     }
 
+    lua_pop(L, 1);
+
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -115,7 +114,7 @@ int render(lua_State *L) {
     if (top != 1) {
         luaL_error(L, "render expects 1 parameter");
     }
-    Mesh *mesh = (Mesh *)luaL_checkudata(L, 1, metatable);
+    Mesh *mesh = (Mesh *)lua_touserdata(L, 1);
     glBindVertexArray(mesh->array);
     glBindBuffer(GL_ARRAY_BUFFER, mesh->vertexBuffer);
     if (mesh->elementBuffer == 0) {
@@ -125,6 +124,7 @@ int render(lua_State *L) {
         glDrawElements(GL_TRIANGLES, mesh->count, GL_UNSIGNED_INT, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
+
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     return 0;
@@ -134,7 +134,7 @@ int gc(lua_State *L) {
     if (top != 1) {
         luaL_error(L, "__gc expects 1 parameter");
     }
-    Mesh *mesh = (Mesh *)luaL_checkudata(L, 1, metatable);
+    Mesh *mesh = (Mesh *)lua_touserdata(L, 1);
     glDeleteVertexArrays(1, &mesh->array);
     glDeleteBuffers(1, &mesh->vertexBuffer);
     if (mesh->elementBuffer != 0) {

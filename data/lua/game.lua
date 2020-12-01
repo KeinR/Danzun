@@ -1,8 +1,7 @@
-
 _dan = {
     eidc = 0,
-    entityReg = {}
-    default = {
+    entityReg = {},
+    defaults = {
         mesh = Mesh.new{
             -- Simple quad
             vertices =
@@ -11,7 +10,7 @@ _dan = {
             1, 1, 1, 1,
             1, -1, 1, 0},
             indices =
-            {0, 1, 2
+            {0, 1, 2,
             0, 2, 3},
             params = {
                 {
@@ -36,7 +35,7 @@ function gh.registerEntity(o)
     -- Protects against the unlikely.
     -- Will run out of memory before all integers
     -- are filled, so I think that we're fine
-    while entities[_dan.eidc] != nil do
+    while entities[_dan.eidc] ~= nil do
         _dan.eidc = _dan.eidc + 1
     end
     o.id = _dan.eidc

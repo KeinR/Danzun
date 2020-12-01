@@ -22,8 +22,7 @@ static vms_t vms;
 dan::ScriptVM::ScriptVM():
     L(nullptr),
     program(nullptr),
-    errCallback(defaultErrCallback),
-    workingDir(".")
+    errCallback(defaultErrCallback)
 {
 
     L = luaL_newstate();
@@ -56,7 +55,6 @@ void dan::ScriptVM::steal(ScriptVM &other) {
     other.L = nullptr;
     vms[L] = this;
     errCallback = other.errCallback;
-    workingDir = other.workingDir;
 }
 
 void dan::ScriptVM::free() {
@@ -111,6 +109,7 @@ void dan::ScriptVM::openLib(const Lib &lib) {
     lua_getglobal(L, lib.name);
     lua_pushvalue(L, -1);
     lua_setfield(L, -2, "__index");
+    luaL_newmetatable(L, lib.name);
     // lua_pop(L, 1);
 }
 
@@ -128,19 +127,6 @@ void dan::ScriptVM::call(const std::string &name) {
     }
 }
 
-void dan::ScriptVM::setWorkingDir(const std::filesystem::path &path) {
-    workingDir = path;
-}
-
-std::filesystem::path dan::ScriptVM::getPath(const std::filesystem::path &path) const {
-    // return std::filesystem::relative(path, workingDir);
-    return workingDir / path;
-}
-
-std::filesystem::path dan::ScriptVM::getWorkingDir() const {
-    return workingDir;
-}
-
 void dan::ScriptVM::exec(const std::string &code) {
     int status = luaL_dostring(L, code.c_str());
 
@@ -153,8 +139,18 @@ void dan::ScriptVM::exec(const std::string &code) {
 }
 
 void dan::ScriptVM::exec(const Script &script) {
-    setWorkingDir(script.getDir());
     exec(script.getCode());
+}
+
+void dan::ScriptVM::execFile(const std::string &path) {
+    int status = luaL_dofile(L, path.c_str());
+
+    if (status != LUA_OK) {
+        std::stringstream str;
+        str << "ScriptVM err @" << this << ": " << lua_tostring(L, -1);
+        lua_pop(L, 1);
+        throw std::logic_error(str.str());
+    }
 }
 
 dan::ScriptVM &dan::ScriptVM::getVM(lua_State *L) {

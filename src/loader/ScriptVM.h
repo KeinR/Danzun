@@ -23,7 +23,6 @@ namespace dan {
         lua_State *L;
         Program *program;
         errCallback_t errCallback;
-        std::filesystem::path workingDir;
         bool checkState(int code);
         void steal(ScriptVM &other);
         void free();
@@ -52,12 +51,9 @@ namespace dan {
 
         std::string getGlobal(const std::string &name);
 
-        void setWorkingDir(const std::filesystem::path &path);
-        std::filesystem::path getWorkingDir() const;
-        std::filesystem::path getPath(const std::filesystem::path &path) const;
-
         // Throws logic_error on error
         void exec(const std::string &code);
+        void execFile(const std::string &code);
         void exec(const Script &script);
 
         static ScriptVM &getVM(lua_State *L);

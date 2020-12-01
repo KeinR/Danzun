@@ -10,7 +10,7 @@
 #include "../../core/debug.h"
 #include "../Program.h"
 
-const char *metatable = "Shader";
+static const char *const metatable = "Shader";
 
 struct Shader {
     int id;
@@ -42,7 +42,8 @@ dan::Lib dan::libs::shader() {
 }
 
 dan::Shader &getShader(lua_State *L, int index) {
-    Shader *sh = (Shader *)luaL_checkudata(L, 1, metatable);
+    // TODO: Type safety
+    Shader *sh = (Shader *)lua_touserdata(L, index);
     return getProgram(L).getData().getShader(sh->id);
 }
 
@@ -123,11 +124,11 @@ int set(lua_State *L) {
 
 int use(lua_State *L) {
     int top = lua_gettop(L);
-    if (top < 3) {
+    if (top != 1) {
         luaL_error(L, "use expects 1 argument");
     }
     dan::Shader &s = getShader(L, 1);
-    s.use();
+    s.doUse();
     return 0;
 }
 

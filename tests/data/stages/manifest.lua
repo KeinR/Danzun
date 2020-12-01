@@ -1,3 +1,0 @@
-
-require("game.stages.one")
-
