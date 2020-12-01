@@ -33,3 +33,8 @@
 
 # Buildfiles
 build/
+
+# gtags
+GPATH
+GRTAGS
+GTAGS

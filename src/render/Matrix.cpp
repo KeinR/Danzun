@@ -1,5 +1,7 @@
 #include "Matrix.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -37,7 +39,7 @@ void dan::Matrix::load(Context &c, const std::string &location) {
         model = reflectYAxis(model);
     }
 
-    c.getShader()->setMatrix4fv(location, glm::value_ptr(model));
+    c.getShader().setMatrix4fv(location, glm::value_ptr(model));
 }
 
 float ndcX(float x, int winWidth) {

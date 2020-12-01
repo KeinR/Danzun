@@ -31,16 +31,15 @@ dan::Context::Context(Engine *e):
     quad_.setParam(1, 2, 4, 2);
 }
 
-void dan::Context::setShader(const shader_t &s) {
-    DANZUN_ASSERT(s);
-    if (currentShader != s) {
-        currentShader = s;
-        currentShader->use();
+void dan::Context::setShader(Shader &s) {
+    if (currentShader != &s) {
+        currentShader = &s;
+        currentShader->doUse();
     }
 }
 
 void dan::Context::clearShader() {
-    currentShader.reset();
+    currentShader = nullptr;
     Shader::disuse();
 }
 
@@ -57,9 +56,9 @@ int dan::Context::getVPHeight() const {
     return vHeight;
 }
 
-const dan::Context::shader_t &dan::Context::getShader() const {
-    DANZUN_ASSERT(currentShader);
-    return currentShader;
+dan::Shader &dan::Context::getShader() const {
+    DANZUN_ASSERT(currentShader != nullptr);
+    return *currentShader;
 }
 
 dan::Engine &dan::Context::getEngine() const {

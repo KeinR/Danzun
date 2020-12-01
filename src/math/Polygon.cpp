@@ -58,7 +58,7 @@ void dan::Polygon::load() {
     }
 
     typedef points_t::size_type size;
-    // No. points must be even
+    // # points must be even
     size end = points.size() - points.size() % 2;
     // Number of lines equal to that of the number of points.
     // Points are in pairs of 2 (x/y)

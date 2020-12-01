@@ -12,17 +12,6 @@
 #include "../core/error.h"
 #include "../lib/opengl.h"
 
-#ifndef NDEBUG
-static void assertBound(GLint thisShader) {
-    GLint currentShaderProgram;
-    glGetIntegerv(GL_CURRENT_PROGRAM, &currentShaderProgram);
-    DANZUN_ASSERT(currentShaderProgram == thisShader);
-}
-#   define DANZUN_ASSERT_IS_BOUND assertBound(this->handle)
-#else
-#   define DANZUN_ASSERT_IS_BOUND ((void)0)
-#endif
-
 static constexpr unsigned int LOG_BUFFER_SIZE = 512;
 
 /**
@@ -51,10 +40,13 @@ static void delShaders(GLuint vert, GLuint frag);
 
 static const char *getShaderTypeName(GLenum type);
 
-dan::Shader::Shader(const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength) {
+dan::Shader::Shader(): c(nullptr), handle(0) {
+}
+
+dan::Shader::Shader(Context &c, const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength): c(&c) {
     createShader(vertexData, vertexLength, fragmentData, fragmentLength);
 }
-dan::Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath) {
+dan::Shader::Shader(Context &c, const std::string &vertexPath, const std::string &fragmentPath): c(&c) {
 
     int vertLen, fragLen;
     char *vertData = nullptr;
@@ -75,8 +67,17 @@ dan::Shader::Shader(const std::string &vertexPath, const std::string &fragmentPa
     }
 
 }
+dan::Shader::Shader(Shader &&other) {
+    steal(other);
+}
 dan::Shader::~Shader() {
     free();
+}
+
+dan::Shader &dan::Shader::operator=(Shader &&other) {
+    free();
+    steal(other);
+    return *this;
 }
 
 void dan::Shader::createShader(const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength) {
@@ -107,7 +108,10 @@ void dan::Shader::createShader(const char *vertexData, unsigned int vertexLength
 
 void dan::Shader::steal(Shader &other) {
     handle = other.handle;
+    c = other.c;
     other.handle = 0;
+    other.c = nullptr;
+    // Don't bother moving the uniforms
 }
 
 dan::Shader::uniform_t dan::Shader::uni(const std::string &name) {
@@ -142,8 +146,12 @@ void dan::Shader::free() {
     }
 }
 
-void dan::Shader::use() const {
+void dan::Shader::doUse() const {
     glUseProgram(handle);
+}
+
+void dan::Shader::use() {
+    c->setShader(*this);
 }
 
 dan::Shader::uniform_t dan::Shader::getUniform(const std::string &name) {
@@ -155,15 +163,15 @@ dan::Shader::program_t dan::Shader::getHandle() const {
 }
 
 void dan::Shader::setMatrix4fv(const std::string &name, const float *data) {
-    DANZUN_ASSERT_IS_BOUND;
+    use();
     glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, data);
 }
 void dan::Shader::setInt1(const std::string &name, int value) {
-    DANZUN_ASSERT_IS_BOUND;
+    use();
     glUniform1i(getUniform(name), value);
 }
 void dan::Shader::set4fv(const std::string &name, const float *values) {
-    DANZUN_ASSERT_IS_BOUND;
+    use();
     glUniform4fv(getUniform(name), 1, values);
 }
 

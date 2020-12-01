@@ -12,17 +12,16 @@ namespace dan {
     class ImgDisp: public AbsRenderConf {
     public:
         typedef std::shared_ptr<AbsTexture> texture_t;
-        typedef std::shared_ptr<Shader> shader_t;
     private:
         texture_t texture;
         // The preferred shader, can be nullptr
-        shader_t shader;
+        Shader *shader;
     public:
-        ImgDisp(const texture_t &texture = nullptr, const shader_t &shader = nullptr);
+        ImgDisp(const texture_t &texture = nullptr, Shader *shader = nullptr);
         void setTexture(const texture_t &texture);
-        void setShader(const shader_t &shader);
+        void setShader(Shader *shader);
         texture_t &getTexture();
-        shader_t &getShader();
+        Shader *getShader();
 
         void setup(Context &c) override;
         void render(Context &c) override;

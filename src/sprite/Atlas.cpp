@@ -1,7 +1,6 @@
 #include "Atlas.h"
 
 #include <fstream>
-#include <filesystem>
 #include <nlohmann/json.hpp>
 
 #include "ManImage.h"
@@ -21,13 +20,7 @@ dan::Atlas::Atlas(): texture(std::make_shared<Texture>()) {
 
 dan::Atlas &dan::Atlas::loadAse(const std::string &path) {
     try {
-        namespace fs = std::filesystem;
-
-        fs::path realPath = fs::canonical(path);
-
-        std::string strPath = realPath.string();
-
-        std::ifstream file(realPath);
+        std::ifstream file(path);
         if (!file.good()) {
             err("Atlas::loadAse") << "\"" << path << "\" does not exist or cannot be opened";
             return *this;

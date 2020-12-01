@@ -2,7 +2,6 @@
 #define DANZUN_CONTEXT_H_INCLUDED
 
 #include <string>
-#include <memory>
 
 #include "../render/Mesh.h"
 #include "../time/Clock.h"
@@ -14,14 +13,11 @@ namespace dan {
 
 namespace dan {
     class Context {
-    public:
-        typedef std::shared_ptr<Shader> shader_t;
-    private:
         Mesh quad_;
-        // Is only for use by client code - The engine has
+        // Is only for use by client code - The context has
         // no use for this
         Engine *engine;
-        shader_t currentShader;
+        Shader *currentShader;
         int vWidth;
         int vHeight;
 
@@ -30,7 +26,7 @@ namespace dan {
     public:
         Context(Engine *e);
 
-        void setShader(const shader_t &s);
+        void setShader(Shader &s);
         // Sets shader to nullptr
         void clearShader();
 
@@ -38,7 +34,7 @@ namespace dan {
 
         int getVPWidth() const;
         int getVPHeight() const;
-        const shader_t &getShader() const;
+        Shader &getShader() const;
         Engine &getEngine() const;
         Clock &getClock();
 

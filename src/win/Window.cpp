@@ -217,6 +217,22 @@ void dan::Window::getFramebufferSize(int &width, int &height) const {
     glfwGetFramebufferSize(handle, &width, &height);
 }
 
+void dan::Window::setVisible(bool toggle) {
+    if (toggle) {
+        glfwShowWindow(handle);
+    } else {
+        glfwHideWindow(handle);
+    }
+}
+
+void dan::Window::setSize(int width, int height) {
+    glfwSetWindowSize(handle, width, height);
+}
+
+void dan::Window::setTitle(const std::string &title) {
+    glfwSetWindowTitle(handle, title.c_str());
+}
+
 // Static members
 
 void dan::Window::pollEvents() {
@@ -287,6 +303,7 @@ GLFWwindow *doCreateWindow(const winparams &p) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, p.MSAASamples);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
     // glfwWindowHint(GLFW_SCALE_TO_MONITOR, ...);
 

@@ -1,0 +1,65 @@
+{ "frames": [
+   {
+    "filename": "player.ani 0.ase",
+    "frame": { "x": 0, "y": 0, "w": 50, "h": 58 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 58 },
+    "sourceSize": { "w": 50, "h": 58 },
+    "duration": 150
+   },
+   {
+    "filename": "player.ani 1.ase",
+    "frame": { "x": 50, "y": 0, "w": 50, "h": 58 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 58 },
+    "sourceSize": { "w": 50, "h": 58 },
+    "duration": 150
+   },
+   {
+    "filename": "player.ani 2.ase",
+    "frame": { "x": 100, "y": 0, "w": 50, "h": 58 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 58 },
+    "sourceSize": { "w": 50, "h": 58 },
+    "duration": 150
+   },
+   {
+    "filename": "player.ani 3.ase",
+    "frame": { "x": 150, "y": 0, "w": 50, "h": 58 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 58 },
+    "sourceSize": { "w": 50, "h": 58 },
+    "duration": 150
+   },
+   {
+    "filename": "player.ani 4.ase",
+    "frame": { "x": 200, "y": 0, "w": 50, "h": 58 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 58 },
+    "sourceSize": { "w": 50, "h": 58 },
+    "duration": 150
+   },
+   {
+    "filename": "player.ani 5.ase",
+    "frame": { "x": 250, "y": 0, "w": 50, "h": 58 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 50, "h": 58 },
+    "sourceSize": { "w": 50, "h": 58 },
+    "duration": 150
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.25-x64",
+  "image": "player.png",
+  "format": "RGBA8888",
+  "size": { "w": 300, "h": 58 },
+  "scale": "1"
+ }
+}

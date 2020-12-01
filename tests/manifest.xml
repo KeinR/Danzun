@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+    <spriteconfig>
+        <sprite name="player" shader="sprite"/>
+    </spriteconfig>
+    <shaders path="shaders/manifest.xml"/>
+    <sprites path="sprites/manifest.xml"/>
+    <stages path="stages/manifest.xml"/>
+</manifest>

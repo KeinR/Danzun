@@ -1,6 +1,8 @@
 #ifndef DANZUN_WINDOW_H_INCLUDED
 #define DANZUN_WINDOW_H_INCLUDED
 
+#include <string>
+
 #include "enums.h"
 
 struct GLFWwindow;
@@ -80,6 +82,10 @@ namespace dan {
         int getFramebufferWidth() const;
         int getFramebufferHeight() const;
         void getFramebufferSize(int &width, int &height) const;
+        
+        void setVisible(bool toggle);
+        void setSize(int width, int height);
+        void setTitle(const std::string &title);
 
         static void pollEvents();
         static void waitEvents();
