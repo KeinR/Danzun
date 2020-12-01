@@ -1,0 +1,3 @@
+
+require("game.stages.one")
+

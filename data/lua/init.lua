@@ -1,38 +1,36 @@
 
-types = {
-    IMAGE = 0,
-    ASEPRITE = 1
-}
+-- types = {
+--     IMAGE = 0,
+--     ASEPRITE = 1
+-- }
 
-lh = {}
+-- lh = {}
 
-function lh:execFile(path)
-    func = loadFile(engine.getPath(path))
-    func()
-end
+-- function lh.loadSprite(o)
+--     local file = engine.getPath(o.file)
+--     if o.type == nil or o.type == types.IMAGE then
+--         return engine.loadImage(o.name, file)
+--     elseif o.type == types.ASEPRITE then
+--         return engine.loadAseprite(o.name, file)
+--     end
+-- end
 
-function lh:execStr(str)
-    func = load(str)
-    func()
-end
+-- function lh.loadShader(o)
+--     return engine.loadShader(
+--         o.name,
+--         engine.getPath(o.vert),
+--         engine.getPath(o.frag)
+--     )
+-- end
 
-function lh:addStage(o)
 
-end
+-- Defined natively
+-- Image = {}
+-- Image.__index = Image
+-- function Image.new(path)
+--     r = {}
+--     setmetatable(r, Image)
+--     r.handle = resource.loadImage(path)
+-- end
 
-function lh:loadSprite(o)
-    file = engine.getPath(o.file)
-    if o.type == nil || o.type == type.IMAGE then
-        engine.loadImage(o.name, file)
-    elseif o.type == type.ASEPRITE then
-        engine.loadAseprite(o.name, file)
-    end
-end
 
-function lh:loadShader(o)
-    return engine.loadShader(
-        o.name,
-        engine.getPath(o.vert),
-        engine.getPath(o.frag)
-    )
-end
