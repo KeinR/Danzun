@@ -1,8 +1,8 @@
 
-// #include "../../src/core.h"
-#include "../../src/loader/Program.h"
-#include "../../src/loader/Script.h"
+#include "../../src/core/Engine.h"
 
 int main() {
-    dan::Program p("../tests/game.lua");
+    dan::Engine e;
+    e.start("../tests/game.lua");
+    return 0;
 }

@@ -11,7 +11,7 @@ struct luaL_Reg;
 
 namespace dan {
     class Script;
-    class Program;
+    class Engine;
     class Lib;
 }
 
@@ -21,7 +21,7 @@ namespace dan {
         typedef std::function<void(ScriptVM&, const std::string&)> errCallback_t;
     private:
         lua_State *L;
-        Program *program;
+        Engine *engine;
         errCallback_t errCallback;
         bool checkState(int code);
         void steal(ScriptVM &other);
@@ -35,8 +35,8 @@ namespace dan {
 
         lua_State *getHandle();
 
-        void setProgram(Program &p);
-        Program &getProgram();
+        void setEngine(Engine &e);
+        Engine &getEngine();
         void setErrCallback(const errCallback_t &callback);
 
         void setGlobal(const std::string &name, const std::string &val);
@@ -53,8 +53,7 @@ namespace dan {
 
         // Throws logic_error on error
         void exec(const std::string &code);
-        void execFile(const std::string &code);
-        void exec(const Script &script);
+        void execFile(const std::string &path);
 
         static ScriptVM &getVM(lua_State *L);
     };

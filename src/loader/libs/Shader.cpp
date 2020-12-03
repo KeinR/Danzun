@@ -8,7 +8,7 @@
 #include "../../render/Shader.h"
 #include "../ScriptVM.h"
 #include "../../core/debug.h"
-#include "../Program.h"
+#include "../../core/Engine.h"
 
 static const char *const metatable = "Shader";
 
@@ -44,7 +44,7 @@ dan::Lib dan::libs::shader() {
 dan::Shader &getShader(lua_State *L, int index) {
     // TODO: Type safety
     Shader *sh = (Shader *)lua_touserdata(L, index);
-    return getProgram(L).getData().getShader(sh->id);
+    return getEngine(L).getData().getShader(sh->id);
 }
 
 int script_new(lua_State *L) {
@@ -56,7 +56,7 @@ int script_new(lua_State *L) {
     std::string frag = getString(L, 2);
 
     Shader *s = (Shader *)lua_newuserdatauv(L, sizeof(Shader), 0);
-    s->id = getProgram(L).getData().loadShader(vert, frag);
+    s->id = getEngine(L).getData().loadShader(vert, frag);
 
     lua_getglobal(L, metatable);
     lua_setmetatable(L, -2);
@@ -138,7 +138,7 @@ int gc(lua_State *L) {
         luaL_error(L, "__gc expects 1 argument");
     }
     Shader *sh = (Shader *)luaL_checkudata(L, 1, metatable);
-    getProgram(L).getData().deleteShader(sh->id);
+    getEngine(L).getData().deleteShader(sh->id);
     return 0;
 }
 

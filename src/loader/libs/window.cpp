@@ -3,7 +3,6 @@
 #include <lua/lua.hpp>
 
 #include "util.h"
-#include "../Program.h"
 #include "../../core/Engine.h"
 #include "../../win/Window.h"
 
@@ -32,7 +31,7 @@ int setTitle(lua_State *L) {
         luaL_error(L, "setTitle expects one string parameter");
     }
     std::string title = getString(L, 1);
-    getProgram(L).getEngine().getWindow().setTitle(title);
+    getEngine(L).getWindow().setTitle(title);
     return 0;
 }
 
@@ -43,7 +42,7 @@ int setSize(lua_State *L) {
     }
     int width = lua_tointeger(L, 1);
     int height = lua_tointeger(L, 2);
-    getProgram(L).getEngine().getWindow().setSize(width, height);
+    getEngine(L).getWindow().setSize(width, height);
     return 0;
 }
 
@@ -53,6 +52,6 @@ int setVisible(lua_State *L) {
         luaL_error(L, "setVisible expects one boolean parameter");
     }
     bool visible = lua_toboolean(L, 1);
-    getProgram(L).getEngine().getWindow().setVisible(visible);
+    getEngine(L).getWindow().setVisible(visible);
     return 0;
 }

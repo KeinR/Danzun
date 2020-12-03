@@ -14,8 +14,8 @@ dan::ScriptVM &dan::libs::ut::getVM(lua_State *L) {
     return ::dan::ScriptVM::getVM(L);
 }
 
-dan::Program &dan::libs::ut::getProgram(lua_State *L) {
-    return getVM(L).getProgram();
+dan::Engine &dan::libs::ut::getEngine(lua_State *L) {
+    return getVM(L).getEngine();
 }
 
 int dan::libs::ut::getIntField(lua_State *L, int tableIndex, const char *name) {

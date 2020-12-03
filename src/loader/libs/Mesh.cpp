@@ -8,11 +8,6 @@
 #include "util.h"
 
 #include "../../lib/opengl.h"
-// #include "../../sprite/ManImage.h"
-
-
-#include "../Program.h"
-
 
 using namespace dan::libs::ut;
 

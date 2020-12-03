@@ -9,7 +9,6 @@
 
 #include "../core/debug.h"
 #include "libs/Lib.h"
-#include "Script.h"
 
 void defaultErrCallback(dan::ScriptVM &vm, const std::string &msg) {
     std::clog << "LUA VM ERROR [0x" << std::hex << &vm << std::dec << "]:" << msg << '\n';
@@ -21,7 +20,7 @@ static vms_t vms;
 
 dan::ScriptVM::ScriptVM():
     L(nullptr),
-    program(nullptr),
+    engine(nullptr),
     errCallback(defaultErrCallback)
 {
 
@@ -75,13 +74,13 @@ bool dan::ScriptVM::checkState(int code) {
     return true;
 }
 
-void dan::ScriptVM::setProgram(Program &p) {
-    program = &p;
+void dan::ScriptVM::setEngine(Engine &e) {
+    engine = &e;
 }
 
-dan::Program &dan::ScriptVM::getProgram() {
-    DANZUN_ASSERT(program != nullptr);
-    return *program;
+dan::Engine &dan::ScriptVM::getEngine() {
+    DANZUN_ASSERT(engine != nullptr);
+    return *engine;
 }
 
 void dan::ScriptVM::setErrCallback(const errCallback_t &callback) {
@@ -136,10 +135,6 @@ void dan::ScriptVM::exec(const std::string &code) {
         lua_pop(L, 1);
         throw std::logic_error(str.str());
     }
-}
-
-void dan::ScriptVM::exec(const Script &script) {
-    exec(script.getCode());
 }
 
 void dan::ScriptVM::execFile(const std::string &path) {

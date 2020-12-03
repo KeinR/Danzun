@@ -12,7 +12,7 @@
 #include "../../math/Polygon.h"
 #include "../../math/Circle.h"
 #include "../../math/Rectangle.h"
-#include "../Program.h"
+#include "../../core/Engine.h"
 
 using namespace dan::libs::ut;
 
@@ -48,7 +48,7 @@ int regCircleCol(lua_State *L) {
     c.hitbox.setX(lua_tonumber(L, 3));
     c.hitbox.setY(lua_tonumber(L, 4));
     c.hitbox.setRadius(lua_tonumber(L, 5));
-    getProgram(L).getEngine().getGame().getGroup(group).pushCircle(c);
+    getEngine(L).getGame().getGroup(group).pushCircle(c);
     return 0;
 }
 int regRectCol(lua_State *L) {
@@ -59,7 +59,7 @@ int regRectCol(lua_State *L) {
     // CALLBACK ID, group name, x (top left), y (top left), width, height
     int id = lua_tonumber(L, 1);
     std::string group = getString(L, 2);
-    getProgram(L).getEngine().getGame().getGroup(group).pushRect({id, dan::Rectangle(
+    getEngine(L).getGame().getGroup(group).pushRect({id, dan::Rectangle(
         lua_tonumber(L, 3),
         lua_tonumber(L, 4),
         lua_tonumber(L, 5),
@@ -83,7 +83,7 @@ int regPolygonCol(lua_State *L) {
     }
     p.hitbox.setPoints(points);
     p.hitbox.load();
-    getProgram(L).getEngine().getGame().getGroup(group).pushPolygon(p);
+    getEngine(L).getGame().getGroup(group).pushPolygon(p);
     return 0;
 }
 
@@ -94,7 +94,7 @@ int testCollisions(lua_State *L) {
     }
     std::string first = getString(L, 1);
     std::string second = getString(L, 1);
-    std::vector<std::pair<int,int>> result = getProgram(L).getEngine().getGame().testCollisions(first, second);
+    std::vector<std::pair<int,int>> result = getEngine(L).getGame().testCollisions(first, second);
 
     const char *gameRegName = "_dan";
     const char *propName = "entityReg";
@@ -123,7 +123,7 @@ int testCollisions(lua_State *L) {
 }
 
 int resetGroups(lua_State *L) {
-    getProgram(L).getEngine().getGame().resetGroups();
+    getEngine(L).getGame().resetGroups();
     return 0;
 }
 

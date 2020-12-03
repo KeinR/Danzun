@@ -2,12 +2,8 @@
 
 #include <lua/lua.hpp>
 
-#include "../Program.h"
-#include "../ScriptVM.h"
 #include "util.h"
 
-static int getPath(lua_State *L);
-static int setWorkingFile(lua_State *L);
 static int scriptExit(lua_State *L);
 
 typedef dan::ScriptVM vm_t;
@@ -24,8 +20,7 @@ dan::Lib dan::libs::engine() {
 }
 
 int scriptExit(lua_State *L) {
-    // Placeholder
+    // Placeholder, should gracefuly exit
     exit(0);
     return 0;
 }
-

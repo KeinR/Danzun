@@ -4,26 +4,29 @@
 #include "../lib/glfw.h"
 #include "error.h"
 
+#include "../loader/libs/engine.h"
+#include "../loader/libs/game.h"
+#include "../loader/libs/Shader.h"
+#include "../loader/libs/window.h"
+#include "../loader/libs/Mesh.h"
+#include "../loader/libs/Image.h"
+
 #include "EventCallback.h"
 
 #include <iostream>
-#include <chrono>
-#include "../time/RealTimer.h"
 
-dan::Engine::Engine(const std::string &winName, int width, int height):
-    window(winName.c_str(), width, height, 0),
+dan::Engine::Engine():
+    window("Danzun", 500, 500, 0),
     rc(this),
-    scene(nullptr),
+    data(rc),
     windowEventCallback(nullptr),
     eventCallback(nullptr),
     game(*this),
     gameActive(false),
     gameSpeed(1)
 {
+    vm.setEngine(*this);
     window.setEventCallback(*this);
-    gameTarget.setNode(game);
-
-    setGameSize(400, 400);
 }
 
 bool dan::Engine::callbackCallable() {
@@ -70,6 +73,9 @@ dan::Window &dan::Engine::getWindow() {
 dan::Game &dan::Engine::getGame() {
     return game;
 }
+dan::Data &dan::Engine::getData() {
+    return data;
+}
 
 void dan::Engine::setGameActive(bool flag) {
     gameActive = flag;
@@ -85,39 +91,11 @@ float dan::Engine::getGameSpeed() const {
     return gameSpeed;
 }
 
-void dan::Engine::setRefreshRate(int count) {
-    glfwSwapInterval(count);
-}
-
 dan::Context &dan::Engine::getContext() {
     return rc;
 }
 
-void dan::Engine::setScene(Node &s) {
-    scene = &s;
-}
-
-void dan::Engine::setGameSize(int w, int h) {
-    game.setWidth(w);
-    game.setHeight(h);
-    gameTarget.setSize(w, h);
-}
-
-void dan::Engine::renderGameTarget() {
-    gameTarget.render(rc);
-    rc.setViewport(window.getWidth(), window.getHeight());
-}
-
-void dan::Engine::bindGameTexture() {
-    gameTarget.bindTexture();
-}
-
 void dan::Engine::run() {
-    if (scene == nullptr) {
-        err("Engine::run") << "No current scene!";
-        return;
-    }
-
     window.makeCurrent();
 
     glActiveTexture(GL_TEXTURE0);
@@ -128,18 +106,12 @@ void dan::Engine::run() {
 
     float start = glfwGetTime();
 
-    RealTimer post(500);
-    post.start();
-    float startTime = glfwGetTime();
-    int frames = 0;
-
     while (!window.shouldClose()) {
         rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-
-        scene->render(rc);
+        vm.call("main");
 
         window.swapBuffers();
 
@@ -155,13 +127,50 @@ void dan::Engine::run() {
         if (eventCallback != nullptr) {
             eventCallback->onFrame(*this, deltaTime);
         }
-
-        frames++;
-        if (post.done()) {
-            std::cout << "FPS = " << (frames / (glfwGetTime() - startTime)) << '\n';
-            frames = 0;
-            post.start();
-            startTime = glfwGetTime();
-        }
     }
+}
+
+void dan::Engine::open(const std::filesystem::path &filePath) {
+
+    std::filesystem::path p = std::filesystem::absolute("../data/lua/game.lua");
+    std::filesystem::path t = std::filesystem::absolute(filePath);
+
+    // IMPORTANT: Set working directory to that of the init script
+    // so that clients can use I/O sanely
+    std::filesystem::current_path(filePath.parent_path());
+
+    t = std::filesystem::relative(t);
+    vm.execFile(t.string());
+
+    std::cout << "start open windows" << '\n';
+
+    vm.openLib(libs::window());
+    vm.openLib(libs::shader());
+    vm.openLib(libs::mesh());
+    vm.openLib(libs::image());
+
+    std::cout << "libs done" << '\n';
+
+    vm.execFile(p.string());
+
+    std::cout << "Setup done" << '\n';
+
+    vm.call("preInit");
+
+    std::cout << "Pre done" << '\n';
+
+    vm.openLib(libs::engine());
+
+    std::cout << "Engine opened" << '\n';
+
+    window.setVisible(true);
+
+    vm.call("init");
+
+    vm.call("start");
+}
+
+void dan::Engine::start(const std::filesystem::path &filePath) {
+    open(filePath);
+    run();
 }
