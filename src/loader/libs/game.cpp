@@ -11,20 +11,17 @@
 #include "../../game/Group.h"
 #include "../../math/Polygon.h"
 #include "../../math/Circle.h"
-#include "../../math/Rectangle.h"
 #include "../../core/Engine.h"
 
 using namespace dan::libs::ut;
 
 static int regCircleCol(lua_State *L);
-static int regRectCol(lua_State *L);
 static int regPolygonCol(lua_State *L);
 static int testCollisions(lua_State *L);
 static int resetGroups(lua_State *L);
 
 static luaL_Reg funcs[] = {
     {"regCircleCol", regCircleCol},
-    {"regRectCol", regRectCol},
     {"regPolygonCol", regPolygonCol},
     {"testCollisions", testCollisions},
     {"resetGroups", resetGroups},
@@ -51,22 +48,6 @@ int regCircleCol(lua_State *L) {
     getEngine(L).getGame().getGroup(group).pushCircle(c);
     return 0;
 }
-int regRectCol(lua_State *L) {
-    int top = lua_gettop(L);
-    if (top < 4) {
-        luaL_error(L, "regRectCol expects 6 parameters");
-    }
-    // CALLBACK ID, group name, x (top left), y (top left), width, height
-    int id = lua_tonumber(L, 1);
-    std::string group = getString(L, 2);
-    getEngine(L).getGame().getGroup(group).pushRect({id, dan::Rectangle(
-        lua_tonumber(L, 3),
-        lua_tonumber(L, 4),
-        lua_tonumber(L, 5),
-        lua_tonumber(L, 6)
-    )});
-    return 0;
-}
 int regPolygonCol(lua_State *L) {
     int top = lua_gettop(L);
     if (top < 4) {
@@ -76,10 +57,13 @@ int regPolygonCol(lua_State *L) {
     dan::Group::polygon p;
     p.id = lua_tonumber(L, 1);
     std::string group = getString(L, 2);
-    std::vector<float> points;
-    points.reserve(top - 2);
-    for (int i = 2; i <= top; i++) {
-        points.push_back(lua_tonumber(L, i));
+    std::vector<Polygon::Point> points;
+    points.reserve((top - 2) / 2);
+    for (int i = 2; i+1 <= top; i += 2) {
+        points.push_back(Point(
+            lua_tonumber(L, i),
+            lua_tonumber(L, i+1)
+        ));
     }
     p.hitbox.setPoints(points);
     p.hitbox.load();

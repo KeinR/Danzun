@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "../math/Circle.h"
-#include "../math/Rectangle.h"
 #include "../math/Polygon.h"
 
 namespace dan {
@@ -15,22 +14,16 @@ namespace dan {
             int id;
             Circle hitbox;
         };
-        struct rectangle {
-            int id;
-            Rectangle hitbox;
-        };
         struct polygon {
             int id;
             Polygon hitbox;
         };
     private:
         std::vector<circle> circles;
-        std::vector<rectangle> rectangles;
         std::vector<polygon> polygons;
     public:
         Group();
         void pushCircle(const circle &v);
-        void pushRect(const rectangle &v);
         void pushPolygon(const polygon &v);
         void clear();
         void test(Group &other, std::vector<std::pair<int,int>> &output);

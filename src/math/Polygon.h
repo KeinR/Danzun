@@ -7,9 +7,19 @@
 #include "Line.h"
 
 namespace dan {
+    class Circle;
+}
+
+namespace dan {
     class Polygon: public Hitbox {
     public:
-        typedef std::vector<float> points_t;
+        struct Point {
+            float x;
+            float y;
+            Point();
+            Point(float x, float y);
+        };
+        typedef std::vector<Point> points_t;
         typedef std::vector<Line> lines_t;
     private:
         // 2D points
@@ -32,7 +42,7 @@ namespace dan {
     public:
         Polygon();
         points_t &getPoints();
-        void setPoints(const std::vector<float> &p);
+        void setPoints(const points_t &p);
 
         void setCenterX(float x);
         void setCenterY(float y);
@@ -48,7 +58,9 @@ namespace dan {
         void setX(float x) override;
         void setY(float y) override;
         void setRotation(float radians) override;
+        float hasPont(const Point &p) const;
         bool intersects(const Circle &c) const override;
+        bool intersects(const Polygon &p) const;
     };
 }
 
