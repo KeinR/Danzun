@@ -58,7 +58,7 @@ namespace dan {
         void setX(float x) override;
         void setY(float y) override;
         void setRotation(float radians) override;
-        float hasPont(const Point &p) const;
+        bool hasPoint(const Point &p) const;
         bool intersects(const Circle &c) const override;
         bool intersects(const Polygon &p) const;
     };

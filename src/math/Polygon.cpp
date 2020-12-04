@@ -4,9 +4,9 @@
 
 #include "Circle.h"
 
-dan::Point::Point(): Point(0, 0) {
+dan::Polygon::Point::Point(): Point(0, 0) {
 }
-dan::Point::Point(float x, float y): x(x), y(y) {
+dan::Polygon::Point::Point(float x, float y): x(x), y(y) {
 }
 
 dan::Polygon::Polygon():
@@ -75,7 +75,7 @@ void dan::Polygon::load() {
     const float c = std::cos(rotation);
     const float s = std::sin(rotation);
     for (size i = 0; i < points.size(); i++) {
-        size next = (i + 1) % end;
+        size next = (i + 1) % points.size();
         float x0 = points[i].x;
         float y0 = points[i].y;
         float x1 = points[next].x;
@@ -116,12 +116,12 @@ bool dan::Polygon::intersects(const Circle &c) const {
     return false;
 }
 
-bool dan::Polygon::hasPoint(const Point &p) {
+bool dan::Polygon::hasPoint(const Point &p) const {
     int hits = 0;
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < lines.size(); i++) {
         if (lines[i].inDomain(x)) {
-            float iy = lines[i].solveForY(p.x, p.y);
-            if (iy > p.y) {
+            float iy = lines[i].solveForY(p.x);
+            if (iy > p.y || std::isinf(iy)) {
                 hits++;
             } else if (iy == p.y) {
                 return true;
@@ -131,14 +131,14 @@ bool dan::Polygon::hasPoint(const Point &p) {
     return hits % 2;
 }
 
-bool dan::Polygon::intersects(const Polygon &p) const {
-    for (Point &p : p.points) {
+bool dan::Polygon::intersects(const Polygon &pg) const {
+    for (const Point &p : pg.points) {
         if (this->hasPoint(p)) {
             return true;
         }
     }
-    for (Point &p : this->points) {
-        if (p.hasPoint(p)) {
+    for (const Point &p : this->points) {
+        if (pg.hasPoint(p)) {
             return true;
         }
     }

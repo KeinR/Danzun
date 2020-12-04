@@ -57,10 +57,10 @@ int regPolygonCol(lua_State *L) {
     dan::Group::polygon p;
     p.id = lua_tonumber(L, 1);
     std::string group = getString(L, 2);
-    std::vector<Polygon::Point> points;
+    std::vector<dan::Polygon::Point> points;
     points.reserve((top - 2) / 2);
     for (int i = 2; i+1 <= top; i += 2) {
-        points.push_back(Point(
+        points.push_back(dan::Polygon::Point(
             lua_tonumber(L, i),
             lua_tonumber(L, i+1)
         ));

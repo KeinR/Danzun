@@ -28,6 +28,46 @@ _dan = {
     }
 }
 
+--[[
+
+Entity prototype:
+
+entity = {
+    logic = function,
+    hit = function,
+    id = int,
+    patternSet = [
+        {
+            time = int,
+            callback = function
+        }
+    ]
+
+    -- These next ones are dependent on the type of
+    -- entity hitbox (circle, rectangle, polygon).
+    -- howerver, all of them will have:
+    -- for representing their center coordinates
+
+    -- Circle
+    radius = number,
+    x = number, -- center
+    y = number -- center
+
+    -- Polygon
+    points = [
+        -- Each point of the polygon, with the center reference being (0, 0)
+        -- Min 3 to be valid
+        {x = number, y = number},
+        {x = number, y = number},
+        {x = number, y = number},
+        ...
+    ]
+    trans = userdata, -- translation matrix for points
+
+}
+
+]]--
+
 gh = {}
 
 function gh.registerEntity(o)
