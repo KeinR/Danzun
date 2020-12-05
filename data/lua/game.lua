@@ -35,18 +35,16 @@ Entity prototype:
 entity = {
     logic = function,
     hit = function,
-    id = int,
+    _id = int, -- internal
+    _begin = number, -- internal
     patternSet = [
-        {
-            time = int,
-            callback = function
-        }
+        int, -- time
+        function, -- callback
+        ...
     ]
 
     -- These next ones are dependent on the type of
-    -- entity hitbox (circle, rectangle, polygon).
-    -- howerver, all of them will have:
-    -- for representing their center coordinates
+    -- entity hitbox (circle, polygon).
 
     -- Circle
     radius = number,
@@ -62,7 +60,9 @@ entity = {
         {x = number, y = number},
         ...
     ]
-    trans = userdata, -- translation matrix for points
+    x = number, -- x translation
+    y = number, -- y translation
+    scale = number, -- scaling done to points before translation
 
 }
 
@@ -75,15 +75,22 @@ function gh.registerEntity(o)
     -- Protects against the unlikely.
     -- Will run out of memory before all integers
     -- are filled, so I think that we're fine
-    while entities[_dan.eidc] ~= nil do
+    while _dan.entityReg[_dan.eidc] ~= nil do
         _dan.eidc = _dan.eidc + 1
     end
-    o.id = _dan.eidc
-    _dan.entityReg[o.id] = o
-    return o.id
+    o._id = _dan.eidc
+    _dan.entityReg[o._id] = o
+    return o._id
+end
+
+function gh.removeEntity(id)
+    _dan.entityReg[id] = nil
 end
 
 function gh.testCollisions()
+    for id,e in _dan.entityReg do
+        e.patternSet:call(e);
+    end
     for id,e in _dan.entityReg do
         e:logic(id);
     end
@@ -95,4 +102,39 @@ end
 
 function hitHealth(self, other)
     self.health = self.health - other.damage
+end
+
+
+Pattern = {}
+Pattern.__index = Pattern
+
+function Pattern.new(p)
+    local result = {
+        data = p,
+        currentIndex = 1,
+        switchTime = game.getTime() + p[1]
+    }
+    setmetatable(result, Pattern);
+    return result
+end
+
+function Pattern:check()
+    -- NOTE: things will break if the time interval is too small
+    if game.getTime() > self.switchTime then
+        -- if currentIndex + 2 <= #data then
+        --     currentIndex = currentIndex + 2
+        -- else
+        --     currentIndex = 1
+        -- end
+        -- switchTime = game.getTime() + data[currentIndex]
+        if self.currentIndex + 2 <= #self.data then
+            self.currentIndex = self.currentIndex + 2
+            self.switchTime = game.getTime() + self.data[self.currentIndex]
+        end
+    end
+end
+
+function Pattern:call(handle)
+    self:check()
+    self.data[self.currentIndex+1](handle)
 end

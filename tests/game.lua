@@ -24,13 +24,66 @@ function init()
     --     height = 300,
     --     channels = 4
     -- }
+    testEntity = {
+        x = 0,
+        y = 0,
+        v = {x = 10, y = 10},
+        radius = 10,
+        logic = function(h)
+
+        end,
+        hit = function(h)
+            print("Have hit!!")
+        end,
+        patternSet = Pattern.new{
+            0,
+            function(h)
+                h.x = h.x + h.v.x * deltaTime
+                h.y = h.y + h.v.y * deltaTime
+            end
+        }
+    }
+
+    testEntity2 = {
+        x = 50,
+        y = 50,
+        v = {x = -10, y = -10},
+        radius = 10,
+        logic = function(h)
+
+        end,
+        hit = function(h)
+            print("Have hit!!")
+        end,
+        patternSet = Pattern.new{
+            0,
+            function(h)
+                h.x = h.x + h.v.x * deltaTime
+                h.y = h.y + h.v.y * deltaTime
+            end
+        }
+    }
 end
 
 function start()
     -- scene.one.init()
+    gh.registerEntity(testEntity);
+    gh.registerEntity(testEntity2);
 end
 
 function main() -- main(e)
+
+
+    -- CALLBACK ID, group name, x (center), y (center), radius
+    testEntity.patternSet:call(testEntity);
+    testEntity2.patternSet:call(testEntity2);
+    game.resetGroups()
+    game.regCircleCol(testEntity._id, "player", testEntity.x, testEntity.y, testEntity.radius)
+    game.regCircleCol(testEntity2._id, "enemyBullets", testEntity2.x, testEntity2.y, testEntity2.radius)
+    -- print("id 1 = " .. testEntity._id)
+    -- print("id 2 = " .. testEntity2._id)
+    game.testCollisions("player", "enemyBullets")
+
     -- window.setFramebuffer(gameBuffer)
     -- scene.one.main(e)
 

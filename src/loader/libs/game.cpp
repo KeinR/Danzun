@@ -19,12 +19,14 @@ static int regCircleCol(lua_State *L);
 static int regPolygonCol(lua_State *L);
 static int testCollisions(lua_State *L);
 static int resetGroups(lua_State *L);
+static int getTime(lua_State *L);
 
 static luaL_Reg funcs[] = {
     {"regCircleCol", regCircleCol},
     {"regPolygonCol", regPolygonCol},
     {"testCollisions", testCollisions},
     {"resetGroups", resetGroups},
+    {"getTime", getTime},
     {NULL, NULL}
 };
 
@@ -77,7 +79,7 @@ int testCollisions(lua_State *L) {
         luaL_error(L, "testCollisions expects 2 string parameters");
     }
     std::string first = getString(L, 1);
-    std::string second = getString(L, 1);
+    std::string second = getString(L, 2);
     std::vector<std::pair<int,int>> result = getEngine(L).getGame().testCollisions(first, second);
 
     const char *gameRegName = "_dan";
@@ -109,5 +111,10 @@ int testCollisions(lua_State *L) {
 int resetGroups(lua_State *L) {
     getEngine(L).getGame().resetGroups();
     return 0;
+}
+
+int getTime(lua_State *L) {
+    lua_pushnumber(L, getEngine(L).getContext().getClock().getTime());
+    return 1;
 }
 

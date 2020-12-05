@@ -105,12 +105,14 @@ void dan::Engine::run() {
     glDisable(GL_CULL_FACE);
 
     float start = glfwGetTime();
+    float deltaTime = 0;
 
     while (!window.shouldClose()) {
         rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        vm.setGlobal("deltaTime", deltaTime);
         vm.call("main");
 
         window.swapBuffers();
@@ -118,7 +120,7 @@ void dan::Engine::run() {
         Window::pollEvents();
 
         const float time = glfwGetTime();
-        const float deltaTime = (time - start) * gameSpeed;
+        deltaTime = (time - start) * gameSpeed;
         start = time;
         rc.getClock().pushDeltaTime(deltaTime);
         if (gameActive) {
@@ -148,6 +150,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     vm.openLib(libs::shader());
     vm.openLib(libs::mesh());
     vm.openLib(libs::image());
+    vm.openLib(libs::game());
 
     std::cout << "libs done" << '\n';
 
