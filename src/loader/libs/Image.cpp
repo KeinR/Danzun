@@ -17,15 +17,22 @@ static const char *const metatable = "Image";
 
 struct Image {
     unsigned int handle;
+    // Metadata that may be of use to the user
+    int width;
+    int height;
 };
 
 static int script_new(lua_State *L);
 static int render(lua_State *L);
+static int getWidth(lua_State *L);
+static int getHeight(lua_State *L);
 static int gc(lua_State *L);
 
 static luaL_Reg funcs[] = {
     {"new", script_new},
     {"render", render},
+    {"getWidth", getWidth},
+    {"getHeight", getHeight},
     {"__gc", gc},
     {NULL, NULL}
 };
@@ -66,6 +73,8 @@ int script_new(lua_State *L) {
 
     Image *img = (Image *)lua_newuserdatauv(L, sizeof(Image), 0);
     img->handle = handle;
+    img->width = image.getWidth();
+    img->height = image.getHeight();
     lua_getglobal(L, "Image");
     lua_setmetatable(L, -2);
 
@@ -85,7 +94,7 @@ int render(lua_State *L) {
     int width = getIntField(L, 2, "width");
     int height = getIntField(L, 2, "height");
 
-    // dan::Matrix(x, y, width, height).load(getProgram(L).getEngine().getContext());
+    dan::Matrix(x, y, width, height).load(getEngine(L).getContext());
 
     glBindTexture(GL_TEXTURE_2D, img->handle);
 
@@ -101,6 +110,20 @@ int render(lua_State *L) {
 
     return 0;
 }
+
+int getWidth(lua_State *L) {
+    // TODO: Type safety
+    Image *img = (Image *)lua_touserdata(L, 1);
+    lua_pushnumber(L, img->width);
+    return 1;
+}
+int getHeight(lua_State *L) {
+    // TODO: Type safety
+    Image *img = (Image *)lua_touserdata(L, 1);
+    lua_pushnumber(L, img->height);
+    return 1;
+}
+
 int gc(lua_State *L) {
     int top = lua_gettop(L);
     if (top != 2) {

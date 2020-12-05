@@ -19,6 +19,8 @@ function init()
     require("sprites.manifest")
     require("stages.manifest")
 
+    ghost = Image.new("sprites/ghost.png")
+
     -- gameBuffer = Framebuffer.new{
     --     width = 300,
     --     height = 300,
@@ -28,9 +30,14 @@ function init()
         x = 0,
         y = 0,
         v = {x = 10, y = 10},
-        radius = 10,
+        radius = 25 / 2,
         logic = function(h)
-
+            ghost:render{
+                x = h.x,
+                y = h.y,
+                width = ghost:getWidth(),
+                height = ghost:getHeight(),
+            }
         end,
         hit = function(h)
             print("Have hit!!")
@@ -45,12 +52,17 @@ function init()
     }
 
     testEntity2 = {
-        x = 50,
-        y = 50,
+        x = 150,
+        y = 150,
         v = {x = -10, y = -10},
-        radius = 10,
+        radius = 25 / 2,
         logic = function(h)
-
+            ghost:render{
+                x = h.x,
+                y = h.y,
+                width = ghost:getWidth(),
+                height = ghost:getHeight(),
+            }
         end,
         hit = function(h)
             print("Have hit!!")
@@ -63,6 +75,7 @@ function init()
             end
         }
     }
+
 end
 
 function start()
@@ -99,9 +112,12 @@ function main() -- main(e)
     sprite:use()
 
     loadingScreen:render{
-        x = 40,
+        x = 40.4234,
         y = 90,
         width = 300,
         height = 300
     }
+
+    testEntity2:logic()
+    testEntity:logic()
 end

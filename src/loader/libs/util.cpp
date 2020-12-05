@@ -2,6 +2,9 @@
 
 #include <lua/lua.hpp>
 
+#include <iostream>
+#include <cmath>
+
 #include "../ScriptVM.h"
 
 std::string dan::libs::ut::getString(lua_State *L, int index) {
@@ -19,8 +22,8 @@ dan::Engine &dan::libs::ut::getEngine(lua_State *L) {
 }
 
 int dan::libs::ut::getIntField(lua_State *L, int tableIndex, const char *name) {
-    lua_getfield(L, tableIndex, name);
-    int result = lua_tointeger(L, -1);
+    int type = lua_getfield(L, tableIndex, name);
+    int result = std::floor(lua_tonumber(L, -1));
     lua_pop(L, 1);
     return result;
 }
