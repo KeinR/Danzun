@@ -5,6 +5,7 @@ function preInit()
     window.setTitle("DAnzun test")
     window.setSize(500, 700)
     loadingScreen = Image.new("load.jpg")
+    clock = Clock.new();
 end
 
 -- This is looped over as init() blocks
@@ -20,12 +21,81 @@ function init()
     require("stages.manifest")
 
     ghost = Image.new("sprites/ghost.png")
+    bullet = Image.new("sprites/bullet.png")
 
     -- gameBuffer = Framebuffer.new{
     --     width = 300,
     --     height = 300,
     --     channels = 4
     -- }
+
+    player = {
+        x = 300,
+        y = 300,
+        radius = 25 / 2,
+        speed = 30,
+        shotTimer = Timer.new(clock, 0.6),
+        logic = function(h)
+            local value = deltaTime * h.speed
+            local up = window.keyDown("up");
+            local down = window.keyDown("down");
+            local left = window.keyDown("left");
+            local right = window.keyDown("right");
+            local shoot = window.keyDown("z");
+            local bomb = window.keyDown("x");
+            if (down ~= up) and (left ~= right) then
+                value = value * math.sqrt(2) / 2
+            end
+            if window.keyDown("up") then
+                h.y = h.y - value
+            end
+            if window.keyDown("down") then
+                h.y = h.y + value
+            end
+            if window.keyDown("right") then
+                h.x = h.x + value
+            end
+            if window.keyDown("left") then
+                h.x = h.x - value
+            end
+            if window.keyDown("z") and h.shotTimer:done() then
+                h.shotTimer:reset()
+                gh.registerEntity{
+                    x = h.x,
+                    y = h.y - 30,
+                    logic = function(h)
+                        game.regCircleCol(h._id, "playerBullets", h.x, h.y, 10)
+                        bullet:render{
+                            x = h.x,
+                            y = h.y,
+                            width = 20,
+                            height = 20,
+                        }
+                    end,
+                    hit = function(h)
+                        gh.removeEntity(h._id)
+                    end,
+                    patternSet = Pattern.new{
+                        0,
+                        function(h)
+                            h.y = h.y - deltaTime * 10
+                        end
+                    }
+                }
+            end
+            if window.keyDown("x") then
+                -- h.x = h.x - value
+            end
+        end,
+        render = function(h)
+            ghost:render{
+                x = h.x,
+                y = h.y,
+                width = ghost:getWidth(),
+                height = ghost:getHeight(),
+            }
+        end
+    }
 
     local pattern = {
         0,
@@ -41,7 +111,7 @@ function init()
         v = {x = 10, y = 10},
         radius = 25 / 2,
         logic = function(h)
-            game.regCircleCol(h._id, "player", h.x, h.y, h.radius)
+            game.regCircleCol(h._id, "enemies", h.x, h.y, h.radius)
             ghost:render{
                 x = h.x,
                 y = h.y,
@@ -61,7 +131,7 @@ function init()
         v = {x = -10, y = -10},
         radius = 25 / 2,
         logic = function(h)
-            game.regCircleCol(h._id, "enemyBullets", h.x, h.y, h.radius)
+            game.regCircleCol(h._id, "enemies", h.x, h.y, h.radius)
             ghost:render{
                 x = h.x,
                 y = h.y,
@@ -85,6 +155,7 @@ end
 
 function main() -- main(e)
 
+    clock:advance(deltaTime)
 
     -- CALLBACK ID, group name, x (center), y (center), radius
     -- testEntity.patternSet:call(testEntity);
@@ -99,6 +170,7 @@ function main() -- main(e)
 
     game.resetGroups()
     gh.testCollisions()
+    player:logic()
 
     -- window.setFramebuffer(gameBuffer)
     -- scene.one.main(e)
@@ -121,10 +193,6 @@ function main() -- main(e)
         height = 300
     }
 
-    testEntity2:logic()
-    testEntity:logic()
+    player:render()
 
-    if window.keyDown("up") then
-        print("moving up!")
-    end
 end

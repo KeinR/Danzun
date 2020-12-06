@@ -140,3 +140,43 @@ function Pattern:call(handle)
 end
 
 
+
+Clock = {
+    time = 0,
+    deltaTime = 0
+}
+Clock.__index = Clock
+
+function Clock.new(o)
+    if o == nil then
+        o = {}
+    end
+    setmetatable(o, Clock);
+    return o
+end
+
+function Clock:advance(seconds)
+    self.time = self.time + seconds
+    self.deltaTime = seconds
+end
+
+Timer = {}
+Timer.__index = Timer
+
+function Timer.new(clock, length)
+    local result = {
+        clock = clock,
+        length = length,
+        endTime = 0,
+    }
+    setmetatable(result, Timer)
+    return result
+end
+
+function Timer:reset()
+    self.endTime = self.clock.time + self.length
+end
+
+function Timer:done()
+    return self.clock.time > self.endTime
+end
