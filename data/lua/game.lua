@@ -1,6 +1,7 @@
 _dan = {
     eidc = 0,
     entityReg = {},
+    removeQueue = {},
     defaults = {
         mesh = Mesh.new{
             -- Simple quad
@@ -84,10 +85,15 @@ function gh.registerEntity(o)
 end
 
 function gh.removeEntity(id)
-    _dan.entityReg[id] = nil
+    -- table.remove(_dan.entityReg, id)
+    table.insert(_dan.removeQueue, id)
 end
 
 function gh.testCollisions()
+    for i,v in pairs(_dan.removeQueue) do
+        _dan.entityReg[v] = nil
+    end
+    _dan.removeQueue = {}
     for id,e in pairs(_dan.entityReg) do
         e.patternSet:call(e);
     end
@@ -179,4 +185,28 @@ end
 
 function Timer:done()
     return self.clock.time > self.endTime
+end
+
+
+Schedular = {}
+Schedular.__index = Schedular
+
+function Schedular.new(p)
+    local result = {
+        data = p,
+        currentIndex = 1,
+        switchTime = game.getTime() + p[1]
+    }
+    setmetatable(result, Schedular);
+    return result
+end
+
+function Schedular:call(handle)
+    if game.getTime() > self.switchTime then
+        if self.currentIndex <= #self.data then
+            self.switchTime = game.getTime() + self.data[self.currentIndex]
+            self.data[self.currentIndex+1](handle)
+            self.currentIndex = self.currentIndex + 2
+        end
+    end
 end

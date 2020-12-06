@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <utility>
+#include <iostream>
 
 #include <lua/lua.hpp>
 
@@ -88,21 +89,37 @@ int testCollisions(lua_State *L) {
     lua_getglobal(L, gameRegName); // _dan
     lua_getfield(L, -1, propName); // _dan.entityReg
 
+    bool brk1 = false;
+    bool brk2 = false;
+
     for (std::pair<int,int> &p : result) {
-        lua_geti(L, -1, p.first); // entitiyReg[firstId]
-        lua_geti(L, -2, p.second); // entitiyReg[secondId]
+        brk1 = lua_geti(L, -1, p.first) == LUA_TNIL; // entitiyReg[firstId]
+        brk2 = lua_geti(L, -2, p.second) == LUA_TNIL; // entitiyReg[secondId]
+
+        if (brk1 || brk2) {
+            std::cout << "BREAK" << '\n';
+        }
+
+        std::cout << "first -> " << p.first << '\n';
+        std::cout << "second -> " << p.second << '\n';
+
         lua_getfield(L, -2, "hit"); // entitiyReg[firstId].hit(... ->
+        std::cout << "ff" << '\n';
         lua_pushvalue(L, -3); // First param: self (entitiyReg[firstId])
         lua_pushvalue(L, -3); // Second param: other (entitiyReg[secondId])
         lua_call(L, 2, 0);
-        lua_pop(L, 1); // Remove hit func
+
+        std::cout << "dd" << '\n';
 
         // Same deal just with the other one
         lua_getfield(L, -1, "hit");
+        std::cout << "ff2" << '\n';
         lua_pushvalue(L, -2);
         lua_pushvalue(L, -4);
         lua_call(L, 2, 0);
-        lua_pop(L, 3); // Remove hit func, as well as the two objects
+
+        lua_pop(L, 2); // Remove the two objects
+        std::cout << "top = " << lua_gettop(L) << '\n';
     }
 
     return 0;

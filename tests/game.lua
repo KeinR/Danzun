@@ -19,6 +19,7 @@ function init()
     require("shaders.manifest")
     require("sprites.manifest")
     require("stages.manifest")
+    require("stages.enemies.Ghost")
 
     ghost = Image.new("sprites/ghost.png")
     bullet = Image.new("sprites/bullet.png")
@@ -33,7 +34,7 @@ function init()
         x = 300,
         y = 300,
         radius = 25 / 2,
-        speed = 30,
+        speed = 100,
         shotTimer = Timer.new(clock, 0.6),
         logic = function(h)
             local value = deltaTime * h.speed
@@ -72,7 +73,7 @@ function init()
                             height = 20,
                         }
                     end,
-                    hit = function(h)
+                    hit = function(h, o)
                         gh.removeEntity(h._id)
                     end,
                     patternSet = Pattern.new{
@@ -97,7 +98,7 @@ function init()
         end
     }
 
-    local pattern = {
+    testPattern = {
         0,
         function(h)
             h.x = h.x + h.v.x * deltaTime
@@ -122,7 +123,7 @@ function init()
         hit = function(h)
             print("Have hit!!")
         end,
-        patternSet = Pattern.new(pattern)
+        patternSet = Pattern.new(testPattern)
     }
 
     testEntity2 = {
@@ -142,7 +143,25 @@ function init()
         hit = function(h)
             print("Have hit!!")
         end,
-        patternSet = Pattern.new(pattern)
+        patternSet = Pattern.new(testPattern)
+    }
+
+
+
+
+    schedule = Schedular.new{
+        5, function()
+            Ghost.new(testPattern, {
+                x = 40,
+                y = 40,
+                v = {x = 5, y = 30},
+            })
+            Ghost.new(testPattern, {
+                x = 250,
+                y = 40,
+                v = {x = -5, y = 30},
+            })
+        end,
     }
 
 end
@@ -153,7 +172,12 @@ function start()
     gh.registerEntity(testEntity2);
 end
 
+
 function main() -- main(e)
+
+
+    sprite:use()
+
 
     clock:advance(deltaTime)
 
@@ -184,15 +208,16 @@ function main() -- main(e)
 
     -- window.setDefaultFramebuffer()
 
-    sprite:use()
 
-    loadingScreen:render{
-        x = 40.4234,
-        y = 90,
-        width = 300,
-        height = 300
-    }
+    -- loadingScreen:render{
+    --     x = 40.4234,
+    --     y = 90,
+    --     width = 300,
+    --     height = 300
+    -- }
 
     player:render()
+
+    schedule:call()
 
 end
