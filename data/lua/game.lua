@@ -88,10 +88,10 @@ function gh.removeEntity(id)
 end
 
 function gh.testCollisions()
-    for id,e in _dan.entityReg do
+    for id,e in pairs(_dan.entityReg) do
         e.patternSet:call(e);
     end
-    for id,e in _dan.entityReg do
+    for id,e in pairs(_dan.entityReg) do
         e:logic(id);
     end
 
@@ -138,3 +138,5 @@ function Pattern:call(handle)
     self:check()
     self.data[self.currentIndex+1](handle)
 end
+
+

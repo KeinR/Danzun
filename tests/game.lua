@@ -7,7 +7,7 @@ function preInit()
     loadingScreen = Image.new("load.jpg")
 end
 
--- This is looped over as init() is called
+-- This is looped over as init() blocks
 function loadMain(deltaTime)
     
 end
@@ -26,12 +26,22 @@ function init()
     --     height = 300,
     --     channels = 4
     -- }
+
+    local pattern = {
+        0,
+        function(h)
+            h.x = h.x + h.v.x * deltaTime
+            h.y = h.y + h.v.y * deltaTime
+        end
+    }
+
     testEntity = {
         x = 0,
         y = 0,
         v = {x = 10, y = 10},
         radius = 25 / 2,
         logic = function(h)
+            game.regCircleCol(h._id, "player", h.x, h.y, h.radius)
             ghost:render{
                 x = h.x,
                 y = h.y,
@@ -42,13 +52,7 @@ function init()
         hit = function(h)
             print("Have hit!!")
         end,
-        patternSet = Pattern.new{
-            0,
-            function(h)
-                h.x = h.x + h.v.x * deltaTime
-                h.y = h.y + h.v.y * deltaTime
-            end
-        }
+        patternSet = Pattern.new(pattern)
     }
 
     testEntity2 = {
@@ -57,6 +61,7 @@ function init()
         v = {x = -10, y = -10},
         radius = 25 / 2,
         logic = function(h)
+            game.regCircleCol(h._id, "enemyBullets", h.x, h.y, h.radius)
             ghost:render{
                 x = h.x,
                 y = h.y,
@@ -67,13 +72,7 @@ function init()
         hit = function(h)
             print("Have hit!!")
         end,
-        patternSet = Pattern.new{
-            0,
-            function(h)
-                h.x = h.x + h.v.x * deltaTime
-                h.y = h.y + h.v.y * deltaTime
-            end
-        }
+        patternSet = Pattern.new(pattern)
     }
 
 end
@@ -88,14 +87,18 @@ function main() -- main(e)
 
 
     -- CALLBACK ID, group name, x (center), y (center), radius
-    testEntity.patternSet:call(testEntity);
-    testEntity2.patternSet:call(testEntity2);
-    game.resetGroups()
-    game.regCircleCol(testEntity._id, "player", testEntity.x, testEntity.y, testEntity.radius)
-    game.regCircleCol(testEntity2._id, "enemyBullets", testEntity2.x, testEntity2.y, testEntity2.radius)
+    -- testEntity.patternSet:call(testEntity);
+    -- testEntity2.patternSet:call(testEntity2);
+
+    -- game.resetGroups()
+    -- game.regCircleCol(testEntity._id, "player", testEntity.x, testEntity.y, testEntity.radius)
+    -- game.regCircleCol(testEntity2._id, "enemyBullets", testEntity2.x, testEntity2.y, testEntity2.radius)
     -- print("id 1 = " .. testEntity._id)
     -- print("id 2 = " .. testEntity2._id)
-    game.testCollisions("player", "enemyBullets")
+    -- game.testCollisions("player", "enemyBullets")
+
+    game.resetGroups()
+    gh.testCollisions()
 
     -- window.setFramebuffer(gameBuffer)
     -- scene.one.main(e)
@@ -120,4 +123,8 @@ function main() -- main(e)
 
     testEntity2:logic()
     testEntity:logic()
+
+    if window.keyDown("up") then
+        print("moving up!")
+    end
 end
