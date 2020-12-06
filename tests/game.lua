@@ -106,58 +106,23 @@ function init()
         end
     }
 
-    testEntity = {
-        x = 0,
-        y = 0,
-        v = {x = 10, y = 10},
-        radius = 25 / 2,
-        logic = function(h)
-            game.regCircleCol(h._id, "enemies", h.x, h.y, h.radius)
-            ghost:render{
-                x = h.x,
-                y = h.y,
-                width = ghost:getWidth(),
-                height = ghost:getHeight(),
-            }
-        end,
-        hit = function(h)
-            print("Have hit!!")
-        end,
-        patternSet = Pattern.new(testPattern)
-    }
-
-    testEntity2 = {
-        x = 150,
-        y = 150,
-        v = {x = -10, y = -10},
-        radius = 25 / 2,
-        logic = function(h)
-            game.regCircleCol(h._id, "enemies", h.x, h.y, h.radius)
-            ghost:render{
-                x = h.x,
-                y = h.y,
-                width = ghost:getWidth(),
-                height = ghost:getHeight(),
-            }
-        end,
-        hit = function(h)
-            print("Have hit!!")
-        end,
-        patternSet = Pattern.new(testPattern)
-    }
-
-
-
-
     schedule = Schedular.new{
-        5, function()
+        1, function()
             Ghost.new(testPattern, {
                 x = 40,
                 y = 40,
                 v = {x = 5, y = 30},
             })
-            Ghost.new(testPattern, {
-                x = 250,
+            Ghost.new(
+                {0, function(h, t)
+                    local m = 100
+                    h.x = 50 + m * math.cos(t + math.pi) + m
+                    h.y = 40 + m * math.sin(t + math.pi) + m * t / 4
+                end,
+
+                }
+            , {
+                x = 50,
                 y = 40,
                 v = {x = -5, y = 30},
             })
@@ -168,8 +133,6 @@ end
 
 function start()
     -- scene.one.init()
-    gh.registerEntity(testEntity);
-    gh.registerEntity(testEntity2);
 end
 
 

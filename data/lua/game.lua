@@ -118,7 +118,8 @@ function Pattern.new(p)
     local result = {
         data = p,
         currentIndex = 1,
-        switchTime = game.getTime() + p[1]
+        switchTime = game.getTime() + p[1],
+        startTime = game.getTime()
     }
     setmetatable(result, Pattern);
     return result
@@ -135,14 +136,15 @@ function Pattern:check()
         -- switchTime = game.getTime() + data[currentIndex]
         if self.currentIndex + 2 <= #self.data then
             self.currentIndex = self.currentIndex + 2
-            self.switchTime = game.getTime() + self.data[self.currentIndex]
+            self.startTime = game.getTime()
+            self.switchTime = self.startTime + self.data[self.currentIndex]
         end
     end
 end
 
 function Pattern:call(handle)
     self:check()
-    self.data[self.currentIndex+1](handle)
+    self.data[self.currentIndex+1](handle, game.getTime() - self.startTime)
 end
 
 
