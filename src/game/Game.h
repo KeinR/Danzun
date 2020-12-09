@@ -10,6 +10,9 @@
 
 #include "Group.h"
 
+#include "Pattern.h"
+#include "PatternInst.h"
+
 namespace dan {
     class Context;
     class Player;
@@ -36,6 +39,10 @@ namespace dan {
         // Paths to
         std::map<std::string, std::string> stages;
 
+        std::map<std::string, Pattern> patterns;
+        std::map<int, PatternInst> patternInstances;
+        int patternInstancesId;
+
         // Clean up entities
         void gc();
     public:
@@ -50,6 +57,11 @@ namespace dan {
 
         void addStage(const std::string &name, const std::string &path);
         std::string &getStage(const std::string &name);
+
+        void addPattern(const std::string &name, const Pattern &p);
+        int newPatternInst(const std::string &name);
+        PatternInst &getPatternInst(int id);
+        void deletePatternInst(int id);
 
         void setWidth(int w);
         void setHeight(int h);

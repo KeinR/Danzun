@@ -41,6 +41,21 @@ void dan::Game::setHeight(int h) {
 }
 
 
+void dan::Game::addPattern(const std::string &name, const Pattern &p) {
+    patterns[name] = p;
+}
+int dan::Game::newPatternInst(const std::string &name) {
+    patternInstancesId++;
+    patternInstances[patternInstancesId] = Pattern(*this, patterns[name]);
+    return patternInstancesId;
+}
+dan::PatternInst &dan::Game::getPatternInst(int id) {
+    return patternInstances[id];
+}
+void dan::Game::deletePatternInst(int id) {
+    patternInstances.erase(id);
+}
+
 
 int dan::Game::getWidth() {
     return width;
