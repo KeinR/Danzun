@@ -4,8 +4,9 @@
 #include <unordered_map>
 #include <filesystem>
 
+#include <sol/sol.hpp>
+
 #include "Data.h"
-#include "../loader/ScriptVM.h"
 #include "Context.h"
 #include "../win/Window.h"
 #include "../win/WindowEvent.h"
@@ -21,7 +22,7 @@ namespace dan {
     class Engine: private WindowEvent {
         Window window;
         Context rc;
-        ScriptVM vm;
+        sol::state s;
         Data data;
 
         WindowEvent *windowEventCallback;

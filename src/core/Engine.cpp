@@ -151,6 +151,11 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     vm.openLib(libs::mesh());
     vm.openLib(libs::image());
     vm.openLib(libs::game());
+    // api::window::open(s);
+    // api::shader::open(s);
+    // api::window::open(s);
+    // api::window::open(s);
+    // api::window::open(s);
 
     std::cout << "libs done" << '\n';
 
