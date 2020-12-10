@@ -28,8 +28,8 @@ add_subdirectory(extern/sub/lua)
 find_package(glm REQUIRED)
 
 target_include_directories(danzun
-    PRIVATE "extern"
-    PRIVATE "${GLFW_INCLUDE_DIRS}"
+    PUBLIC "extern"
+    PUBLIC "${GLFW_INCLUDE_DIRS}"
     PUBLIC "${GLM_INCLUDE_DIRS}"
 )
 

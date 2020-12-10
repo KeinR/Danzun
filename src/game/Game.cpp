@@ -45,9 +45,10 @@ void dan::Game::addPattern(const std::string &name, const Pattern &p) {
     patterns[name] = p;
 }
 int dan::Game::newPatternInst(const std::string &name) {
-    patternInstancesId++;
-    patternInstances[patternInstancesId] = Pattern(*this, patterns[name]);
-    return patternInstancesId;
+    // patternInstancesId++;
+    // patternInstances[patternInstancesId] = Pattern(*this, patterns[name]);
+    // return patternInstancesId;
+    DANZUN_ASSERT(false); // hold off on this for now; TEMP
 }
 dan::PatternInst &dan::Game::getPatternInst(int id) {
     return patternInstances[id];

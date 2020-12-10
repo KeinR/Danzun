@@ -5,7 +5,7 @@
 #include <utility>
 #include <string>
 
-#include <atashpartow/exprtk.hpp>
+#include <arashpartow/exprtk.hpp>
 
 namespace dan {
     class Pattern {
@@ -17,6 +17,7 @@ namespace dan {
         typedef std::vector<std::pair<float, rungroup_t>> runs_t;
 
         typedef std::vector<std::pair<std::string, float>> rawParams_t;
+        // [time, [variables, [name, expression]]]
         typedef std::vector<std::pair<float, std::vector<std::pair<std::string, std::string>>>> rawRuns_t;
     private:
         // Explicit parameters
