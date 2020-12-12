@@ -15,23 +15,29 @@ std::vector<T> getTableData(sol::table data) {
 
 dan::api::Mesh() {
 }
-void dan::api::setVertices(sol::table data) {
+void dan::api::Mesh::setVertices(sol::table data) {
     std::vector<float> data = getTableData<float>(data);
     mesh.setVertices(data.size(), data.data());
 }
-void dan::api::setIndices(sol::table data) {
+void dan::api::Mesh::setIndices(sol::table data) {
     std::vector<unsigned int> data = getTableData<unsigned int>(data);
     mesh.setIndices(data.size(), data.data());
 }
-void dan::api::setParam(unsigned int index, int size, int stride, int offset) {
+void dan::api::Mesh::setParam(unsigned int index, int size, int stride, int offset) {
     mesh.setParam(index, size, stride, offset);
 }
-void dan::api::render() {
+void dan::api::Mesh::render() {
     mesh.render();
 }
 
 // Static members
 
-void open(sol::state_view &lua) {
+void dan::api::Mesh::open(sol::state_view &lua) {
+    sol::usertype<Mesh> type = lua.new_usertype<Mesh>("Mesh", sol::constructors<Mesh()>());
+
+    type["setVertices"] = &setVertices;
+    type["setIndices"] = &setIndices;
+    type["setParam"] = &setParam;
+    type["render"] = &render;
 
 }

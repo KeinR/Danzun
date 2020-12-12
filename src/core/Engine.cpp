@@ -4,12 +4,12 @@
 #include "../lib/glfw.h"
 #include "error.h"
 
-#include "../loader/libs/engine.h"
-#include "../loader/libs/game.h"
-#include "../loader/libs/Shader.h"
-#include "../loader/libs/window.h"
-#include "../loader/libs/Mesh.h"
-#include "../loader/libs/Image.h"
+#include "../api/Engine.h"
+#include "../api/Game.h"
+#include "../api/Shader.h"
+#include "../api/Window.h"
+#include "../api/Mesh.h"
+#include "../api/Image.h"
 
 #include "EventCallback.h"
 
@@ -112,8 +112,7 @@ void dan::Engine::run() {
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vm.setGlobal("deltaTime", deltaTime);
-        vm.call("main");
+        s["main"]()
 
         window.swapBuffers();
 
@@ -145,6 +144,8 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     vm.execFile(t.string());
 
     std::cout << "start open windows" << '\n';
+
+    api::Engine
 
     vm.openLib(libs::window());
     vm.openLib(libs::shader());

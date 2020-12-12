@@ -3,10 +3,12 @@
 #include <map>
 #include <string>
 
+#include <sol/sol.hpp>
+
 #include "../../win/Window.h"
 #include "../../win/enums.h"
 
-dan::api::Window(::dan::Window &handle): handle(&handle) {
+dan::api::Window::Window(::dan::Window &handle): handle(&handle) {
     keyMappings["up"] = dan::keyt::UP;
     keyMappings["down"] = dan::keyt::DOWN;
     keyMappings["left"] = dan::keyt::LEFT;
@@ -16,16 +18,16 @@ dan::api::Window(::dan::Window &handle): handle(&handle) {
     keyMappings["x"] = dan::keyt::X;
 }
 
-void dan::api::setTitle(const std::string &text) {
+void dan::api::Window::setTitle(const std::string &text) {
     handle->setTitle(text);
 }
-void dan::api::setSize(int width, int height) {
+void dan::api::Window::setSize(int width, int height) {
     handle->setSize(width, height);
 }
-void dan::api::setVisible(bool toggle) {
+void dan::api::Window::setVisible(bool toggle) {
     handle->setVisible(toggle);
 }
-void dan::api::keyDown(const std::string &name) {
+void dan::api::Window::keyDown(const std::string &name) {
     for (char &c : name) {
         if ('A' <= c && c <= 'Z') {
             c |= 0x20;
@@ -36,6 +38,12 @@ void dan::api::keyDown(const std::string &name) {
 
 // Static members
 
-void dan::api::open(sol::state_view &lua) {
-    
+void dan::api::Window::open(sol::state_view &lua) {
+    sol::usertype<Window> type = lua.new_usertype<Window>("Window");
+
+    type["setTitle"] = &setTitle;
+    type["setSize"] = &setSize;
+    type["setVisible"] = &setVisible;
+    type["keyDown"] = &keyDown;
+
 }

@@ -4,6 +4,8 @@
 #include <vector>
 #include <utility>
 
+#include <sol/sol.hpp>
+
 #include "../math/Circle.h"
 #include "../math/Polygon.h"
 
@@ -11,11 +13,11 @@ namespace dan {
     class Group {
     public:
         struct circle {
-            int id;
+            std::table o;
             Circle hitbox;
         };
         struct polygon {
-            int id;
+            std::table id;
             Polygon hitbox;
         };
     private:
@@ -26,7 +28,7 @@ namespace dan {
         void pushCircle(const circle &v);
         void pushPolygon(const polygon &v);
         void clear();
-        void test(Group &other, std::vector<std::pair<int,int>> &output);
+        void test(Group &other, std::vector<std::pair<sol::table, sol::table>> &output);
     };
 }
 

@@ -1,5 +1,11 @@
 #include "game.h"
 
+#include <sol/sol.hpp>
+
+#include "../game/Game.h"
+
+/*
+
 #include <vector>
 #include <utility>
 #include <iostream>
@@ -184,3 +190,39 @@ int loadPatterns(lua_State *L) {
     return 0;
 }
 
+*/
+
+
+dan::api::Game::Game(::dan::Game &g): g(&g) {
+}
+
+setVerticesvoid dan::api::Game::regCircleCol(sol::table self, const std::string &groupName, float xCenter, float yCenter, float radius) {
+    dan::Group::circle c;
+    c.obj = self;
+    c.hitbox.setX(xCenter);
+    c.hitbox.setY(yCenter);
+    c.hitbox.setRadius(radius);
+    handle->getGroup(groupName).pushCircle(c);
+}
+void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
+    for (std::pair<sol::table, sol::table> &p : handle->testCollisions(first, second)) {
+        p.first.get("hit")(p.second);
+        p.second.get("hit")(p.first);
+    }
+}
+void dan::api::Game::resetGroups() {
+    handle->resetGroups();
+}
+float dan::api::Game::getTime() {
+    return getEngine(L).getContext().getClock().getTime();
+}
+
+void dan::api::Game::open(sol::state_view &lua) {
+    sol::usertype<Game> type = lua.new_usertype<Game>("Game");
+
+    type["regCircleCol"] = &regCircleCol;
+    type["testCollisions"] = &testCollisions;
+    type["resetGroups"] = &resetGroups;
+    type["getTime"] = &getTime;
+
+}
