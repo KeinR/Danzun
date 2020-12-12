@@ -32,6 +32,8 @@ namespace dan {
         bool gameActive;
         float gameSpeed;
 
+        // Cautious call - don't call if nil
+        void cCall(const std::string &functionGlobalName);
         bool callbackCallable();
     public:
         Engine();

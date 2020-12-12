@@ -27,8 +27,8 @@ void dan::Game::clearGroups() {
     groups.clear();
 }
 
-std::vector<std::pair<int,int>> dan::Game::testCollisions(const std::string &a, const std::string &b) {
-    std::vector<std::pair<int,int>> result;
+dan::Game::collisionResult_t dan::Game::testCollisions(const std::string &a, const std::string &b) {
+    collisionResult_t result;
     groups[a].test(groups[b], result);
     return result;
 }

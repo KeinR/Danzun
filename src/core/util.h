@@ -5,6 +5,7 @@
 
 namespace dan::ut {
     std::string dirname(const std::string &path);
+    std::string lowercase(const std::string &in);
 }
 
 #endif

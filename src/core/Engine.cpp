@@ -25,7 +25,6 @@ dan::Engine::Engine():
     gameActive(false),
     gameSpeed(1)
 {
-    vm.setEngine(*this);
     window.setEventCallback(*this);
 }
 
@@ -112,7 +111,7 @@ void dan::Engine::run() {
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        s["main"]()
+        s["main"].call();
 
         window.swapBuffers();
 
@@ -131,6 +130,13 @@ void dan::Engine::run() {
     }
 }
 
+void dan::Engine::cCall(const std::string &functionGlobalName) {
+    sol::function func = s[functionGlobalName];
+    if (func.is<sol::function>()) {
+        func.call();
+    }
+}
+
 void dan::Engine::open(const std::filesystem::path &filePath) {
 
     std::filesystem::path p = std::filesystem::absolute("../data/lua/game.lua");
@@ -141,42 +147,34 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     std::filesystem::current_path(filePath.parent_path());
 
     t = std::filesystem::relative(t);
-    vm.execFile(t.string());
+    s.script_file(t.string());
 
     std::cout << "start open windows" << '\n';
 
-    api::Engine
-
-    vm.openLib(libs::window());
-    vm.openLib(libs::shader());
-    vm.openLib(libs::mesh());
-    vm.openLib(libs::image());
-    vm.openLib(libs::game());
-    // api::window::open(s);
-    // api::shader::open(s);
-    // api::window::open(s);
-    // api::window::open(s);
-    // api::window::open(s);
+    api::Engine::open(s);
+    api::Shader::open(s);
+    api::Mesh::open(s);
+    api::Image::open(s);
+    api::Game::open(s);
+    api::Window::open(s);
 
     std::cout << "libs done" << '\n';
 
-    vm.execFile(p.string());
+    s.script_file(p.string());
 
     std::cout << "Setup done" << '\n';
 
-    vm.call("preInit");
+    cCall("preInit");
 
     std::cout << "Pre done" << '\n';
-
-    vm.openLib(libs::engine());
 
     std::cout << "Engine opened" << '\n';
 
     window.setVisible(true);
 
-    vm.call("init");
+    cCall("init");
 
-    vm.call("start");
+    cCall("start");
 }
 
 void dan::Engine::start(const std::filesystem::path &filePath) {

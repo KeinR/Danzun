@@ -13,11 +13,11 @@ namespace dan {
     class Group {
     public:
         struct circle {
-            std::table o;
+            sol::table obj;
             Circle hitbox;
         };
         struct polygon {
-            std::table id;
+            sol::table obj;
             Polygon hitbox;
         };
     private:

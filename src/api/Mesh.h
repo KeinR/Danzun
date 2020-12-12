@@ -5,13 +5,13 @@
 
 #include "../render/Mesh.h"
 
-namespace dan::api::mesh {
+namespace dan::api {
     class Mesh {
         ::dan::Mesh mesh;
     public:
         Mesh();
-        void setVertices(sol::table data);
-        void setIndices(sol::table data);
+        void setVertices(sol::table rawData);
+        void setIndices(sol::table rawData);
         void setParam(unsigned int index, int size, int stride, int offset);
         void render();
 

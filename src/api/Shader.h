@@ -11,8 +11,8 @@ namespace dan::api {
     public:
         Shader(sol::this_state l, const std::string &vertex, const std::string &fragment);
 
-        void setInt1(sol::this_state l, const std::string &name, int value);
-        void use(sol::this_state l);
+        void setInt1(const std::string &name, int value);
+        void use();
 
         static void open(sol::state_view &lua);
     };

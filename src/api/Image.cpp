@@ -147,8 +147,9 @@ void dan::api::Image::bind() {
 void dan::api::Image::open(sol::state_view &lua) {
     sol::usertype<Image> type = lua.new_usertype<Image>("Image", sol::constructors<Image(const std::string&)>());
 
-    type["bind"] = &bind;
-    type["width"] = sol::readonly(&width);
-    type["height"] = sol::readonly(&height);
+    type["bind"] = &Image::bind;
+    // NB: Performance degredation when mixing variables and functions in userdata
+    type["width"] = sol::readonly(&Image::width);
+    type["height"] = sol::readonly(&Image::height);
 
 }

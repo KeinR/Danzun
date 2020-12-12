@@ -1,5 +1,5 @@
-#ifndef DANZUN_LIBS_ENGINE_H_INCLUDED
-#define DANZUN_LIBS_ENGINE_H_INCLUDED
+#ifndef DANZUN_API_ENGINE_H_INCLUDED
+#define DANZUN_API_ENGINE_H_INCLUDED
 
 #include <sol/forward.hpp>
 
@@ -9,10 +9,12 @@ namespace dan {
 
 namespace dan::api {
     class Engine {
-        ::dan::Engine *handle
+        ::dan::Engine *handle;
     public:
         Engine(::dan::Engine &handle);
-        void exit(int status);
+
+        ::dan::Engine *getHandle();
+        void term(int status);
 
         static void open(sol::state_view &lua);
     };

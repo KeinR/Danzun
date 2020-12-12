@@ -21,6 +21,9 @@ namespace dan {
 
 namespace dan {
     class Game: public Node {
+    public:
+        typedef std::vector<std::pair<sol::table, sol::table>> collisionResult_t;
+    private:
         // Not used internally - exlcusively for use by
         // client applications
         Engine *engine;
@@ -53,7 +56,7 @@ namespace dan {
         Group &getGroup(const std::string &name);
         void clearGroups();
         void resetGroups();
-        std::vector<std::pair<int,int>> testCollisions(const std::string &a, const std::string &b);
+        collisionResult_t testCollisions(const std::string &a, const std::string &b);
 
         void addStage(const std::string &name, const std::string &path);
         std::string &getStage(const std::string &name);

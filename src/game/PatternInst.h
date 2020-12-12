@@ -1,14 +1,10 @@
 #ifndef DANZUN_PATTERNINST_H_INCLUDED
 #define DANZUN_PATTERNINST_H_INCLUDED
 
-#include <memory>
 #include <vector>
 #include <utility>
 
-#include <arashpartow/exprtk.hpp>
-
 #include "Pattern.h"
-#include "../loader/ScriptVM.h"
 
 namespace dan {
     class Game;

@@ -5,6 +5,8 @@
 
 #include <sol/forward.hpp>
 
+#include "../win/enums.h"
+
 namespace dan {
     class Window;
 }
@@ -19,10 +21,10 @@ namespace dan::api {
         void setTitle(const std::string &text);
         void setSize(int width, int height);
         void setVisible(bool toggle);
-        void keyDown(const std::string &name);
+        bool keyDown(const std::string &name);
 
         static void open(sol::state_view &lua);
-    }
+    };
 }
 
 #endif
