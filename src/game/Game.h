@@ -20,6 +20,7 @@
 #include "Pattern.h"
 #include "PatternInst.h"
 #include "../time/Clock.h"
+#include "../api/RenderConfig.h"
 
 namespace dan {
     class Context;
@@ -65,7 +66,7 @@ namespace dan {
         void resetGroups();
         collisionResult_t testCollisions(const std::string &a, const std::string &b);
 
-        Entity &addEntity(sol::function hitCallback, const disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC);
+        Entity &addEntity(sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC);
         // REF MUST STAY VALID
         void submitRenderable(Renderable &rend);
         void removeRenderable(Renderable *rend);

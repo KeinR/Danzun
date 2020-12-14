@@ -1,7 +1,7 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 
-#include <arashpartow/exprtk.hpp>
+// #include <arashpartow/exprtk.hpp>
 
 #include <string>
 #include <iostream>
@@ -26,11 +26,9 @@ struct ff {
     ff() {
         std::cout << "ff ctor" << '\n';
     }
-    void run(sol::table table) {
-        std::cout << "table size = " << table.size() << '\n';
-        for (int i = 1; i <= table.size(); i++) {
-            std::cout << "Hello, " << table.get<int>(i) << '\n';
-        }
+    void run(sol::userdata othe) {
+		// std::cout << othe->o->fefesf << '\n';
+		std::cout << *othe.as<ff*>()->o.fefesf << '\n';
     }
 };
 
@@ -76,25 +74,25 @@ int main () {
 	player_type["run"] = &ff::run;
 
 
-	lua.script("f = ff.new() \n f:run({4, 3, 2, 1, 0, -1})"); // only takes 2 arguments, NOT 3
+	lua.script("f = ff.new() \n b = ff.new() \n f:run(b)"); // only takes 2 arguments, NOT 3
 
-	std::map<sol::table, std::string, lessThan<sol::table>> someMap;
+	// std::map<sol::table, std::string, lessThan<sol::table>> someMap;
 
-	someMap[lua["first"].get_or_create<sol::table>()] = "fesg";
-	someMap[lua["second"].get_or_create<sol::table>()] = "22";
+	// someMap[lua["first"].get_or_create<sol::table>()] = "fesg";
+	// someMap[lua["second"].get_or_create<sol::table>()] = "22";
 
 
-	typedef exprtk::symbol_table<double> symbol_table_t;
-   	typedef exprtk::expression<double>     expression_t;
-	typedef exprtk::parser<double>             parser_t;
+	// typedef exprtk::symbol_table<double> symbol_table_t;
+   	// typedef exprtk::expression<double>     expression_t;
+	// typedef exprtk::parser<double>             parser_t;
 
-	std::string expression_string = R"(
-		v[0] := v[0] - 10;
-		x := x + 1;
-		x := { 3 , 4 };
-		result1 := 'I am t';
-		x;
-	)";
+	// std::string expression_string = R"(
+	// 	v[0] := v[0] - 10;
+	// 	x := x + 1;
+	// 	x := { 3 , 4 };
+	// 	result1 := 'I am t';
+	// 	x;
+	// )";
 
 	// std::string expression_string =
 	// 				" var x := 123.456;\n     "
@@ -109,38 +107,38 @@ int main () {
 	// 	result1 := s + '123';
 	// )";
 
-	double result0;
-	std::string result1;
-	// float y = 31;
+	// double result0;
+	// std::string result1;
+	// // float y = 31;
 
-	std::array<double, 2> vec = {
-		44,
-		55
-	};
+	// std::array<double, 2> vec = {
+	// 	44,
+	// 	55
+	// };
 
-	symbol_table_t symbol_table;
-	symbol_table.add_variable("result0", result0);
-	symbol_table.add_vector("v", vec.data(), vec.size());
-	symbol_table.add_stringvar("result1", result1);
-	// symbol_table.add_variable("y", y);
-	// symbol_table.add_constants();
+	// symbol_table_t symbol_table;
+	// symbol_table.add_variable("result0", result0);
+	// symbol_table.add_vector("v", vec.data(), vec.size());
+	// symbol_table.add_stringvar("result1", result1);
+	// // symbol_table.add_variable("y", y);
+	// // symbol_table.add_constants();
 
-	expression_t expression;
-	expression.register_symbol_table(symbol_table);
+	// expression_t expression;
+	// expression.register_symbol_table(symbol_table);
 
-	parser_t parser;
-	parser.enable_unknown_symbol_resolver();
-	if (!parser.compile(expression_string,expression)) {
-		std::cerr << "Exp err: " << parser.error().c_str() << '\n';
-		return 1;
-	}
+	// parser_t parser;
+	// parser.enable_unknown_symbol_resolver();
+	// if (!parser.compile(expression_string,expression)) {
+	// 	std::cerr << "Exp err: " << parser.error().c_str() << '\n';
+	// 	return 1;
+	// }
 
-	std::cout << "vec[0] = " << vec[0] << '\n';
-	std::cout << "expression.value() = " << expression.value() << '\n';
-	std::cout << "expression.value() = " << expression.value() << '\n';
-	std::cout << "expression.value() = " << expression.value() << '\n';
-	std::cout << "vec[0] = " << vec[0] << '\n';
-	std::cout << "result1 = " << result1 << '\n';
+	// std::cout << "vec[0] = " << vec[0] << '\n';
+	// std::cout << "expression.value() = " << expression.value() << '\n';
+	// std::cout << "expression.value() = " << expression.value() << '\n';
+	// std::cout << "expression.value() = " << expression.value() << '\n';
+	// std::cout << "vec[0] = " << vec[0] << '\n';
+	// std::cout << "result1 = " << result1 << '\n';
 
 	// typedef exprtk::symbol_table<float> symbol_table_t;
 	// typedef exprtk::expression<float>     expression_t;

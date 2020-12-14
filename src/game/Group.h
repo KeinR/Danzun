@@ -19,8 +19,8 @@ namespace dan {
         std::vector<polygon_t> polygons;
     public:
         Group();
-        void pushCircle(const circle_t &v);
-        void pushPolygon(const polygon_t &v);
+        void pushCircle(Entity &owner);
+        void pushPolygon(Entity &owner);
         void erase(Entity *ptr);
         void clear();
         void update();

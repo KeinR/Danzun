@@ -2,11 +2,11 @@
 
 dan::Group::Group() {
 }
-void dan::Group::pushCircle(const circle &v) {
-    circles.push_back(v);
+void dan::Group::pushCircle(Entity &owner) {
+    circles.emplace_back(&owner, Circle());
 }
-void dan::Group::pushPolygon(const polygon &v) {
-    polygons.push_back(v);
+void dan::Group::pushPolygon(Entity &owner) {
+    polygons.emplace_back(&owner, Polygon());
 }
 bool dan::Group::erase(Entity *ptr) {
     for (std::vector<circle_t>::iterator it = circles.begin(); it < circles.end(); ++it) {

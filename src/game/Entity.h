@@ -22,7 +22,7 @@ namespace dan {
         typedef exprtk::expression<float> expression_t;
         typedef exprtk::parser<float> parser_t;
         typedef std::shared_ptr<Hitbox> hitbox_t;
-        typedef std::shared_ptr<AbsRenderConf> disp_t;
+        typedef LuaRef<api::RenderConfig> disp_t;
 
     private:
 

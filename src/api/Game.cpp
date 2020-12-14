@@ -1,8 +1,9 @@
 #include "Game.h"
 
-#include <sol/sol.hpp>
+#include <stdexcept>
 
 #include "../game/Game.h"
+#include "RenderConfig.h"
 
 /*
 
@@ -210,6 +211,18 @@ void dan::api::Game::testCollisions(const std::string &groupA, const std::string
         p.second["hit"].call(p.first);
     }
 }
+
+void dan::api::Game::spawnEntityFull(sol::function hitCallback, sol::userdata disp, const std::string &equation, float x, float y, float width, float height, bool autoGC) {
+    if (disp.is<RenderConfig>()) {
+        Entity &e = handle->addEntity(hitCallback, LuaRef<RenderConfig>(disp), equation, x, y, width, height, autoGC);
+        // TEMP
+        handle->submitRenderable(0, e);
+        handle->getGroup("test").pushCircle(e);
+    } else {
+        throw std::runtime_exception("Expected RenderConfig as second arg");
+    }
+}
+
 void dan::api::Game::resetGroups() {
     handle->resetGroups();
 }
@@ -224,5 +237,6 @@ void dan::api::Game::open(sol::state_view &lua) {
     type["testCollisions"] = &Game::testCollisions;
     type["resetGroups"] = &Game::resetGroups;
     type["getTime"] = &Game::getTime;
+    type["spawnEntityFull"] = &Game::spawnEntityFull;
 
 }

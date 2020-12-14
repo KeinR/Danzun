@@ -2,132 +2,132 @@
 -- First thing that runs, before window
 -- opens
 function preInit()
-    window.setTitle("DAnzun test")
-    window.setSize(500, 700)
-    loadingScreen = Image.new("load.jpg")
-    clock = Clock.new();
+    -- window.setTitle("DAnzun test")
+    -- window.setSize(500, 700)
+    -- loadingScreen = Image.new("load.jpg")
+    -- clock = Clock.new();
 end
 
 -- This is looped over as init() blocks
-function loadMain(deltaTime)
+function loadMain()
     
 end
 
 -- Stuff to do asynchronously while loadMain is running
 function init()
-    require("scenes.manifest")
-    require("shaders.manifest")
-    require("sprites.manifest")
-    require("stages.manifest")
-    require("stages.enemies.Ghost")
+    -- require("scenes.manifest")
+    -- require("shaders.manifest")
+    -- require("sprites.manifest")
+    -- require("stages.manifest")
+    -- require("stages.enemies.Ghost")
 
-    ghost = Image.new("sprites/ghost.png")
-    bullet = Image.new("sprites/bullet.png")
+    -- ghost = Image.new("sprites/ghost.png")
+    -- bullet = Image.new("sprites/bullet.png")
 
-    -- gameBuffer = Framebuffer.new{
-    --     width = 300,
-    --     height = 300,
-    --     channels = 4
+    -- -- gameBuffer = Framebuffer.new{
+    -- --     width = 300,
+    -- --     height = 300,
+    -- --     channels = 4
+    -- -- }
+
+    -- player = {
+    --     x = 300,
+    --     y = 300,
+    --     radius = 25 / 2,
+    --     speed = 100,
+    --     shotTimer = Timer.new(clock, 0.6),
+    --     logic = function(h)
+    --         local value = deltaTime * h.speed
+    --         local up = window.keyDown("up");
+    --         local down = window.keyDown("down");
+    --         local left = window.keyDown("left");
+    --         local right = window.keyDown("right");
+    --         local shoot = window.keyDown("z");
+    --         local bomb = window.keyDown("x");
+    --         if (down ~= up) and (left ~= right) then
+    --             value = value * math.sqrt(2) / 2
+    --         end
+    --         if window.keyDown("up") then
+    --             h.y = h.y - value
+    --         end
+    --         if window.keyDown("down") then
+    --             h.y = h.y + value
+    --         end
+    --         if window.keyDown("right") then
+    --             h.x = h.x + value
+    --         end
+    --         if window.keyDown("left") then
+    --             h.x = h.x - value
+    --         end
+    --         if window.keyDown("z") and h.shotTimer:done() then
+    --             h.shotTimer:reset()
+    --             gh.registerEntity{
+    --                 x = h.x,
+    --                 y = h.y - 30,
+    --                 logic = function(h)
+    --                     game.regCircleCol(h._id, "playerBullets", h.x, h.y, 10)
+    --                     bullet:render{
+    --                         x = h.x,
+    --                         y = h.y,
+    --                         width = 20,
+    --                         height = 20,
+    --                     }
+    --                 end,
+    --                 hit = function(h, o)
+    --                     gh.removeEntity(h._id)
+    --                 end,
+    --                 patternSet = Pattern.new{
+    --                     0,
+    --                     function(h)
+    --                         h.y = h.y - deltaTime * 10
+    --                     end
+    --                 }
+    --             }
+    --         end
+    --         if window.keyDown("x") then
+    --             -- h.x = h.x - value
+    --         end
+    --     end,
+    --     render = function(h)
+    --         ghost:render{
+    --             x = h.x,
+    --             y = h.y,
+    --             width = ghost:getWidth(),
+    --             height = ghost:getHeight(),
+    --         }
+    --     end
     -- }
 
-    player = {
-        x = 300,
-        y = 300,
-        radius = 25 / 2,
-        speed = 100,
-        shotTimer = Timer.new(clock, 0.6),
-        logic = function(h)
-            local value = deltaTime * h.speed
-            local up = window.keyDown("up");
-            local down = window.keyDown("down");
-            local left = window.keyDown("left");
-            local right = window.keyDown("right");
-            local shoot = window.keyDown("z");
-            local bomb = window.keyDown("x");
-            if (down ~= up) and (left ~= right) then
-                value = value * math.sqrt(2) / 2
-            end
-            if window.keyDown("up") then
-                h.y = h.y - value
-            end
-            if window.keyDown("down") then
-                h.y = h.y + value
-            end
-            if window.keyDown("right") then
-                h.x = h.x + value
-            end
-            if window.keyDown("left") then
-                h.x = h.x - value
-            end
-            if window.keyDown("z") and h.shotTimer:done() then
-                h.shotTimer:reset()
-                gh.registerEntity{
-                    x = h.x,
-                    y = h.y - 30,
-                    logic = function(h)
-                        game.regCircleCol(h._id, "playerBullets", h.x, h.y, 10)
-                        bullet:render{
-                            x = h.x,
-                            y = h.y,
-                            width = 20,
-                            height = 20,
-                        }
-                    end,
-                    hit = function(h, o)
-                        gh.removeEntity(h._id)
-                    end,
-                    patternSet = Pattern.new{
-                        0,
-                        function(h)
-                            h.y = h.y - deltaTime * 10
-                        end
-                    }
-                }
-            end
-            if window.keyDown("x") then
-                -- h.x = h.x - value
-            end
-        end,
-        render = function(h)
-            ghost:render{
-                x = h.x,
-                y = h.y,
-                width = ghost:getWidth(),
-                height = ghost:getHeight(),
-            }
-        end
-    }
+    -- testPattern = {
+    --     0,
+    --     function(h)
+    --         h.x = h.x + h.v.x * deltaTime
+    --         h.y = h.y + h.v.y * deltaTime
+    --     end
+    -- }
 
-    testPattern = {
-        0,
-        function(h)
-            h.x = h.x + h.v.x * deltaTime
-            h.y = h.y + h.v.y * deltaTime
-        end
-    }
+    -- schedule = Schedular.new{
+    --     1, function()
+    --         Ghost.new(testPattern, {
+    --             x = 40,
+    --             y = 40,
+    --             v = {x = 5, y = 30},
+    --         })
+    --         Ghost.new(
+    --             {0, function(h, t)
+    --                 local m = 100
+    --                 h.x = 50 + m * math.cos(t + math.pi) + m
+    --                 h.y = 40 + m * math.sin(t + math.pi) + m * t / 4
+    --             end,
 
-    schedule = Schedular.new{
-        1, function()
-            Ghost.new(testPattern, {
-                x = 40,
-                y = 40,
-                v = {x = 5, y = 30},
-            })
-            Ghost.new(
-                {0, function(h, t)
-                    local m = 100
-                    h.x = 50 + m * math.cos(t + math.pi) + m
-                    h.y = 40 + m * math.sin(t + math.pi) + m * t / 4
-                end,
-
-                }
-            , {
-                x = 50,
-                y = 40,
-                v = {x = -5, y = 30},
-            })
-        end,
-    }
+    --             }
+    --         , {
+    --             x = 50,
+    --             y = 40,
+    --             v = {x = -5, y = 30},
+    --         })
+    --     end,
+    -- }
 
 end
 
@@ -138,11 +138,13 @@ end
 
 function main() -- main(e)
 
+    print("foo");
 
-    sprite:use()
+
+    -- sprite:use()
 
 
-    clock:advance(deltaTime)
+    -- clock:advance(deltaTime)
 
     -- CALLBACK ID, group name, x (center), y (center), radius
     -- testEntity.patternSet:call(testEntity);
@@ -155,9 +157,9 @@ function main() -- main(e)
     -- print("id 2 = " .. testEntity2._id)
     -- game.testCollisions("player", "enemyBullets")
 
-    game.resetGroups()
-    gh.testCollisions()
-    player:logic()
+    -- game.resetGroups()
+    -- gh.testCollisions()
+    -- player:logic()
 
     -- window.setFramebuffer(gameBuffer)
     -- scene.one.main(e)
@@ -179,8 +181,8 @@ function main() -- main(e)
     --     height = 300
     -- }
 
-    player:render()
+    -- player:render()
 
-    schedule:call()
+    -- schedule:call()
 
 end

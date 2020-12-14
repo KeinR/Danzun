@@ -81,7 +81,7 @@ void dan::Entity::run() {
 }
 
 void dan::Entity::render(Context &c) {
-    disp->setup(c);
+    disp->setup();
 
     Matrix mat;
         mat.x = currentPosition[0];
@@ -91,5 +91,5 @@ void dan::Entity::render(Context &c) {
         mat.rotation = rotation;
     mat.load(c);
 
-    disp->render(c);
+    disp->render();
 }

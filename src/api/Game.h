@@ -21,6 +21,8 @@ namespace dan::api {
         float getTime();
         // void loadPatternsFromFile(const std::string &path);
 
+        void spawnEntityFull(sol::function hitCallback, sol::userdata disp, const std::string &equation, float x, float y, float width, float height, bool autoGC);
+
         static void open(sol::state_view &lua);
 
     };
