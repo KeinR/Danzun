@@ -14,6 +14,12 @@ void dan::Clock::pushDeltaTime(float s) {
     time += deltaTime;
     deltaTime = s;
 }
+float &dan::Clock::getTime() {
+    return time;
+}
+float &dan::Clock::getDeltaTime() {
+    return deltaTime;
+}
 float dan::Clock::getTime() const {
     return time;
 }

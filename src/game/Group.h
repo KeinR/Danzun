@@ -12,23 +12,19 @@
 namespace dan {
     class Group {
     public:
-        struct circle {
-            sol::table obj;
-            Circle hitbox;
-        };
-        struct polygon {
-            sol::table obj;
-            Polygon hitbox;
-        };
+        typedef std::pair<Entity*, Circle> circle_t
+        typedef std::pair<Entity*, Polygon> polygon_t
     private:
-        std::vector<circle> circles;
-        std::vector<polygon> polygons;
+        std::vector<circle_t> circles;
+        std::vector<polygon_t> polygons;
     public:
         Group();
-        void pushCircle(const circle &v);
-        void pushPolygon(const polygon &v);
+        void pushCircle(const circle_t &v);
+        void pushPolygon(const polygon_t &v);
+        void erase(Entity *ptr);
         void clear();
-        void test(Group &other, std::vector<std::pair<sol::table, sol::table>> &output);
+        void update();
+        void test(Group &other, std::vector<std::pair<Entity*, Entity*>> &output);
     };
 }
 

@@ -2,7 +2,6 @@
 
 #include <sol/sol.hpp>
 
-#include "../core/Engine.h"
 #include "../game/Game.h"
 
 /*
@@ -215,7 +214,7 @@ void dan::api::Game::resetGroups() {
     handle->resetGroups();
 }
 float dan::api::Game::getTime() {
-    return handle->getEngine().getContext().getClock().getTime();
+    return handle->getClock().getTime();
 }
 
 void dan::api::Game::open(sol::state_view &lua) {

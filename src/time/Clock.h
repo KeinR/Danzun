@@ -11,6 +11,8 @@ namespace dan {
         void setTime(float s);
         void setDeltaTime(float s);
         void pushDeltaTime(float s);
+        float &getTime();
+        float &getDeltaTime();
         float getTime() const;
         float getDeltaTime() const;
     };

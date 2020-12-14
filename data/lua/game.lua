@@ -1,33 +1,4 @@
-_dan = {
-    eidc = 0,
-    entityReg = {},
-    removeQueue = {},
-    defaults = {
-        mesh = Mesh.new{
-            -- Simple quad
-            vertices =
-            {-1, -1, 0, 0,
-            -1, 1, 0, 1,
-            1, 1, 1, 1,
-            1, -1, 1, 0},
-            indices =
-            {0, 1, 2,
-            0, 2, 3},
-            params = {
-                {
-                    size = 2,
-                    stride = 4,
-                    offset = 0
-                },
-                {
-                    size = 2,
-                    stride = 4,
-                    offset = 2
-                }
-            }
-        }
-    }
-}
+
 
 --[[
 
@@ -70,24 +41,6 @@ entity = {
 ]]--
 
 gh = {}
-
-function gh.registerEntity(o)
-    eidc = _dan.eidc + 1
-    -- Protects against the unlikely.
-    -- Will run out of memory before all integers
-    -- are filled, so I think that we're fine
-    while _dan.entityReg[_dan.eidc] ~= nil do
-        _dan.eidc = _dan.eidc + 1
-    end
-    o._id = _dan.eidc
-    _dan.entityReg[o._id] = o
-    return o._id
-end
-
-function gh.removeEntity(id)
-    -- table.remove(_dan.entityReg, id)
-    table.insert(_dan.removeQueue, id)
-end
 
 function gh.testCollisions()
     for i,v in pairs(_dan.removeQueue) do

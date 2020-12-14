@@ -33,6 +33,39 @@ dan::Game::collisionResult_t dan::Game::testCollisions(const std::string &a, con
     return result;
 }
 
+dan::Game::entities_t::iterator dan::Game::deleteEntity(const entities_t::iterator &it) {
+    Entity *ptr = &(*it);
+    // Will only be in one collision group, however arbitrary normal groups
+    for (auto &p : groups) {
+        if (p.second.erase(ptr)) {
+            break;
+        }
+    }
+    for (auto &p : collisionGroups) {
+        p.second.erase(ptr);
+    }
+    removeRenderable(ptr);
+    return entities.erase(it);
+}
+
+dan::Entity &dan::Game::addEntity(sol::function hitCallback, const disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC) {
+    entities.emplace_back(*this, hitCallback, disp, equation, x, y, width, height, autoGC);
+    return entities.back();
+}
+
+void dan::Game::submitRenderable(Renderable &rend) {
+    renderQueue[priority] = &rend;
+}
+void dan::Game::removeRenderable(Renderable *rend) {
+    for (renderQueue_t it = renderQueue.begin(); it != renderQueue.end();) {
+        if (it->second == rend) {
+            it = renderQueue.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
 void dan::Game::setWidth(int w) {
     width = w;
 }
@@ -40,22 +73,6 @@ void dan::Game::setHeight(int h) {
     height = h;
 }
 
-
-void dan::Game::addPattern(const std::string &name, const Pattern &p) {
-    patterns[name] = p;
-}
-int dan::Game::newPatternInst(const std::string &name) {
-    // patternInstancesId++;
-    // patternInstances[patternInstancesId] = Pattern(*this, patterns[name]);
-    // return patternInstancesId;
-    DANZUN_ASSERT(false); // hold off on this for now; TEMP
-}
-dan::PatternInst &dan::Game::getPatternInst(int id) {
-    return patternInstances[id];
-}
-void dan::Game::deletePatternInst(int id) {
-    patternInstances.erase(id);
-}
 
 
 int dan::Game::getWidth() {
@@ -67,18 +84,30 @@ int dan::Game::getHeight() {
 
 
 void dan::Game::logic(float deltaTime) {
-
+    clock.pushDeltaTime(deltaTime);
 
     if (gcTimer.done()) {
         gc();
         gcTimer.start();
     }
+
+    for (Entity &e : entities) {
+        e.run();
+    }
+
+    for (auto &p : groups) {
+        p.second.update();
+    }
 }
 
 void dan::Game::gc() {
-    
+    for (Entity &e : entities) {
+        // TODO
+    }
 }
 
 void dan::Game::render(Context &c) {
-
+    for (auto &p : renderQueue) {
+        p.second.render(c);
+    }
 }

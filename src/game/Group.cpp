@@ -8,33 +8,59 @@ void dan::Group::pushCircle(const circle &v) {
 void dan::Group::pushPolygon(const polygon &v) {
     polygons.push_back(v);
 }
+bool dan::Group::erase(Entity *ptr) {
+    for (std::vector<circle_t>::iterator it = circles.begin(); it < circles.end(); ++it) {
+        if (*it == ptr) {
+            circles.erase(it);
+            return;
+        }
+    }
+    for (std::vector<polygon_t>::iterator it = polygons.begin(); it < polygons.end(); ++it) {
+        if (*it == ptr) {
+            polygons.erase(it);
+            return;
+        }
+    }
+}
 void dan::Group::clear() {
     circles.clear();
     polygons.clear();
 }
+void dan::Group::update() {
+    for (circle_t &c : circles) {
+        c.second.setX(c.first->getX());
+        c.second.setY(c.first->getY());
+        c.second.setRadius(std::min(c.first->getWidth(), c.first->getHeight()) / 2);
+    }
+    for (polygon_t &c : polygons) {
+        c.second.setX(c.first->getX());
+        c.second.setY(c.first->getY());
+        c.second.setRotation(c.first->getRotation());
+    }
+}
 void dan::Group::test(Group &other, std::vector<std::pair<sol::table, sol::table>> &output) {
-    // TODO: Add code to hitboxes to allow them to test each-other
-    for (circle &c : other.circles) {
-        for (circle &c1 : circles) {
-            if (c1.hitbox.intersects(c.hitbox)) {
-                output.emplace_back(c1.obj, c.obj);
+
+    for (circle_t &c : other.circles) {
+        for (circle_t &c1 : circles) {
+            if (c1.second.intersects(c.second)) {
+                output.emplace_back(c1.first, c.first);
             }
         }
-        for (polygon &p : polygons) {
-            if (p.hitbox.intersects(c.hitbox)) {
-                output.emplace_back(p.obj, c.obj);
+        for (polygon_t &p : polygons) {
+            if (p.second.intersects(c.second)) {
+                output.emplace_back(p.first, c.first);
             }
         }
     }
-    for (polygon &c : other.polygons) {
-        for (circle &c1 : circles) {
-            if (c1.hitbox.intersects(c.hitbox)) {
-                output.emplace_back(c1.obj, c.obj);
+    for (polygon_t &c : other.polygons) {
+        for (circle_t &c1 : circles) {
+            if (c1.second.intersects(c.second)) {
+                output.emplace_back(c1.first, c.first);
             }
         }
-        for (polygon &p : polygons) {
-            if (p.hitbox.intersects(c.hitbox)) {
-                output.emplace_back(p.obj, c.obj);
+        for (polygon_t &p : polygons) {
+            if (p.second.intersects(c.second)) {
+                output.emplace_back(p.first, c.first);
             }
         }
     }

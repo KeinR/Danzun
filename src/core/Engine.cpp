@@ -132,7 +132,7 @@ void dan::Engine::run() {
 
 void dan::Engine::cCall(const std::string &functionGlobalName) {
     sol::function func = s[functionGlobalName];
-    if (func.is<sol::function>()) {
+    if (func.get_type() == sol::type::function) {
         func.call();
     }
 }
