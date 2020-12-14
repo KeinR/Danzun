@@ -26,6 +26,19 @@ dan::Engine::Engine():
     gameSpeed(1)
 {
     window.setEventCallback(*this);
+    s.open_libraries(
+        sol::lib::base,
+        sol::lib::package,
+        sol::lib::coroutine,
+        sol::lib::string,
+        sol::lib::os,
+        sol::lib::math,
+        sol::lib::table,
+        sol::lib::bit32,
+        sol::lib::io,
+        sol::lib::ffi,
+        sol::lib::jit
+    );
 }
 
 bool dan::Engine::callbackCallable() {

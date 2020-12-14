@@ -15,7 +15,7 @@ namespace dan::api {
     public:
         Game(::dan::Game &handle);
 
-        void regCircleCol(sol::table self, const std::string &groupName, float xCenter, float yCenter, float radius);
+        // void regCircleCol(sol::table self, const std::string &groupName, float xCenter, float yCenter, float radius);
         void testCollisions(const std::string &groupA, const std::string &groupB);
         void resetGroups();
         float getTime();

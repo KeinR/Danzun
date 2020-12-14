@@ -4,6 +4,7 @@
 
 #include "../game/Game.h"
 #include "RenderConfig.h"
+#include "../game/LuaRef.h"
 
 /*
 
@@ -197,18 +198,18 @@ int loadPatterns(lua_State *L) {
 dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
 }
 
-void dan::api::Game::regCircleCol(sol::table self, const std::string &groupName, float xCenter, float yCenter, float radius) {
-    dan::Group::circle c;
-    c.obj = self;
-    c.hitbox.setX(xCenter);
-    c.hitbox.setY(yCenter);
-    c.hitbox.setRadius(radius);
-    handle->getGroup(groupName).pushCircle(c);
-}
+// void dan::api::Game::regCircleCol(sol::table self, const std::string &groupName, float xCenter, float yCenter, float radius) {
+//     dan::Group::circle c;
+//     c.obj = self;
+//     c.hitbox.setX(xCenter);
+//     c.hitbox.setY(yCenter);
+//     c.hitbox.setRadius(radius);
+//     handle->getGroup(groupName).pushCircle(c);
+// }
 void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
-    for (std::pair<sol::table, sol::table> &p : handle->testCollisions(groupA, groupB)) {
-        p.first["hit"].call(p.second);
-        p.second["hit"].call(p.first);
+    for (std::pair<Entity*, Entity*> &p : handle->testCollisions(groupA, groupB)) {
+        // p.first->getHitCallback().call(p.second);
+        // p.second->getHitCallback().call(p.first);
     }
 }
 
@@ -219,7 +220,7 @@ void dan::api::Game::spawnEntityFull(sol::function hitCallback, sol::userdata di
         handle->submitRenderable(0, e);
         handle->getGroup("test").pushCircle(e);
     } else {
-        throw std::runtime_exception("Expected RenderConfig as second arg");
+        throw std::runtime_error("Expected RenderConfig as second arg");
     }
 }
 
@@ -233,7 +234,7 @@ float dan::api::Game::getTime() {
 void dan::api::Game::open(sol::state_view &lua) {
     sol::usertype<Game> type = lua.new_usertype<Game>("Game");
 
-    type["regCircleCol"] = &Game::regCircleCol;
+    // type["regCircleCol"] = &Game::regCircleCol;
     type["testCollisions"] = &Game::testCollisions;
     type["resetGroups"] = &Game::resetGroups;
     type["getTime"] = &Game::getTime;

@@ -4,11 +4,12 @@
 #include <array>
 #include <memory>
 
-#include <arashpartow/exprtk.h>
+#include <arashpartow/exprtk.hpp>
 #include <sol/sol.hpp>
 
-#include "../sprite/AbsRemderConf.h"
+#include "../api/RenderConfig.h"
 #include "../sprite/Renderable.h"
+#include "LuaRef.h"
 
 namespace dan {
     class Game;
@@ -21,8 +22,10 @@ namespace dan {
         typedef exprtk::symbol_table<float> symbolTable_t;
         typedef exprtk::expression<float> expression_t;
         typedef exprtk::parser<float> parser_t;
-        typedef std::shared_ptr<Hitbox> hitbox_t;
         typedef LuaRef<api::RenderConfig> disp_t;
+
+        bool f2b(float f);
+        float b2f(bool b);
 
     private:
 
@@ -32,8 +35,8 @@ namespace dan {
         float rotation;
         float width;
         float height;
-        bool autoGC;
-        bool gc;
+        float autoGC;
+        float gc;
 
         // Each having one increases mem and construction penalty, but increases
         // performance frame-to-frame
@@ -48,7 +51,6 @@ namespace dan {
 
     public:
 
-        Entity();
         Entity(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC);
 
         // Cannot move or copy due to symbol table
@@ -58,9 +60,14 @@ namespace dan {
         Entity &operator=(Entity&) = delete;
         Entity &operator=(Entity&&) = delete;
 
-        void setParam(const std::string &name, const std::vector<float> &vector);
+        // TODO: Seperation of sprite and hitbox
+        int getX() const;
+        int getY() const;
+        int getWidth() const;
+        int getHeight() const;
+        int getRotation() const;
+
         void setParam(const std::string &name, float value);
-        void setParam(const std::string &name, const std::string &string);
 
         bool isGC();
         bool isAutoGC();

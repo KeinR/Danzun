@@ -12,7 +12,7 @@ namespace dan {
         // Expects type to be valid
         LuaRef(sol::userdata ref);
         T &operator*();
-        T &operator->();
+        T *operator->();
     };
 }
 

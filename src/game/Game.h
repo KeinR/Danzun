@@ -10,15 +10,13 @@
 
 #include <sol/sol.hpp>
 
-#include <arashpartow/exprtk.h>
+#include <arashpartow/exprtk.hpp>
 
 #include "../ui/Node.h"
 #include "../time/RealTimer.h"
 
 #include "Group.h"
-#include "Bullet.h"
-#include "Pattern.h"
-#include "PatternInst.h"
+#include "Entity.h"
 #include "../time/Clock.h"
 #include "../api/RenderConfig.h"
 
@@ -31,9 +29,9 @@ namespace dan {
 namespace dan {
     class Game: public Node {
     public:
-        typedef std::vector<std::pair<sol::table, sol::table>> collisionResult_t;
+        typedef std::vector<std::pair<Entity*, Entity*>> collisionResult_t;
         typedef std::list<Entity> entities_t;
-        typedef std::miltimap<int, Renderable*, std::greater> renderQueue_t;
+        typedef std::multimap<int, Renderable*, std::greater<int>> renderQueue_t;
     private:
         // Not used internally - exlcusively for use by
         // client applications
@@ -55,11 +53,12 @@ namespace dan {
 
         // Clean up entities
         void gc();
-        entities_t::iterator deleteEntity(const entities_t::const_iterator &it);
+        entities_t::iterator deleteEntity(const entities_t::iterator &it);
     public:
         Game(Engine &e);
 
         Engine &getEngine() const;
+        Clock &getClock();
 
         Group &getGroup(const std::string &name);
         void clearGroups();
@@ -68,7 +67,7 @@ namespace dan {
 
         Entity &addEntity(sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC);
         // REF MUST STAY VALID
-        void submitRenderable(Renderable &rend);
+        void submitRenderable(int priority, Renderable &rend);
         void removeRenderable(Renderable *rend);
 
         void addStage(const std::string &name, const std::string &path);
