@@ -13,3 +13,13 @@ std::string dan::ut::dirname(const std::string &path) {
     // Must be in the base dir 
     return "";
 }
+
+std::string dan::ut::lowercase(const std::string &in) {
+    std::string result = in;
+    for (char &c : result) {
+        if ('A' <= c && c <= 'Z') {
+            c |= 0x20;
+        }
+    }
+    return result;
+}

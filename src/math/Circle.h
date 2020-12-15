@@ -4,6 +4,10 @@
 #include "Hitbox.h"
 
 namespace dan {
+    class Polygon;
+}
+
+namespace dan {
     class Circle: public Hitbox {
         float x;
         float y;
@@ -29,6 +33,7 @@ namespace dan {
         // Does nothing
         void setRotation(float radians) override;
         bool intersects(const Circle &c) const override;
+        bool intersects(const Polygon &p) const;
     };
 }
 

@@ -1,43 +1,36 @@
 
 Ghost = {
-    pos = vec2.new{x = 0, y = 0},
-    vel = vec2.new{x = 0, y = 0},
-    radius = 10,
-    patternSet = [
-        {
-            time = 0,
-            callback = function(h)
-                
-            end
-        }
-    ]
+    x = 0,
+    y = 0,
+    v = {x = 0, y = 0},
+    radius = 25 / 2
 }
 
-function Ghost:new(o)
+Ghost.__index = Ghost
+
+function Ghost.new(pattern, o)
     o = o or {}
-    setmetatable(o, self)
-    self.__index = self
-    game.regEnemy(self)
+    o.patternSet = Pattern.new(pattern)
+    setmetatable(o, Ghost)
+    gh.registerEntity(o)
     return o
 end
 
-function Ghost:delete()
-    game.clearEnemy(self)
-end
-
-function hit(damage)
-    
-end
-
-function Ghost:logic(deltaTime)
-    game.regCollision()
-    if deltaTime % 50 == 0 then
-        game.addBullet("basic", 50, 50, 0, {vx = 5, vy = 4}, patternSet)
-    end
-
+function Ghost:logic()
+    game.regCircleCol(self._id, "enemies", self.x, self.y, self.radius)
+    self:render()
 end
 
 function Ghost:render()
-    game.renderSprite("ghost", pos)
+    ghost:render{
+        x = self.x,
+        y = self.y,
+        width = ghost:getWidth(),
+        height = ghost:getHeight(),
+    }
+end
+
+function Ghost:hit(o)
+    gh.removeEntity(self._id)
 end
 

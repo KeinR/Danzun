@@ -73,3 +73,10 @@ dan::Clock &dan::Context::getClock() {
 void dan::Context::renderQuad() const {
     quad_.render();
 }
+
+// Static members
+
+dan::Context &dan::Context::fromLua(sol::state_view lua) {
+    Context &c = lua["engine"]["getHandle"].call(lua["engine"]).get<dan::Engine*>()->getContext();
+    return c;
+}

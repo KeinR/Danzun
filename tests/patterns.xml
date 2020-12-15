@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<patterns>
+    <pattern name="loopy">
+        <!-- <param name="sx" def="0"/>
+        <param name="sy" def="0"/> These are implicit
+        <param name="t" def="0"/> -->
+        <param name="m" value="10"/>
+
+        <run>
+            <m>10</m>
+        </run>
+
+        <run dur="5">
+            <x> sx + m * cos(t + pi) + m </x>
+            <y> sy + m * sin(t + pi) + m * t / 4 </y>
+        </run>
+    </pattern>
+</pattern>
+
+<!--
+
+x = sx + m * math.cos(t + math.pi) + m
+y = sy + m * math.sin(t + math.pi) + m * t / 4
+
+Implemted as:
+
+``` string
+local t,x,y,m=...
+
+x = sx + m * math.cos(t + math.pi) + m
+y = sy + m * math.sin(t + math.pi) + m * t / 4
+
+return x, y
+
+``` end string
+
+f = loadstring(string)
+f(t,x,y,m)
+
+-->

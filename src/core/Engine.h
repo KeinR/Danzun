@@ -2,8 +2,11 @@
 #define DANZUN_ENGINE_H_INCLUDED
 
 #include <unordered_map>
-#include <string>
+#include <filesystem>
 
+#include <sol/sol.hpp>
+
+#include "Data.h"
 #include "Context.h"
 #include "../win/Window.h"
 #include "../win/WindowEvent.h"
@@ -19,18 +22,22 @@ namespace dan {
     class Engine: private WindowEvent {
         Window window;
         Context rc;
-        Node *scene;
+        Data data;
+
         WindowEvent *windowEventCallback;
         EventCallback *eventCallback;
 
         Game game;
-        Target gameTarget;
         bool gameActive;
         float gameSpeed;
 
+        sol::state s;
+
+        // Cautious call - don't call if nil
+        void cCall(const std::string &functionGlobalName);
         bool callbackCallable();
     public:
-        Engine(const std::string &winName, int width, int height);
+        Engine();
 
         void keyPressed(const event::KeyPress &e) override;
         void mouseMoved(const event::MouseMove &e) override;
@@ -45,6 +52,7 @@ namespace dan {
 
         Window &getWindow();
         Game &getGame();
+        Data &getData();
 
         void setGameActive(bool flag);
         bool isGameActive() const;
@@ -52,14 +60,12 @@ namespace dan {
         void setGameSpeed(float s);
         float getGameSpeed() const;
 
-        void setRefreshRate(int count);
-
         Context &getContext();
-        void setScene(Node &s);
-        void setGameSize(int w, int h);
-        void renderGameTarget();
-        void bindGameTexture();
+
+        void open(const std::filesystem::path &filePath);
         void run();
+
+        void start(const std::filesystem::path &filePath);
     };
 }
 

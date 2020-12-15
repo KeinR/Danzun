@@ -4,16 +4,21 @@
 #include "../lib/glfw.h"
 #include "error.h"
 
+#include "../api/Engine.h"
+#include "../api/Game.h"
+#include "../api/Shader.h"
+#include "../api/Window.h"
+#include "../api/Mesh.h"
+#include "../api/Image.h"
+
 #include "EventCallback.h"
 
 #include <iostream>
-#include <chrono>
-#include "../time/RealTimer.h"
 
-dan::Engine::Engine(const std::string &winName, int width, int height):
-    window(winName.c_str(), width, height, 0),
+dan::Engine::Engine():
+    window("Danzun", 500, 500, 0),
     rc(this),
-    scene(nullptr),
+    data(rc),
     windowEventCallback(nullptr),
     eventCallback(nullptr),
     game(*this),
@@ -21,9 +26,19 @@ dan::Engine::Engine(const std::string &winName, int width, int height):
     gameSpeed(1)
 {
     window.setEventCallback(*this);
-    gameTarget.setNode(game);
-
-    setGameSize(400, 400);
+    s.open_libraries(
+        sol::lib::base,
+        sol::lib::package,
+        sol::lib::coroutine,
+        sol::lib::string,
+        sol::lib::os,
+        sol::lib::math,
+        sol::lib::table,
+        sol::lib::bit32,
+        sol::lib::io,
+        sol::lib::ffi,
+        sol::lib::jit
+    );
 }
 
 bool dan::Engine::callbackCallable() {
@@ -70,6 +85,9 @@ dan::Window &dan::Engine::getWindow() {
 dan::Game &dan::Engine::getGame() {
     return game;
 }
+dan::Data &dan::Engine::getData() {
+    return data;
+}
 
 void dan::Engine::setGameActive(bool flag) {
     gameActive = flag;
@@ -85,39 +103,11 @@ float dan::Engine::getGameSpeed() const {
     return gameSpeed;
 }
 
-void dan::Engine::setRefreshRate(int count) {
-    glfwSwapInterval(count);
-}
-
 dan::Context &dan::Engine::getContext() {
     return rc;
 }
 
-void dan::Engine::setScene(Node &s) {
-    scene = &s;
-}
-
-void dan::Engine::setGameSize(int w, int h) {
-    game.setWidth(w);
-    game.setHeight(h);
-    gameTarget.setSize(w, h);
-}
-
-void dan::Engine::renderGameTarget() {
-    gameTarget.render(rc);
-    rc.setViewport(window.getWidth(), window.getHeight());
-}
-
-void dan::Engine::bindGameTexture() {
-    gameTarget.bindTexture();
-}
-
 void dan::Engine::run() {
-    if (scene == nullptr) {
-        err("Engine::run") << "No current scene!";
-        return;
-    }
-
     window.makeCurrent();
 
     glActiveTexture(GL_TEXTURE0);
@@ -127,26 +117,23 @@ void dan::Engine::run() {
     glDisable(GL_CULL_FACE);
 
     float start = glfwGetTime();
-
-    RealTimer post(500);
-    post.start();
-    float startTime = glfwGetTime();
-    int frames = 0;
+    float deltaTime = 0;
 
     while (!window.shouldClose()) {
         rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        s.collect_garbage();
 
-        scene->render(rc);
+        s["main"].call();
 
         window.swapBuffers();
 
         Window::pollEvents();
 
         const float time = glfwGetTime();
-        const float deltaTime = (time - start) * gameSpeed;
+        deltaTime = (time - start) * gameSpeed;
         start = time;
         rc.getClock().pushDeltaTime(deltaTime);
         if (gameActive) {
@@ -155,13 +142,65 @@ void dan::Engine::run() {
         if (eventCallback != nullptr) {
             eventCallback->onFrame(*this, deltaTime);
         }
+    }
+}
 
-        frames++;
-        if (post.done()) {
-            std::cout << "FPS = " << (frames / (glfwGetTime() - startTime)) << '\n';
-            frames = 0;
-            post.start();
-            startTime = glfwGetTime();
+void dan::Engine::cCall(const std::string &functionGlobalName) {
+    sol::function func = s[functionGlobalName];
+    if (func.get_type() == sol::type::function) {
+        sol::function_result result = func.call();
+        if (!result.valid()) {
+            sol::error err = result;
+            std::cerr << "FUNCTION ERROR: " << err.what() << std::endl;
         }
     }
+}
+
+void dan::Engine::open(const std::filesystem::path &filePath) {
+
+    std::filesystem::path p = std::filesystem::absolute("../data/lua/game.lua");
+    std::filesystem::path t = std::filesystem::absolute(filePath);
+
+    // IMPORTANT: Set working directory to that of the init script
+    // so that clients can use I/O sanely
+    std::filesystem::current_path(filePath.parent_path());
+
+    t = std::filesystem::relative(t);
+    s.script_file(t.string());
+
+    std::cout << "start open windows" << '\n';
+
+    api::Engine::open(s);
+    api::Shader::open(s);
+    api::Mesh::open(s);
+    api::Image::open(s);
+    api::Game::open(s);
+    api::Window::open(s);
+
+    s["engine"] = api::Engine(*this);
+    s["game"] = api::Game(game);
+    s["window"] = api::Window(window);
+
+    std::cout << "libs done" << '\n';
+
+    s.script_file(p.string());
+
+    std::cout << "Setup done" << '\n';
+
+    cCall("preInit");
+
+    std::cout << "Pre done" << '\n';
+
+    std::cout << "Engine opened" << '\n';
+
+    window.setVisible(true);
+
+    cCall("init");
+
+    cCall("start");
+}
+
+void dan::Engine::start(const std::filesystem::path &filePath) {
+    open(filePath);
+    run();
 }

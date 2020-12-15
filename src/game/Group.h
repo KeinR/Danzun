@@ -4,36 +4,31 @@
 #include <vector>
 #include <utility>
 
+#include <sol/sol.hpp>
+
 #include "../math/Circle.h"
-#include "../math/Rectangle.h"
 #include "../math/Polygon.h"
+
+namespace dan {
+    class Entity;
+}
 
 namespace dan {
     class Group {
     public:
-        struct circle {
-            int id;
-            Circle hitbox;
-        };
-        struct rectangle {
-            int id;
-            Rectangle hitbox;
-        };
-        struct polygon {
-            int id;
-            Polygon hitbox;
-        };
+        typedef std::pair<Entity*, Circle> circle_t;
+        typedef std::pair<Entity*, Polygon> polygon_t;
     private:
-        std::vector<circle> circles;
-        std::vector<rectangle> rectangles;
-        std::vector<polygon> polygons;
+        std::vector<circle_t> circles;
+        std::vector<polygon_t> polygons;
     public:
         Group();
-        void pushCircle(const circle &v);
-        void pushRect(const rectangle &v);
-        void pushPolygon(const polygon &v);
+        void pushCircle(Entity &owner);
+        void pushPolygon(Entity &owner);
+        bool erase(Entity *ptr);
         void clear();
-        void test(Group &other, std::vector<std::pair<int,int>> &output);
+        void update();
+        void test(Group &other, std::vector<std::pair<Entity*, Entity*>> &output);
     };
 }
 

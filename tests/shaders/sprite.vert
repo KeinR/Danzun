@@ -11,5 +11,6 @@ uniform mat4 model;
 void main() {
     // gl_Position = model * vec4(aPos, 0, 1);
     gl_Position = vec4(aPos, 0, 1);
+    // gl_Position = vec4(aPos, 0, 1);
     texCoords = aCoords;
 }

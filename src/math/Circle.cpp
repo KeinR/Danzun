@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "Polygon.h"
+
 dan::Circle::Circle(): x(0), y(0), radius(10) {
 }
 
@@ -47,4 +49,7 @@ void dan::Circle::setRotation(float radians) {
 }
 bool dan::Circle::intersects(const Circle &c) const {
     return std::hypot(c.getX() - getX(), c.getY() - getY()) <= c.getRadius() + getRadius();
+}
+bool dan::Circle::intersects(const Polygon &p) const {
+    return p.intersects(*this); // Deffer to the polygon's method
 }

@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <sol/sol.hpp>
+
 #include "../render/Mesh.h"
 #include "../time/Clock.h"
 
@@ -39,6 +41,8 @@ namespace dan {
         Clock &getClock();
 
         void renderQuad() const;
+
+        static Context &fromLua(sol::state_view lua);
     };
 }
 
