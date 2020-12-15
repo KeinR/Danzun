@@ -22,7 +22,6 @@ namespace dan {
     class Engine: private WindowEvent {
         Window window;
         Context rc;
-        sol::state s;
         Data data;
 
         WindowEvent *windowEventCallback;
@@ -31,6 +30,8 @@ namespace dan {
         Game game;
         bool gameActive;
         float gameSpeed;
+
+        sol::state s;
 
         // Cautious call - don't call if nil
         void cCall(const std::string &functionGlobalName);

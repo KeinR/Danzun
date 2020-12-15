@@ -15,6 +15,7 @@
 
 struct other {
     int *fefesf = new int(22);
+	std::map<std::string, int> some_map;
     ~other() {
         std::cout << "Other dtor callled" << '\n';
         delete fefesf;

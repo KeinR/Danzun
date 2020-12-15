@@ -124,6 +124,8 @@ void dan::Engine::run() {
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        s.collect_garbage();
+
         s["main"].call();
 
         window.swapBuffers();
@@ -146,7 +148,11 @@ void dan::Engine::run() {
 void dan::Engine::cCall(const std::string &functionGlobalName) {
     sol::function func = s[functionGlobalName];
     if (func.get_type() == sol::type::function) {
-        func.call();
+        sol::function_result result = func.call();
+        if (!result.valid()) {
+            sol::error err = result;
+            std::cerr << "FUNCTION ERROR: " << err.what() << std::endl;
+        }
     }
 }
 
@@ -170,6 +176,10 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Image::open(s);
     api::Game::open(s);
     api::Window::open(s);
+
+    s["engine"] = api::Engine(*this);
+    s["game"] = api::Game(game);
+    s["window"] = api::Window(window);
 
     std::cout << "libs done" << '\n';
 

@@ -208,6 +208,7 @@ dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
 // }
 void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
     for (std::pair<Entity*, Entity*> &p : handle->testCollisions(groupA, groupB)) {
+        // I'll figure it out...
         // p.first->getHitCallback().call(p.second);
         // p.second->getHitCallback().call(p.first);
     }

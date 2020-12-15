@@ -77,5 +77,6 @@ void dan::Context::renderQuad() const {
 // Static members
 
 dan::Context &dan::Context::fromLua(sol::state_view lua) {
-    return lua["engine"]["getHandle"].call().get<dan::Engine*>()->getContext();
+    Context &c = lua["engine"]["getHandle"].call(lua["engine"]).get<dan::Engine*>()->getContext();
+    return c;
 }

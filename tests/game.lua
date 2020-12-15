@@ -133,12 +133,32 @@ end
 
 function start()
     -- scene.one.init()
+    img = Image.new("load.jpg")
+    mesh = Mesh.new()
+    mesh:setVertices{
+        -1, -1, 0, 0,
+        -1, 1, 0, 1,
+        1, 1, 1, 1,
+        1, -1, 1, 0
+    }
+    mesh:setIndices{
+        0, 1, 2,
+        0, 2, 3
+    }
+    mesh:setParam(0, 2, 4, 0)
+    mesh:setParam(1, 2, 4, 2)
+    shader = Shader.new("shaders/sprite.vert", "shaders/sprite.frag")
+    shader:setInt1("tex", 0)
 end
 
 
 function main() -- main(e)
 
-    print("foo");
+    -- print("foo");
+
+    shader:use();
+    img:bind();
+    mesh:render();
 
 
     -- sprite:use()
