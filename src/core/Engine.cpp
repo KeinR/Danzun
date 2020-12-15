@@ -10,6 +10,7 @@
 #include "../api/Window.h"
 #include "../api/Mesh.h"
 #include "../api/Image.h"
+#include "../api/Matrix.h"
 
 #include "EventCallback.h"
 
@@ -176,6 +177,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Image::open(s);
     api::Game::open(s);
     api::Window::open(s);
+    api::Matrix::open(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);

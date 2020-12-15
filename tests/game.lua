@@ -149,6 +149,11 @@ function start()
     mesh:setParam(1, 2, 4, 2)
     shader = Shader.new("shaders/sprite.vert", "shaders/sprite.frag")
     shader:setInt1("tex", 0)
+    mat = Matrix.new()
+    mat.x = 50
+    mat.y = 50
+    mat.width = 100
+    mat.height = 100
 end
 
 
@@ -156,9 +161,10 @@ function main() -- main(e)
 
     -- print("foo");
 
-    shader:use();
-    img:bind();
-    mesh:render();
+    shader:use()
+    mat:load()
+    img:bind()
+    mesh:render()
 
 
     -- sprite:use()
