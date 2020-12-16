@@ -5,6 +5,7 @@
 #include "../game/Game.h"
 #include "RenderConfig.h"
 #include "../game/LuaRef.h"
+#include "PatternVars.h"
 
 /*
 
@@ -214,9 +215,22 @@ void dan::api::Game::testCollisions(const std::string &groupA, const std::string
     }
 }
 
-void dan::api::Game::spawnEntityFull(sol::function hitCallback, sol::userdata disp, const std::string &equation, float x, float y, float width, float height, bool autoGC) {
+void dan::api::Game::spawnEntityFull(sol::function hitCallback, sol::userdata disp, const std::string &equation, sol::table vars, float x, float y, float width, float height, bool autoGC) {
     if (disp.is<RenderConfig>()) {
-        Entity &e = handle->addEntity(hitCallback, LuaRef<RenderConfig>(disp), equation, x, y, width, height, autoGC);
+        std::vector<sol::userdata> deps;
+        std::vector<PatternVars::symTable_t> tables;
+        deps.reserve(vars.size());
+        tables.reserve(vars.size());
+        for (auto &d : vars) {
+            if (d.second.is<PatternVars>()) {
+                deps.push_back(d.second);
+                tables.push_back(d.second.as<PatternVars>().getTable());
+            }
+        }
+        Entity &e = handle->addEntity(hitCallback, LuaRef<RenderConfig>(disp), equation, tables, x, y, width, height, autoGC);
+        for (sol::userdata d : deps) {
+            e.addReference(d);
+        }
         // TEMP
         handle->submitRenderable(0, e);
         handle->getGroup("test").pushCircle(e);

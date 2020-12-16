@@ -3,6 +3,8 @@
 
 #include <array>
 #include <memory>
+#include <set>
+#include <vector>
 
 #include <arashpartow/exprtk.hpp>
 #include <sol/sol.hpp>
@@ -46,12 +48,20 @@ namespace dan {
         disp_t disp;
 
         sol::function hitCallback;
+        
+        struct cmp {
+            bool operator()(const sol::reference &a, const sol::reference &b) const {
+                return a.registry_index() < b.registry_index();
+            }
+        };
 
-        void initEquation(Game &g, const std::string &eq);
+        std::set<sol::reference, cmp> refs;
+
+        void initEquation(const std::vector<symbolTable_t> &symbols, const std::string &eq);
 
     public:
 
-        Entity(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC);
+        Entity(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation, const std::vector<symbolTable_t> &as, float x, float y, float width, float height, bool autoGC);
 
         // Cannot move or copy due to symbol table
         // (I mean, COULD write custom move funcs, but nahhh)
@@ -68,6 +78,11 @@ namespace dan {
         int getRotation() const;
 
         void setParam(const std::string &name, float value);
+
+        // NB: This action is irreversible!
+        void regSymbolTable(symbolTable_t &table);
+
+        bool addReference(sol::reference ref);
 
         bool isGC();
         bool isAutoGC();

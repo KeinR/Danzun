@@ -11,6 +11,9 @@
 #include "../api/Mesh.h"
 #include "../api/Image.h"
 #include "../api/Matrix.h"
+#include "../api/Entity.h"
+#include "../api/PatternVars.h"
+#include "../api/RenderConfig.h"
 
 #include "EventCallback.h"
 
@@ -128,6 +131,7 @@ void dan::Engine::run() {
         s.collect_garbage();
 
         s["main"].call();
+        game.render(rc);
 
         window.swapBuffers();
 
@@ -178,6 +182,9 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Game::open(s);
     api::Window::open(s);
     api::Matrix::open(s);
+    api::PatternVars::open(s);
+    api::Entity::open(s);
+    api::RenderConfig::open(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);
@@ -200,6 +207,9 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     cCall("init");
 
     cCall("start");
+
+    // Temp
+    gameActive = true;
 }
 
 void dan::Engine::start(const std::filesystem::path &filePath) {

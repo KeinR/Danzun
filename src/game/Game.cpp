@@ -8,6 +8,9 @@ dan::Game::Game(Engine &e):
     // (Not happening much, as there aren't many entities...)
     gcTimer(5000)
 {
+    // A little dangerous I will admit, but it really helps the flow
+    globalSymbols.add_variable("t", clock.getTimeRef(), false);
+    globalSymbols.add_variable("dt", clock.getDeltaTimeRef(), false);
 }
 
 dan::Engine &dan::Game::getEngine() const {
@@ -48,8 +51,10 @@ dan::Game::entities_t::iterator dan::Game::deleteEntity(const entities_t::iterat
     return entities.erase(it);
 }
 
-dan::Entity &dan::Game::addEntity(sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC) {
-    entities.emplace_back(*this, hitCallback, disp, equation, x, y, width, height, autoGC);
+dan::Entity &dan::Game::addEntity(sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation, const std::vector<Entity::symbolTable_t> &symbols, float x, float y, float width, float height, bool autoGC) {
+    std::vector<Entity::symbolTable_t> s = symbols;
+    s.push_back(globalSymbols);
+    entities.emplace_back(*this, hitCallback, disp, equation, s, x, y, width, height, autoGC);
     return entities.back();
 }
 
@@ -85,14 +90,21 @@ int dan::Game::getHeight() {
 
 void dan::Game::logic(float deltaTime) {
     clock.pushDeltaTime(deltaTime);
+    std::cout << clock.getDeltaTimeRef() << '\n';
+    std::cout << globalSymbols.get_variable("dt")->ref() << '\n';
 
     if (gcTimer.done()) {
         gc();
         gcTimer.start();
     }
 
-    for (Entity &e : entities) {
-        e.run();
+    for (entities_t::iterator it = entities.begin(); it != entities.end();) {
+        if (it->isGC()) {
+            it = deleteEntity(it);
+        } else {
+            it->run();
+            ++it;
+        }
     }
 
     for (auto &p : groups) {
@@ -101,8 +113,17 @@ void dan::Game::logic(float deltaTime) {
 }
 
 void dan::Game::gc() {
-    for (Entity &e : entities) {
-        // TODO
+    for (entities_t::iterator it = entities.begin(); it != entities.end();) {
+        if (it->isAutoGC()) {
+            if (false) {
+                // TODO
+                it = deleteEntity(it);
+            } else {
+                ++it;
+            }
+        } else {
+            ++it;
+        }
     }
 }
 

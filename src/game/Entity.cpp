@@ -1,10 +1,10 @@
 #include "Entity.h"
 
-#include "../time/Clock.h"
 #include "../game/Game.h"
+#include "../time/Clock.h"
 #include "../render/Matrix.h"
 
-dan::Entity::Entity(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation, float x, float y, float width, float height, bool autoGC):
+dan::Entity::Entity(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation, const std::vector<symbolTable_t> &as, float x, float y, float width, float height, bool autoGC):
     pos{x, y},
     startingTime(g.getClock().getTime()),
     rotation(0),
@@ -15,7 +15,7 @@ dan::Entity::Entity(Game &g, sol::function hitCallback, const disp_t &disp, cons
     disp(disp),
     hitCallback(hitCallback)
 {
-    initEquation(g, equation);
+    initEquation(as, equation);
 }
 
 int dan::Entity::getX() const {
@@ -38,9 +38,19 @@ void dan::Entity::setParam(const std::string &name, float value) {
     symbols.add_constant(name, value);
 }
 
-void dan::Entity::initEquation(Game &g, const std::string &eq) {
+void dan::Entity::regSymbolTable(symbolTable_t &table) {
+    exp.register_symbol_table(table);
+}
+
+bool dan::Entity::addReference(sol::reference ref) {
+    return refs.insert(ref).second;
+}
+
+void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const std::string &eq) {
 
     symbols.add_vector("p", pos.data(), pos.size());
+    symbols.add_variable("x", pos[0]);
+    symbols.add_variable("y", pos[1]);
     symbols.add_variable("ti", startingTime);
     symbols.add_variable("rot", rotation);
     symbols.add_variable("width", width);
@@ -48,21 +58,23 @@ void dan::Entity::initEquation(Game &g, const std::string &eq) {
     symbols.add_variable("autoGC", autoGC);
     symbols.add_variable("gc", gc);
 
-    // A little dangerous I will admit, but it really helps the flow
-    symbols.add_variable("t", g.getClock().getTimeRef(), true);
-    symbols.add_variable("dt", g.getClock().getDeltaTimeRef(), true);
     // I don't see a way in exprtk to make vectors const. Oh well, guess entities get to change the player's position...
-    // NOT IMPLEMENTED
+    // [[ PLAYER NOT YET IMPLEMENTED ]]
     // symbols.add_variable("plp", g.getPlayer().getPos().data(), g.getPlayer().getPos().size());
 
     symbols.add_constants();
 
     exp.register_symbol_table(symbols);
 
+    for (symbolTable_t table : as) {
+        std::cout << "Reg table..." << '\n';
+        exp.register_symbol_table(table);
+    }
+
     parser_t parser;
-    if (parser.compile(eq, exp)) {
+    if (!parser.compile(eq, exp)) {
         // TEMP - should notify once then ignore, not spam console
-        std::cerr << "Failed to compile expression, " << parser.error() << '\n';
+        std::cerr << "Entity: Failed to compile expression, " << parser.error() << '\n';
     }
 }
 
@@ -87,6 +99,7 @@ sol::function dan::Entity::getHitCallback() {
 
 void dan::Entity::run() {
     exp.value();
+    std::cout << "Entity eq run, new value for x = " << pos[0] << '\n';
 }
 
 void dan::Entity::render(Context &c) {
