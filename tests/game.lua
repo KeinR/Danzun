@@ -46,16 +46,20 @@ function start()
 
     conf = RenderConfig.new(bltImg, mesh, shader);
 
+    bvars = PatternVars.new{m = 4}
+
     game:spawnEntityFull(
         function(other)
             print ("nice hit!")
         end,
         conf,
         [[
-            x := x + dt * 10;
-            # y += dt * 100;
+            x += dt * m * 10;
+            y += dt * m * 10;
         ]],
-        {},
+        {
+            bvars
+        },
         50, 50,
         100, 100,
         false
@@ -74,5 +78,7 @@ function main() -- main(e)
     -- conf:setup()
     -- mat:load()
     -- conf:render()
+
+    bvars:push()
 
 end

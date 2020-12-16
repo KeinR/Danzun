@@ -15,8 +15,12 @@
 constexpr dan::Texture::tparam dan::Texture::defaultParams{
     GL_CLAMP_TO_EDGE,
     GL_CLAMP_TO_EDGE,
-    GL_NEAREST,
-    GL_NEAREST
+    // GL_REPEAT,
+    // GL_REPEAT,
+    // GL_NEAREST,
+    // GL_NEAREST
+    GL_LINEAR,
+    GL_LINEAR
 };
 
 dan::Texture::Texture() {

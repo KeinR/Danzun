@@ -1,21 +1,30 @@
 #include "PatternVars.h"
 
 dan::api::PatternVars::PatternVars(sol::table table): luaTable(table) {
-    push();
+    init();
 }
 
 dan::api::PatternVars::symTable_t &dan::api::PatternVars::getTable() {
     return symTable;
 }
 
-void dan::api::PatternVars::push() {
+void dan::api::PatternVars::init() {
     for (auto &v : luaTable) {
         if (v.second.is<float>() && v.first.is<std::string>()) {
             std::string name = v.first.as<std::string>();
             float value = v.second.as<float>();
             buffer[name] = value;
             // Just make sure that it exists
-            symTable.add_variable(name, value);
+            symTable.add_variable(name, buffer[name]);
+        }
+    }
+}
+
+void dan::api::PatternVars::push() {
+    for (auto &v : buffer) {
+        sol::table t = luaTable[v.first];
+        if (t.is<float>()) {
+            v.second = t.as<float>();
         }
     }
 }

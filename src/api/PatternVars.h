@@ -15,6 +15,8 @@ namespace dan::api {
         sol::table luaTable;
         std::unordered_map<std::string, float> buffer;
         symTable_t symTable;
+
+        void init();
     public:
         PatternVars(sol::table table);
 
