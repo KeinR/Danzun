@@ -83,6 +83,9 @@ namespace dan {
 
         void logic(float deltaTime);
         void render(Context &c) override;
+
+
+        static Game &fromLua(sol::state_view lua);
     };
 }
 

@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "../core/debug.h"
+#include "../core/Engine.h"
 
 dan::Game::Game(Engine &e):
     engine(&e),
@@ -90,8 +91,6 @@ int dan::Game::getHeight() {
 
 void dan::Game::logic(float deltaTime) {
     clock.pushDeltaTime(deltaTime);
-    std::cout << clock.getDeltaTimeRef() << '\n';
-    std::cout << globalSymbols.get_variable("dt")->ref() << '\n';
 
     if (gcTimer.done()) {
         gc();
@@ -131,4 +130,8 @@ void dan::Game::render(Context &c) {
     for (auto &p : renderQueue) {
         p.second->render(c);
     }
+}
+
+dan::Game &dan::Game::fromLua(sol::state_view lua) {
+    return Engine::fromLua(lua).getGame();
 }

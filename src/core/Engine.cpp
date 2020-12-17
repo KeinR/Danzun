@@ -14,6 +14,7 @@
 #include "../api/Entity.h"
 #include "../api/PatternVars.h"
 #include "../api/RenderConfig.h"
+#include "../api/Script.h"
 
 #include "EventCallback.h"
 
@@ -130,7 +131,11 @@ void dan::Engine::run() {
 
         s.collect_garbage();
 
-        s["main"].call();
+        sol::function_result mr = s["main"].call();
+        if (!mr.valid()) {
+            sol::error err = mr;
+            std::cerr << "MAIN FUNCTION ERROR: " << err.what() << '\n';
+        }
         game.render(rc);
 
         window.swapBuffers();
@@ -185,6 +190,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::PatternVars::open(s);
     api::Entity::open(s);
     api::RenderConfig::open(s);
+    api::Script::open(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);
@@ -215,4 +221,11 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
 void dan::Engine::start(const std::filesystem::path &filePath) {
     open(filePath);
     run();
+}
+
+// Static members
+
+dan::Engine &dan::Engine::fromLua(sol::state_view lua) {
+    sol::table engine = lua["engine"];
+    return *engine["getHandle"].call(engine).get<dan::Engine*>();
 }

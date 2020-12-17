@@ -99,7 +99,6 @@ sol::function dan::Entity::getHitCallback() {
 
 void dan::Entity::run() {
     exp.value();
-    std::cout << "Entity eq run, new value for x = " << pos[0] << '\n';
 }
 
 void dan::Entity::render(Context &c) {

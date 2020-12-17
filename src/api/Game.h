@@ -19,6 +19,7 @@ namespace dan::api {
         void testCollisions(const std::string &groupA, const std::string &groupB);
         void resetGroups();
         float getTime();
+        float getDeltaTime();
         // void loadPatternsFromFile(const std::string &path);
 
         void spawnEntityFull(sol::function hitCallback, sol::userdata disp, const std::string &equation, sol::table vars, float x, float y, float width, float height, bool autoGC);

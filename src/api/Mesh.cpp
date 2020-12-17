@@ -33,7 +33,9 @@ void dan::api::Mesh::render() {
 // Static members
 
 void dan::api::Mesh::open(sol::state_view &lua) {
-    sol::usertype<Mesh> type = lua.new_usertype<Mesh>("Mesh", sol::constructors<Mesh()>());
+    sol::usertype<Mesh> type = lua.new_usertype<Mesh>("Mesh",
+        sol::constructors<Mesh()>()
+    );
 
     type["setVertices"] = &Mesh::setVertices;
     type["setIndices"] = &Mesh::setIndices;

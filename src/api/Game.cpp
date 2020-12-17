@@ -245,6 +245,9 @@ void dan::api::Game::resetGroups() {
 float dan::api::Game::getTime() {
     return handle->getClock().getTime();
 }
+float dan::api::Game::getDeltaTime() {
+    return handle->getClock().getDeltaTime();
+}
 
 void dan::api::Game::open(sol::state_view &lua) {
     sol::usertype<Game> type = lua.new_usertype<Game>("Game");
@@ -253,6 +256,7 @@ void dan::api::Game::open(sol::state_view &lua) {
     type["testCollisions"] = &Game::testCollisions;
     type["resetGroups"] = &Game::resetGroups;
     type["getTime"] = &Game::getTime;
+    type["getDeltaTime"] = &Game::getDeltaTime;
     type["spawnEntityFull"] = &Game::spawnEntityFull;
 
 }

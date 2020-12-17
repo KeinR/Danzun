@@ -27,7 +27,9 @@ void dan::api::RenderConfig::render() {
 // Static members
 
 void dan::api::RenderConfig::open(sol::state_view lua) {
-    sol::usertype<RenderConfig> type = lua.new_usertype<RenderConfig>("RenderConfig", sol::constructors<Image(sol::userdata,sol::userdata,sol::userdata)>());
+    sol::usertype<RenderConfig> type = lua.new_usertype<RenderConfig>("RenderConfig",
+        sol::constructors<Image(sol::userdata,sol::userdata,sol::userdata)>()
+    );
 
     // yes no?
     type["setup"] = &RenderConfig::setup;

@@ -66,6 +66,8 @@ namespace dan {
         void run();
 
         void start(const std::filesystem::path &filePath);
+
+        static Engine &fromLua(sol::state_view lua);
     };
 }
 

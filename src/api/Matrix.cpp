@@ -10,7 +10,9 @@ void dan::api::Matrix::load(sol::this_state l) {
 }
 
 void dan::api::Matrix::open(sol::state_view &lua) {
-    sol::usertype<Matrix> type = lua.new_usertype<Matrix>("Matrix", sol::constructors<Matrix()>());
+    sol::usertype<Matrix> type = lua.new_usertype<Matrix>("Matrix",
+        sol::constructors<Matrix()>()
+    );
 
     type["x"] = &Matrix::x;
     type["y"] = &Matrix::y;

@@ -64,6 +64,9 @@ function start()
         100, 100,
         false
     );
+
+    -- script = Script.new(loadfile("test.dzs"))
+    script = Script.new(loadfile("test.dzs"))
 end
 
 
@@ -80,5 +83,7 @@ function main() -- main(e)
     -- conf:render()
 
     bvars:push()
+
+    script:run()
 
 end

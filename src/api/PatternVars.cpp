@@ -22,9 +22,9 @@ void dan::api::PatternVars::init() {
 
 void dan::api::PatternVars::push() {
     for (auto &v : buffer) {
-        sol::table t = luaTable[v.first];
-        if (t.is<float>()) {
-            v.second = t.as<float>();
+        auto t = luaTable[v.first];
+        if (t.get_type() == sol::type::number) {
+            v.second = t.get<float>();
         }
     }
 }
@@ -37,7 +37,9 @@ void dan::api::PatternVars::pull() {
 // Static members
 
 void dan::api::PatternVars::open(sol::state_view &lua) {
-    sol::usertype<PatternVars> type = lua.new_usertype<PatternVars>("PatternVars", sol::constructors<PatternVars(sol::table)>());
+    sol::usertype<PatternVars> type = lua.new_usertype<PatternVars>("PatternVars",
+        sol::constructors<PatternVars(sol::table)>()
+    );
 
     type["push"] = &PatternVars::push;
     type["pull"] = &PatternVars::pull;

@@ -16,7 +16,9 @@ void dan::api::Shader::use() {
 // static members
 
 void dan::api::Shader::open(sol::state_view &lua) {
-    sol::usertype<Shader> type = lua.new_usertype<Shader>("Shader", sol::constructors<Shader(sol::this_state,const std::string&,const std::string&)>());
+    sol::usertype<Shader> type = lua.new_usertype<Shader>("Shader",
+        sol::constructors<Shader(sol::this_state,const std::string&,const std::string&)>()
+    );
 
     type["setInt1"] = &Shader::setInt1;
     type["use"] = &Shader::use;

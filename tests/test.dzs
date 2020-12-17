@@ -1,0 +1,47 @@
+
+print("         __ 0")
+
+function wait(sec)
+    coroutine.yield(sec)
+end
+
+print("         __ 1")
+
+function spawn()
+    game:spawnEntityFull(
+        function(other)
+            print ("nice hit!")
+        end,
+        conf,
+        [[
+            x += dt * m * 10;
+            y += dt * m * 10;
+        ]],
+        {
+            bvars
+        },
+        50, 50,
+        100, 100,
+        false
+    );
+end
+
+print("         __ 2")
+
+spawn()
+
+print("         __ 3")
+
+wait(5)
+
+print("         __ 4")
+
+spawn()
+
+print("         __ 5")
+
+wait(5)
+
+print("         __ 6")
+
+spawn()
