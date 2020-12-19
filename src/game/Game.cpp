@@ -52,10 +52,14 @@ dan::Game::entities_t::iterator dan::Game::deleteEntity(const entities_t::iterat
     return entities.erase(it);
 }
 
-dan::Entity &dan::Game::addEntity(sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation, const std::vector<Entity::symbolTable_t> &symbols, float x, float y, float width, float height, bool autoGC) {
+dan::Entity &dan::Game::addEntity(
+    sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation,
+    const std::vector<Entity::symbolTable_t> &symbols, const Entity::constants_t &constants,
+    float x, float y, float width, float height, bool autoGC)
+{
     std::vector<Entity::symbolTable_t> s = symbols;
     s.push_back(globalSymbols);
-    entities.emplace_back(*this, hitCallback, disp, equation, s, x, y, width, height, autoGC);
+    entities.emplace_back(*this, hitCallback, disp, equation, s, constants, x, y, width, height, autoGC);
     return entities.back();
 }
 

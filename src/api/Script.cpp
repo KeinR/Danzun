@@ -6,35 +6,37 @@ dan::api::Script::Script(sol::this_state l, sol::function func, sol::variadic_ar
     thread(sol::thread::create(l)),
     routine(thread.state(), func),
     timeOfNextRun(0),
+    done(false),
     args(pargs.begin(), pargs.end())
 {
 }
 bool dan::api::Script::run(sol::this_state l) {
-    float time = Game::fromLua(l).getClock().getTime();
-    if (time >= timeOfNextRun) {
-        sol::function_result result = routine(sol::as_args(args));
-        switch (result.status()) {
-            case sol::call_status::ok:
-                // We're all done here, thread's ended
-                return true;
-            case sol::call_status::yielded:
-                if (result.get_type() == sol::type::number) {
-                    // Only advance time if actually yielded a number
-                    timeOfNextRun = time + result.get<float>();
-                }
-                return false;
-            default:
-                // There was an error :(
-                // Well, don't try that again...
-                sol::error err = result;
-                std::cerr << "SCRIPT ERROR: " << err.what() << '\n';
-                timeOfNextRun = 1e10;
-                break;
+    if (!done) {
+        float time = Game::fromLua(l).getClock().getTime();
+        if (time >= timeOfNextRun) {
+            sol::function_result result = routine(sol::as_args(args));
+            switch (result.status()) {
+                case sol::call_status::ok:
+                    // We're all done here, thread's ended
+                    done = true;
+                    break;
+                case sol::call_status::yielded:
+                    if (result.get_type() == sol::type::number) {
+                        // Only advance time if actually yielded a number
+                        timeOfNextRun = time + result.get<float>();
+                    }
+                    break;
+                default:
+                    // There was an error :(
+                    // Well, don't try that again...
+                    sol::error err = result;
+                    std::cerr << "SCRIPT ERROR: " << err.what() << '\n';
+                    done = true;
+                    break;
+            }
         }
-    } else {
-        return false;
     }
-    return true;
+    return done;
 }
 
 void dan::api::Script::open(sol::state_view lua) {

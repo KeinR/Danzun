@@ -67,7 +67,11 @@ namespace dan {
         void resetGroups();
         collisionResult_t testCollisions(const std::string &a, const std::string &b);
 
-        Entity &addEntity(sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation, const std::vector<Entity::symbolTable_t> &symbols, float x, float y, float width, float height, bool autoGC);
+        Entity &addEntity(
+            sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation,
+            const std::vector<Entity::symbolTable_t> &symbols, const Entity::constants_t &constants,
+            float x, float y, float width, float height, bool autoGC
+        );
         // REF MUST STAY VALID
         void submitRenderable(int priority, Renderable &rend);
         void removeRenderable(Renderable *rend);

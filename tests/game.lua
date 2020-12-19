@@ -1,4 +1,6 @@
 
+entities = {}
+
 -- First thing that runs, before window
 -- opens
 function preInit()
@@ -19,8 +21,7 @@ function init()
 end
 
 function start()
-    -- scene.one.init()
-    img = Image.new("load.jpg")
+
     mesh = Mesh.new()
     mesh:setVertices{
         -1, -1, 0, 0,
@@ -36,6 +37,7 @@ function start()
     mesh:setParam(1, 2, 4, 2)
     shader = Shader.new("shaders/sprite.vert", "shaders/sprite.frag")
     shader:setInt1("tex", 0)
+
     mat = Matrix.new()
     mat.x = 50
     mat.y = 50
@@ -46,24 +48,10 @@ function start()
 
     conf = RenderConfig.new(bltImg, mesh, shader);
 
-    bvars = PatternVars.new{m = 4}
 
-    game:spawnEntityFull(
-        function(other)
-            print ("nice hit!")
-        end,
-        conf,
-        [[
-            x += dt * m * 10;
-            y += dt * m * 10;
-        ]],
-        {
-            bvars
-        },
-        50, 50,
-        100, 100,
-        false
-    );
+    bvars_data = {m = 4};
+
+    bvars = PatternVars.new(bvars_data)
 
     -- script = Script.new(loadfile("test.dzs"))
     script = Script.new(loadfile("test.dzs"))
@@ -81,6 +69,8 @@ function main() -- main(e)
     -- conf:setup()
     -- mat:load()
     -- conf:render()
+
+    bvars_data.m = bvars_data.m + 0.1
 
     bvars:push()
 

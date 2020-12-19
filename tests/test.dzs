@@ -1,47 +1,38 @@
 
-print("         __ 0")
-
 function wait(sec)
     coroutine.yield(sec)
 end
 
-print("         __ 1")
-
-function spawn()
+function spawn(x, y, vx, vy)
     game:spawnEntityFull(
         function(other)
             print ("nice hit!")
         end,
         conf,
         [[
-            x += dt * m * 10;
-            y += dt * m * 10;
+            x += dt * m * 10 * vx;
+            y += dt * m * 10 * vy;
         ]],
         {
             bvars
         },
-        50, 50,
+        {
+            vx = vx,
+            vy = vy
+        },
+        x, y,
         100, 100,
         false
     );
 end
 
-print("         __ 2")
+spawn(40, 0, -0.5, 1)
+spawn(80, 0, 0.5, 1)
 
-spawn()
+wait(50)
 
-print("         __ 3")
+-- spawn()
 
-wait(5)
+-- wait(5)
 
-print("         __ 4")
-
-spawn()
-
-print("         __ 5")
-
-wait(5)
-
-print("         __ 6")
-
-spawn()
+-- spawn()

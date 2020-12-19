@@ -2,6 +2,8 @@
 #define DANZUN_API_GAME_H_INCLUDED
 
 #include <string>
+#include <vector>
+#include <utility>
 
 #include <sol/sol.hpp>
 
@@ -22,7 +24,11 @@ namespace dan::api {
         float getDeltaTime();
         // void loadPatternsFromFile(const std::string &path);
 
-        void spawnEntityFull(sol::function hitCallback, sol::userdata disp, const std::string &equation, sol::table vars, float x, float y, float width, float height, bool autoGC);
+        void spawnEntityFull(
+            sol::function hitCallback, sol::userdata disp, const std::string &equation,
+            sol::table vars, sol::table constants,
+            float x, float y, float width, float height, bool autoGC
+        );
 
         static void open(sol::state_view &lua);
 

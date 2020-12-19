@@ -4,7 +4,12 @@
 #include "../time/Clock.h"
 #include "../render/Matrix.h"
 
-dan::Entity::Entity(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation, const std::vector<symbolTable_t> &as, float x, float y, float width, float height, bool autoGC):
+dan::Entity::Entity(
+    Game &g, sol::function hitCallback, const disp_t &disp,
+    const std::string &equation, const std::vector<symbolTable_t> &as,
+    const constants_t &constants,
+    float x, float y, float width, float height, bool autoGC
+):
     pos{x, y},
     startingTime(g.getClock().getTime()),
     rotation(0),
@@ -15,7 +20,7 @@ dan::Entity::Entity(Game &g, sol::function hitCallback, const disp_t &disp, cons
     disp(disp),
     hitCallback(hitCallback)
 {
-    initEquation(as, equation);
+    initEquation(as, constants, equation);
 }
 
 int dan::Entity::getX() const {
@@ -46,7 +51,7 @@ bool dan::Entity::addReference(sol::reference ref) {
     return refs.insert(ref).second;
 }
 
-void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const std::string &eq) {
+void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const constants_t &constants, const std::string &eq) {
 
     symbols.add_vector("p", pos.data(), pos.size());
     symbols.add_variable("x", pos[0]);
@@ -57,6 +62,10 @@ void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const std::
     symbols.add_variable("height", height);
     symbols.add_variable("autoGC", autoGC);
     symbols.add_variable("gc", gc);
+
+    for (const std::pair<std::string, float> &c : constants) {
+        symbols.add_constant(c.first, c.second);
+    }
 
     // I don't see a way in exprtk to make vectors const. Oh well, guess entities get to change the player's position...
     // [[ PLAYER NOT YET IMPLEMENTED ]]

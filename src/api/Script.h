@@ -10,6 +10,7 @@ namespace dan::api {
         sol::thread thread;
         sol::coroutine routine;
         float timeOfNextRun;
+        bool done;
         std::vector<sol::object> args;
     public:
         Script(sol::this_state, sol::function func, sol::variadic_args pargs);

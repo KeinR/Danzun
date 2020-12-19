@@ -215,7 +215,11 @@ void dan::api::Game::testCollisions(const std::string &groupA, const std::string
     }
 }
 
-void dan::api::Game::spawnEntityFull(sol::function hitCallback, sol::userdata disp, const std::string &equation, sol::table vars, float x, float y, float width, float height, bool autoGC) {
+void dan::api::Game::spawnEntityFull(
+    sol::function hitCallback, sol::userdata disp, const std::string &equation,
+    sol::table vars, sol::table constants,
+    float x, float y, float width, float height, bool autoGC
+) {
     if (disp.is<RenderConfig>()) {
         std::vector<sol::userdata> deps;
         std::vector<PatternVars::symTable_t> tables;
@@ -227,7 +231,21 @@ void dan::api::Game::spawnEntityFull(sol::function hitCallback, sol::userdata di
                 tables.push_back(d.second.as<PatternVars>().getTable());
             }
         }
-        Entity &e = handle->addEntity(hitCallback, LuaRef<RenderConfig>(disp), equation, tables, x, y, width, height, autoGC);
+
+        std::vector<std::pair<std::string, float>> csts;
+        for (auto p : constants) {
+            if (p.first.get_type() == sol::type::string &&
+                p.second.get_type() == sol::type::number)
+            {
+                csts.push_back({p.first.as<std::string>(), p.second.as<float>()});
+            }
+        }
+
+        Entity &e = handle->addEntity(
+            hitCallback, LuaRef<RenderConfig>(disp), equation,
+            tables, csts,
+            x, y, width, height, autoGC
+        );
         for (sol::userdata d : deps) {
             e.addReference(d);
         }

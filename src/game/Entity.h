@@ -25,6 +25,7 @@ namespace dan {
         typedef exprtk::expression<float> expression_t;
         typedef exprtk::parser<float> parser_t;
         typedef LuaRef<api::RenderConfig> disp_t;
+        typedef std::vector<std::pair<std::string, float>> constants_t;
 
         bool f2b(float f);
         float b2f(bool b);
@@ -57,11 +58,15 @@ namespace dan {
 
         std::set<sol::reference, cmp> refs;
 
-        void initEquation(const std::vector<symbolTable_t> &symbols, const std::string &eq);
+        void initEquation(const std::vector<symbolTable_t> &symbols, const constants_t &constants, const std::string &eq);
 
     public:
 
-        Entity(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation, const std::vector<symbolTable_t> &as, float x, float y, float width, float height, bool autoGC);
+        Entity(
+            Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation,
+            const std::vector<symbolTable_t> &as, const constants_t &constants,
+            float x, float y, float width, float height, bool autoGC
+        );
 
         // Cannot move or copy due to symbol table
         // (I mean, COULD write custom move funcs, but nahhh)
