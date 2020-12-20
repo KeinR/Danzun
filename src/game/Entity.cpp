@@ -3,6 +3,7 @@
 #include "../game/Game.h"
 #include "../time/Clock.h"
 #include "../render/Matrix.h"
+#include "../api/Entity.h"
 
 dan::Entity::Entity(
     Game &g, sol::function hitCallback, const disp_t &disp,
@@ -35,8 +36,14 @@ int dan::Entity::getWidth() const {
 int dan::Entity::getHeight() const {
     return height;
 }
-int dan::Entity::getRotation() const {
+float dan::Entity::getRotation() const {
     return rotation;
+}
+
+void dan::Entity::setScript(sol::state_view lua, sol::function func, const std::vector<sol::object> &params) {
+    std::vector<sol::object> p = params;
+    p.insert(p.begin(), sol::make_object<api::Entity>(lua, *this));
+    this->script = api::Script(lua, func, p);
 }
 
 void dan::Entity::setParam(const std::string &name, float value) {
@@ -106,8 +113,9 @@ sol::function dan::Entity::getHitCallback() {
     return hitCallback;
 }
 
-void dan::Entity::run() {
+void dan::Entity::run(sol::state_view lua) {
     exp.value();
+    script.run(lua.lua_state());
 }
 
 void dan::Entity::render(Context &c) {

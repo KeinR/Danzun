@@ -6,9 +6,9 @@
 
 namespace dan::event {
     struct KeyPress {
-          keyt key;
-          keyAction action;
-          KeyMods mods;
+        keyt key;
+        keyAction action;
+        KeyMods mods;
     };
     struct MouseMove {
         // New x

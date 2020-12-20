@@ -93,6 +93,9 @@ dan::Game &dan::Engine::getGame() {
 dan::Data &dan::Engine::getData() {
     return data;
 }
+sol::state_view dan::Engine::getState() {
+    return s;
+}
 
 void dan::Engine::setGameActive(bool flag) {
     gameActive = flag;

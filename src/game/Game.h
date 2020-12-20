@@ -12,6 +12,8 @@
 
 #include <arashpartow/exprtk.hpp>
 
+#include "../win/WindowEvent.h"
+
 #include "../ui/Node.h"
 #include "../time/RealTimer.h"
 
@@ -19,6 +21,7 @@
 #include "Entity.h"
 #include "../time/Clock.h"
 #include "../api/RenderConfig.h"
+#include "Player.h"
 
 namespace dan {
     class Context;
@@ -42,6 +45,8 @@ namespace dan {
 
         RealTimer gcTimer;
         Clock clock;
+
+        Player player;
 
         std::map<std::string, Group> groups;
 

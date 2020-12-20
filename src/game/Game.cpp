@@ -3,6 +3,26 @@
 #include "../core/debug.h"
 #include "../core/Engine.h"
 
+template <typename T>
+struct PrintFunc : public exprtk::igeneric_function<T> {
+    typedef typename exprtk::igeneric_function<T>::parameter_list_t parameter_list_t;
+    typedef typename exprtk::igeneric_function<T>::generic_type generic_type;
+
+    PrintFunc()
+    : exprtk::igeneric_function<T>("S")
+    {}
+
+    inline T operator()(parameter_list_t params) {
+        typedef typename generic_type::string_view string_t;
+        string_t string(params[0]);
+        std::string str(string.begin(), string.end());
+        std::cout << str << '\n';
+        return T(0);
+    }
+};
+
+static PrintFunc<float> printFunc;
+
 dan::Game::Game(Engine &e):
     engine(&e),
     // Clean up entities every ~5 seconds
@@ -12,6 +32,11 @@ dan::Game::Game(Engine &e):
     // A little dangerous I will admit, but it really helps the flow
     globalSymbols.add_variable("t", clock.getTimeRef(), false);
     globalSymbols.add_variable("dt", clock.getDeltaTimeRef(), false);
+    globalSymbols.add_variable("px", player.getXRef());
+    globalSymbols.add_variable("py", player.getYRef());
+    globalSymbols.add_vector("pv", player.getPos().data(), player.getPos().size());
+
+    globalSymbols.add_function("print", printFunc);
 }
 
 dan::Engine &dan::Game::getEngine() const {
@@ -101,11 +126,22 @@ void dan::Game::logic(float deltaTime) {
         gcTimer.start();
     }
 
+    Window &w = engine->getWindow();
+
+    Player::dir d;
+    d.up = w.keyPressed(keyt::UP);
+    d.down = w.keyPressed(keyt::DOWN);
+    d.left = w.keyPressed(keyt::LEFT);
+    d.right = w.keyPressed(keyt::RIGHT);
+    player.move(d, deltaTime);
+
+    sol::state_view lua = engine->getState();
+
     for (entities_t::iterator it = entities.begin(); it != entities.end();) {
         if (it->isGC()) {
             it = deleteEntity(it);
         } else {
-            it->run();
+            it->run(lua);
             ++it;
         }
     }

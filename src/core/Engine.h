@@ -53,6 +53,7 @@ namespace dan {
         Window &getWindow();
         Game &getGame();
         Data &getData();
+        sol::state_view getState();
 
         void setGameActive(bool flag);
         bool isGameActive() const;

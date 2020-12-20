@@ -2,12 +2,18 @@
 
 #include "../game/Game.h"
 
+dan::api::Script::Script(): done(true) {
+}
 dan::api::Script::Script(sol::this_state l, sol::function func, sol::variadic_args pargs):
-    thread(sol::thread::create(l)),
+    Script(l, func, std::vector<sol::object>(pargs.begin(), pargs.end()))
+{
+}
+dan::api::Script::Script(sol::state_view lua, sol::function func, const std::vector<sol::object> &pargs):
+    thread(sol::thread::create(lua)),
     routine(thread.state(), func),
     timeOfNextRun(0),
     done(false),
-    args(pargs.begin(), pargs.end())
+    args(pargs)
 {
 }
 bool dan::api::Script::run(sol::this_state l) {

@@ -11,6 +11,7 @@
 
 #include "../api/RenderConfig.h"
 #include "../sprite/Renderable.h"
+#include "../api/Script.h"
 #include "LuaRef.h"
 
 namespace dan {
@@ -26,9 +27,6 @@ namespace dan {
         typedef exprtk::parser<float> parser_t;
         typedef LuaRef<api::RenderConfig> disp_t;
         typedef std::vector<std::pair<std::string, float>> constants_t;
-
-        bool f2b(float f);
-        float b2f(bool b);
 
     private:
 
@@ -58,7 +56,12 @@ namespace dan {
 
         std::set<sol::reference, cmp> refs;
 
+        api::Script script;
+
         void initEquation(const std::vector<symbolTable_t> &symbols, const constants_t &constants, const std::string &eq);
+
+        bool f2b(float f);
+        float b2f(bool b);
 
     public:
 
@@ -80,7 +83,9 @@ namespace dan {
         int getY() const;
         int getWidth() const;
         int getHeight() const;
-        int getRotation() const;
+        float getRotation() const;
+
+        void setScript(sol::state_view lua, sol::function func, const std::vector<sol::object> &params);
 
         void setParam(const std::string &name, float value);
 
@@ -93,7 +98,7 @@ namespace dan {
         bool isAutoGC();
         sol::function getHitCallback();
 
-        void run();
+        void run(sol::state_view lua);
         void render(Context &c) override;
 
     };

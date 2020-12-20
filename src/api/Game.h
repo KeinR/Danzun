@@ -7,6 +7,8 @@
 
 #include <sol/sol.hpp>
 
+#include "Entity.h"
+
 namespace dan {
     class Game;
 }
@@ -24,7 +26,7 @@ namespace dan::api {
         float getDeltaTime();
         // void loadPatternsFromFile(const std::string &path);
 
-        void spawnEntityFull(
+        Entity spawnEntityFull(
             sol::function hitCallback, sol::userdata disp, const std::string &equation,
             sol::table vars, sol::table constants,
             float x, float y, float width, float height, bool autoGC

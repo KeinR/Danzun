@@ -12,8 +12,11 @@ namespace dan::api {
         ::dan::Entity *handle;
     public:
         Entity(::dan::Entity &handle);
-        // Superfluous calls are ignored 
-        void addVars(sol::userdata patternVars);
+
+        void setScript(sol::this_state l, sol::function func, sol::variadic_args pargs);
+
+        int getX();
+        int getY();
 
         static void open(sol::state_view &lua);
     };

@@ -13,7 +13,10 @@ namespace dan::api {
         bool done;
         std::vector<sol::object> args;
     public:
-        Script(sol::this_state, sol::function func, sol::variadic_args pargs);
+        // Default constructs all and sets `done` to true, so func calls do nothing...
+        Script();
+        Script(sol::this_state l, sol::function func, sol::variadic_args pargs);
+        Script(sol::state_view lua, sol::function func, const std::vector<sol::object> &pargs);
         // Returns true if it's done
         bool run(sol::this_state l);
 

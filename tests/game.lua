@@ -39,14 +39,16 @@ function start()
     shader:setInt1("tex", 0)
 
     mat = Matrix.new()
-    mat.x = 50
-    mat.y = 50
     mat.width = 100
     mat.height = 100
 
-    bltImg = Image.new("sprites/bullet.png");
+    img = Image.new("sprites/bullet.png");
 
-    conf = RenderConfig.new(bltImg, mesh, shader);
+    conf = RenderConfig.new(img, mesh, shader);
+
+    img = Image.new("sprites/ghost.png");
+
+    entConf = RenderConfig.new(img, mesh, shader);
 
 
     bvars_data = {m = 4};
@@ -70,7 +72,7 @@ function main() -- main(e)
     -- mat:load()
     -- conf:render()
 
-    bvars_data.m = bvars_data.m + 0.1
+    -- bvars_data.m = bvars_data.m + 0.1
 
     bvars:push()
 
