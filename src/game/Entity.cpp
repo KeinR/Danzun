@@ -83,7 +83,6 @@ void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const const
     exp.register_symbol_table(symbols);
 
     for (symbolTable_t table : as) {
-        std::cout << "Reg table..." << '\n';
         exp.register_symbol_table(table);
     }
 

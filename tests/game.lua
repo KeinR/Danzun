@@ -39,8 +39,8 @@ function start()
     shader:setInt1("tex", 0)
 
     mat = Matrix.new()
-    mat.width = 100
-    mat.height = 100
+    mat.width = 30
+    mat.height = 30
 
     img = Image.new("sprites/bullet.png");
 
@@ -57,6 +57,8 @@ function start()
 
     -- script = Script.new(loadfile("test.dzs"))
     script = Script.new(loadfile("test.dzs"))
+
+    playerImg = Image.new("sprites/charge.png");
 end
 
 
@@ -77,5 +79,14 @@ function main() -- main(e)
     bvars:push()
 
     script:run()
+
+    shader:use()
+    mat.x = player:getX();
+    mat.y = player:getY();
+    mat:load()
+    playerImg:bind()
+    mesh:render()
+
+    game:testCollisions("")
 
 end

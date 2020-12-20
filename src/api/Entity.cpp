@@ -7,6 +7,11 @@
 
 dan::api::Entity::Entity(::dan::Entity &handle): handle(&handle) {
 }
+
+::dan::Entity &dan::api::Entity::getHandle() {
+    return *handle;
+}
+
 void dan::api::Entity::setScript(sol::this_state l, sol::function func, sol::variadic_args pargs) {
     handle->setScript(l, func, std::vector<sol::object>(pargs.begin(), pargs.end()));
 }

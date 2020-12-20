@@ -22,30 +22,34 @@ function spawn(x, y, vx, vy)
         },
         x, y,
         10, 10,
-        false
+        false,
+        "enemies", 0
     );
     e:setScript(function(e)
         while true do
+            local x = player:getX() - e:getX();
+            local y = player:getY() - e:getY();
+            local mag = math.sqrt(x^2 + y^2);
+            x = x / mag;
+            y = y / mag;
             game:spawnEntityFull(
                 function(other)
                     print ("nice hit!")
                 end,
                 conf,
                 [[
-                    var target[2] := { 100, 100 };
                     var v[2] := { vx, vy };
-                    var n[2] := target - p;
-                    n := n / hypot(n[0], n[1]);
-                    p := p + n * 10 * dt;
+                    p := p + v * 10 * dt;
                 ]],
                 {},
                 {
-                    vx = vx,
-                    vy = vy
+                    vx = x,
+                    vy = y
                 },
                 e:getX(), e:getY(),
                 10, 10,
-                false
+                false,
+                "enemyBullets", 0
             );
             wait(1);
         end

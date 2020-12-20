@@ -15,6 +15,7 @@
 #include "../api/PatternVars.h"
 #include "../api/RenderConfig.h"
 #include "../api/Script.h"
+#include "../api/Player.h"
 
 #include "EventCallback.h"
 
@@ -194,9 +195,11 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Entity::open(s);
     api::RenderConfig::open(s);
     api::Script::open(s);
+    api::Player::open(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);
+    s["player"] = api::Player(game.getPlayer());
     s["window"] = api::Window(window);
 
     std::cout << "libs done" << '\n';

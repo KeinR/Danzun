@@ -22,6 +22,9 @@ namespace dan {
         float getX() const;
         float getY() const;
 
+        void setX(float x);
+        void setY(float y);
+
         void move(const dir &d, float deltaTime);
     };
 }

@@ -23,8 +23,10 @@ dan::Matrix::Matrix(float x, float y, float width, float height, float rotation,
 void dan::Matrix::load(Context &c, const std::string &location) {
     glm::mat4 model(1.0f);
 
-    const float s = ndcX(x + width / 2, c.getVPWidth());
-    const float t = ndcY(y + height / 2, c.getVPHeight());
+    // const float s = ndcX(x + width / 2, c.getVPWidth());
+    // const float t = ndcY(y + height / 2, c.getVPHeight());
+    const float s = ndcX(x, c.getVPWidth());
+    const float t = ndcY(y, c.getVPHeight());
 
     model = glm::translate(model, glm::vec3(s, t, 0));
 

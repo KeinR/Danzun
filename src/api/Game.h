@@ -29,7 +29,9 @@ namespace dan::api {
         Entity spawnEntityFull(
             sol::function hitCallback, sol::userdata disp, const std::string &equation,
             sol::table vars, sol::table constants,
-            float x, float y, float width, float height, bool autoGC
+            float x, float y, float width, float height, bool autoGC,
+            const std::string &group, int renderPriority,
+            sol::object points // If not nil, assumes that hitbox is polygon. Else, circle.
         );
 
         static void open(sol::state_view &lua);

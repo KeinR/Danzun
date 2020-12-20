@@ -46,6 +46,10 @@ dan::Clock &dan::Game::getClock() {
     return clock;
 }
 
+dan::Player &dan::Game::getPlayer() {
+    return player;
+}
+
 dan::Group &dan::Game::getGroup(const std::string &name) {
     return groups[name];
 }

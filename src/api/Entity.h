@@ -13,6 +13,8 @@ namespace dan::api {
     public:
         Entity(::dan::Entity &handle);
 
+        ::dan::Entity &getHandle();
+
         void setScript(sol::this_state l, sol::function func, sol::variadic_args pargs);
 
         int getX();

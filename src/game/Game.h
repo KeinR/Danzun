@@ -66,6 +66,7 @@ namespace dan {
 
         Engine &getEngine() const;
         Clock &getClock();
+        Player &getPlayer();
 
         Group &getGroup(const std::string &name);
         void clearGroups();

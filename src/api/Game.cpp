@@ -6,6 +6,7 @@
 #include "RenderConfig.h"
 #include "../game/LuaRef.h"
 #include "PatternVars.h"
+#include "../core/debug.h"
 
 
 dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
@@ -21,16 +22,17 @@ dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
 // }
 void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
     for (std::pair<::dan::Entity*, ::dan::Entity*> &p : handle->testCollisions(groupA, groupB)) {
-        // I'll figure it out...
-        // p.first->getHitCallback().call(p.second);
-        // p.second->getHitCallback().call(p.first);
+        p.first->getHitCallback().call(::dan::api::Entity(*p.second));
+        p.second->getHitCallback().call(::dan::api::Entity(*p.first));
     }
 }
 
 dan::api::Entity dan::api::Game::spawnEntityFull(
     sol::function hitCallback, sol::userdata disp, const std::string &equation,
     sol::table vars, sol::table constants,
-    float x, float y, float width, float height, bool autoGC
+    float x, float y, float width, float height, bool autoGC,
+    const std::string &group, int renderPriority,
+    sol::object points
 ) {
     if (disp.is<RenderConfig>()) {
         std::vector<sol::userdata> deps;
@@ -61,9 +63,16 @@ dan::api::Entity dan::api::Game::spawnEntityFull(
         for (sol::userdata d : deps) {
             e.addReference(d);
         }
-        // TEMP
-        handle->submitRenderable(0, e);
-        handle->getGroup("test").pushCircle(e);
+
+        handle->submitRenderable(renderPriority, e);
+
+        Group &g = handle->getGroup(group);
+
+        if (points.get_type() == sol::type::nil) {
+            g.pushCircle(e);
+        } else {
+            DANZUN_ASSERT(false); // NOT IMPLEMENTED
+        }
 
         return ::dan::api::Entity(e);
     } else {
@@ -81,6 +90,8 @@ float dan::api::Game::getDeltaTime() {
     return handle->getClock().getDeltaTime();
 }
 
+// Static members
+
 void dan::api::Game::open(sol::state_view &lua) {
     sol::usertype<Game> type = lua.new_usertype<Game>("Game");
 
@@ -90,5 +101,7 @@ void dan::api::Game::open(sol::state_view &lua) {
     type["getTime"] = &Game::getTime;
     type["getDeltaTime"] = &Game::getDeltaTime;
     type["spawnEntityFull"] = &Game::spawnEntityFull;
+    type["submitRenderable"] = &Game::spawnEntityFull;
+    type["addCircle"] = &Game::spawnEntityFull;
 
 }

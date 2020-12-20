@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-dan::Player::Player(): pos{0, 0}, speed(5) {
+dan::Player::Player(): pos{0, 0}, speed(30) {
 }
 float &dan::Player::getXRef() {
     return pos[0];
@@ -18,6 +18,13 @@ float dan::Player::getX() const {
 }
 float dan::Player::getY() const {
     return pos[1];
+}
+
+void dan::Player::setX(float x) {
+    pos[0] = x;
+}
+void dan::Player::setY(float y) {
+    pos[1] = y;
 }
 
 void dan::Player::move(const dir &d, float deltaTime) {
