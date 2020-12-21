@@ -70,6 +70,7 @@ namespace dan {
         Engine &getEngine() const;
         Clock &getClock();
         Player &getPlayer();
+        Entity::symbolTable_t &getGlobalSymbols();
 
         Group &getGroup(const std::string &name);
         void clearGroups();

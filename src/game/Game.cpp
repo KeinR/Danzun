@@ -52,6 +52,10 @@ dan::Player &dan::Game::getPlayer() {
     return player;
 }
 
+dan::Entity::symbolTable_t &dan::Game::getGlobalSymbols() {
+    return globalSymbols;
+}
+
 dan::Group &dan::Game::getGroup(const std::string &name) {
     return groups[name];
 }

@@ -17,6 +17,7 @@
 #include "../api/Script.h"
 #include "../api/Player.h"
 #include "../api/Effect.h"
+#include "../api/Pattern.h"
 
 #include "EventCallback.h"
 
@@ -222,6 +223,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Script::open(s);
     api::Player::open(s);
     api::Effect::open(s);
+    api::Pattern::open(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);

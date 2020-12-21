@@ -16,7 +16,7 @@ namespace dan {
         sol::state_view lua;
     public:
         Effect(sol::state_view lua, sol::table masterObject, sol::function callback);
-        void spawn(sol::table table);
+        void spawn(sol::table obj);
         void render(Context &c) override;
     };
 }

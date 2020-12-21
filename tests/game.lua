@@ -38,6 +38,9 @@ function start()
     shader = Shader.new("shaders/sprite.vert", "shaders/sprite.frag")
     shader:setInt1("tex", 0)
 
+    circleShader = Shader.new("shaders/circle.vert", "shaders/circle.frag");
+    shader:setInt1("tex", 0)
+
     mat = Matrix.new()
     mat.width = 30
     mat.height = 30
@@ -132,27 +135,24 @@ function start()
         1
     )
 
-    effect:spawn({
-        runLogic = function(self)
-            self.x = player:getX()
-            self.y = player:getY()
-            self.width = self.width - game:getDeltaTime() * 10
-            self.height = self.height - game:getDeltaTime() * 10
-            self.rotation = self.rotation + game:getDeltaTime()
-        end,
-        x = 100,
-        y = 100,
-        width = 150,
-        height = 150,
-        rotation = 0
-    })
+    effectPattern = Pattern.new([[
+        x := px;
+        y := py;
+        height -= dt * 10;
+        width -= dt * 10;
+        rotation += dt;
+    ]])
+    effectPattern.width = 150
+    effectPattern.height = 150
+    effectPattern.rotation = 0
+
+    effect:spawn(effectPattern)
 end
 
 function magicCircleEffect(m, lst)
     for i,o in ipairs(lst) do
 
-        o:runLogic()
-
+        o:run()
 
         local vertices = {
             -- x, y, tex x, tex y
@@ -222,7 +222,7 @@ function magicCircleEffect(m, lst)
         mat.height = o.height
         mat.rotation = o.rotation
 
-        shader:use()
+        circleShader:use()
         mat:load()
         magicCircleImg:bind()
         m:render()

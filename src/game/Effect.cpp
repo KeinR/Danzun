@@ -5,8 +5,8 @@
 dan::Effect::Effect(sol::state_view lua, sol::table masterObject, sol::function callback):
     masterObject(masterObject), callback(callback), lua(lua) {
 }
-void dan::Effect::spawn(sol::table table) {
-    objects.push_back(table);
+void dan::Effect::spawn(sol::table obj) {
+    objects.push_back(obj);
 }
 void dan::Effect::render(Context &c) {
     sol::table params = lua.create_table();
