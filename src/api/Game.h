@@ -8,6 +8,7 @@
 #include <sol/sol.hpp>
 
 #include "Entity.h"
+#include "Effect.h"
 
 namespace dan {
     class Game;

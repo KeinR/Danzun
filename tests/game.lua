@@ -123,6 +123,111 @@ function start()
     --         "enemyBullets", 0
     --     );
     -- end
+
+    magicCircleImg = Image.new("magic circle.png")
+
+    effect = Effect.new(
+        {},
+        magicCircleEffect,
+        1
+    )
+
+    effect:spawn({
+        runLogic = function(self)
+            self.x = player:getX()
+            self.y = player:getY()
+            self.width = self.width - game:getDeltaTime() * 10
+            self.height = self.height - game:getDeltaTime() * 10
+            self.rotation = self.rotation + game:getDeltaTime()
+        end,
+        x = 100,
+        y = 100,
+        width = 150,
+        height = 150,
+        rotation = 0
+    })
+end
+
+function magicCircleEffect(m, lst)
+    for i,o in ipairs(lst) do
+
+        o:runLogic()
+
+
+        local vertices = {
+            -- x, y, tex x, tex y
+            -- (counter clockwise)
+        }
+        local indices = {}
+        -- Generate annulus
+        local iterations = 60
+        local step = 2 * math.pi / iterations
+        local texStep = 1 / iterations
+        -- Next two MUST add up to 1
+        local radius = 0.6
+        local thickness = 0.4
+        local stride = 4
+        local totalVertices = iterations * 2
+        for i=0,iterations do
+            -- Vertices
+
+            local radians = step * i
+            local ix = radius * math.cos(radians)
+            local iy = radius * math.sin(radians)
+            -- Could replace r + t with 1
+            local ox = (radius + thickness) * math.cos(radians)
+            local oy = (radius + thickness) * math.sin(radians)
+            local ixt = i * texStep
+            local iyt = 0
+            local oxt = ixt
+            local oyt = 1
+            -- Positional
+            table.insert(vertices, ix)
+            table.insert(vertices, iy)
+            -- Texture
+            table.insert(vertices, ixt)
+            table.insert(vertices, iyt)
+            -- Positional
+            table.insert(vertices, ox)
+            table.insert(vertices, oy)
+            -- Texture
+            table.insert(vertices, oxt)
+            table.insert(vertices, oyt)
+
+            -- Indices
+
+            local tv = i * 2
+
+            -- Inner (close, far, next close)
+            table.insert(indices, tv)
+            table.insert(indices, (tv+1) % totalVertices)
+            table.insert(indices, (tv+2) % totalVertices)
+
+            -- Inner (next close, far, next far)
+            table.insert(indices, (tv+2) % totalVertices)
+            table.insert(indices, (tv+1) % totalVertices)
+            table.insert(indices, (tv+3) % totalVertices)
+
+        end
+
+        local m = Mesh.new()
+        m:setVertices(vertices)
+        m:setIndices(indices)
+        m:setParam(0, 2, 4, 0)
+        m:setParam(1, 2, 4, 2)
+        local mat = Matrix.new()
+        mat.x = o.x
+        mat.y = o.y
+        mat.width = o.width
+        mat.height = o.height
+        mat.rotation = o.rotation
+
+        shader:use()
+        mat:load()
+        magicCircleImg:bind()
+        m:render()
+    end
+
 end
 
 

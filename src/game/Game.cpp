@@ -107,6 +107,21 @@ void dan::Game::removeRenderable(Renderable *rend) {
     }
 }
 
+dan::Effect &dan::Game::createEffect(sol::table masterObject, sol::function callback) {
+    effects.emplace_back(engine->getState(), masterObject, callback);
+    return effects.back();
+}
+void dan::Game::deleteEffect(Effect *e) {
+    for (effects_t::iterator it = effects.begin(); it != effects.end();) {
+        if (&(*it) == e) {
+            it = effects.erase(it);
+        } else {
+            ++it;
+        }
+    }
+    removeRenderable(e);
+}
+
 void dan::Game::setWidth(int w) {
     width = w;
 }

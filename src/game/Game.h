@@ -22,6 +22,7 @@
 #include "../time/Clock.h"
 #include "../api/RenderConfig.h"
 #include "Player.h"
+#include "Effect.h"
 
 namespace dan {
     class Context;
@@ -35,6 +36,7 @@ namespace dan {
         typedef std::vector<std::pair<Entity*, Entity*>> collisionResult_t;
         typedef std::list<Entity> entities_t;
         typedef std::multimap<int, Renderable*, std::greater<int>> renderQueue_t;
+        typedef std::list<Effect> effects_t;
     private:
         // Not used internally - exlcusively for use by
         // client applications
@@ -54,6 +56,7 @@ namespace dan {
         std::map<std::string, std::string> stages;
 
         entities_t entities;
+        effects_t effects;
         renderQueue_t renderQueue;
 
         Entity::symbolTable_t globalSymbols;
@@ -81,6 +84,9 @@ namespace dan {
         // REF MUST STAY VALID
         void submitRenderable(int priority, Renderable &rend);
         void removeRenderable(Renderable *rend);
+
+        Effect &createEffect(sol::table masterObject, sol::function callback);
+        void deleteEffect(Effect *e);
 
         void addStage(const std::string &name, const std::string &path);
         std::string &getStage(const std::string &name);
