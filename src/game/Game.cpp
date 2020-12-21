@@ -25,6 +25,8 @@ static PrintFunc<float> printFunc;
 
 dan::Game::Game(Engine &e):
     engine(&e),
+    width(e.getWindow().getWidth()),
+    height(e.getWindow().getHeight()),
     // Clean up entities every ~5 seconds
     // (Not happening much, as there aren't many entities...)
     gcTimer(5000)
@@ -137,7 +139,7 @@ void dan::Game::logic(float deltaTime) {
     d.down = w.keyPressed(keyt::DOWN);
     d.left = w.keyPressed(keyt::LEFT);
     d.right = w.keyPressed(keyt::RIGHT);
-    player.move(d, deltaTime);
+    player.move(*this, d, deltaTime);
 
     sol::state_view lua = engine->getState();
 

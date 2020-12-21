@@ -15,6 +15,8 @@ namespace dan::api {
 
         void setX(float x);
         void setY(float y);
+        void setWidth(float w);
+        void setHeight(float h);
 
         float getX();
         float getY();

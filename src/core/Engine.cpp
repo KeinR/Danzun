@@ -21,6 +21,11 @@
 
 #include <iostream>
 
+
+#include <chrono>
+#include <thread>
+
+
 dan::Engine::Engine():
     window("Danzun", 500, 500, 0),
     rc(this),
@@ -128,6 +133,16 @@ void dan::Engine::run() {
     float start = glfwGetTime();
     float deltaTime = 0;
 
+// #define DANZUN_FPS_COUNTER 1
+
+
+#ifdef DANZUN_FPS_COUNTER
+    int sampleSize = 100;
+    float secondsTaken = 0;
+    int framesElapsed = 0;
+    Window::setSwapInterval(0);
+#endif
+
     while (!window.shouldClose()) {
         rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
@@ -148,6 +163,15 @@ void dan::Engine::run() {
 
         const float time = glfwGetTime();
         deltaTime = (time - start) * gameSpeed;
+
+#ifdef DANZUN_FPS_COUNTER
+        secondsTaken += deltaTime;
+        framesElapsed++;
+        if (framesElapsed > sampleSize) {
+            std::cout << "-- FPS = " << (framesElapsed / secondsTaken) << '\n' << std::flush;
+        }
+#endif
+
         start = time;
         rc.getClock().pushDeltaTime(deltaTime);
         if (gameActive) {

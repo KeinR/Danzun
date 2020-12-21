@@ -5,7 +5,7 @@ end
 
 function spawn(x, y, vx, vy)
     local e = game:spawnEntityFull(
-        function(other)
+        function(self, other)
             print ("nice hit!")
         end,
         entConf,
@@ -33,7 +33,7 @@ function spawn(x, y, vx, vy)
             x = x / mag;
             y = y / mag;
             game:spawnEntityFull(
-                function(other)
+                function(self, other)
                     print ("nice hit!")
                 end,
                 conf,

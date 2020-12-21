@@ -4,9 +4,16 @@
 #include <array>
 
 namespace dan {
+    class Game;
+}
+
+namespace dan {
     class Player {
         std::array<float, 2> pos;
         float speed;
+        // Only set externally and used in calculations.
+        float semiMinor; // y
+        float semiMajor; // x
     public:
         struct dir {
             bool up;
@@ -24,8 +31,10 @@ namespace dan {
 
         void setX(float x);
         void setY(float y);
+        void setWidth(float w);
+        void setHeight(float h);
 
-        void move(const dir &d, float deltaTime);
+        void move(Game &g, const dir &d, float deltaTime);
     };
 }
 

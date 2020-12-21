@@ -22,8 +22,8 @@ dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
 // }
 void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
     for (std::pair<::dan::Entity*, ::dan::Entity*> &p : handle->testCollisions(groupA, groupB)) {
-        p.first->getHitCallback().call(::dan::api::Entity(*p.second));
-        p.second->getHitCallback().call(::dan::api::Entity(*p.first));
+        p.first->getHitCallback().call(::dan::api::Entity(*p.first), ::dan::api::Entity(*p.second));
+        p.second->getHitCallback().call(::dan::api::Entity(*p.second), ::dan::api::Entity(*p.first));
     }
 }
 

@@ -59,6 +59,70 @@ function start()
     script = Script.new(loadfile("test.dzs"))
 
     playerImg = Image.new("sprites/charge.png");
+
+    pyrConf = RenderConfig.new(playerImg, mesh, shader);
+
+
+
+
+    game:spawnEntityFull(
+        function(self, other)
+            print ("player hit!")
+        end,
+        pyrConf,
+        [[
+            x := px;
+            y := py;
+        ]],
+        {},
+        {},
+        0, 0,
+        30, 30,
+        false,
+        "player", 0
+    );
+
+
+    -- for y=0,400,5 do
+    --     game:spawnEntityFull(
+    --         function(self, other)
+    --             print ("something hit...")
+    --         end,
+    --         conf,
+    --         [[
+    --             if (t - ti < 5) {
+    --                 x += sgn(px - x) * dt * 10;
+    --             } else {
+    --                 y += sgn(px - y) * dt * 10;
+    --             }
+    --         ]],
+    --         {}, {},
+    --         300, y,
+    --         10, 10,
+    --         false,
+    --         "enemyBullets", 0
+    --     );
+    -- end
+    -- for y=0,400,5 do
+    --     game:spawnEntityFull(
+    --         function(self, other)
+    --             print ("something hit...")
+    --         end,
+    --         conf,
+    --         [[
+    --             if (t - ti < 5) {
+    --                 x += sgn(px - x) * dt * 10;
+    --             } else {
+    --                 y += sgn(px - y) * dt * 10;
+    --             }
+    --         ]],
+    --         {}, {},
+    --         200, y,
+    --         10, 10,
+    --         false,
+    --         "enemyBullets", 0
+    --     );
+    -- end
 end
 
 
@@ -76,17 +140,18 @@ function main() -- main(e)
 
     -- bvars_data.m = bvars_data.m + 0.1
 
-    bvars:push()
+    -- bvars:push()
 
-    script:run()
+    -- script:run()
 
-    shader:use()
-    mat.x = player:getX();
-    mat.y = player:getY();
-    mat:load()
-    playerImg:bind()
-    mesh:render()
+    -- shader:use()
+    -- mat.x = player:getX();
+    -- mat.y = player:getY();
+    -- mat:load()
+    -- playerImg:bind()
+    -- mesh:render()
 
-    game:testCollisions("")
+    game:testCollisions("player", "enemyBullets")
+    game:testCollisions("enemies", "playerBullets")
 
 end
