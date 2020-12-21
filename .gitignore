@@ -38,3 +38,7 @@ build/
 GPATH
 GRTAGS
 GTAGS
+
+# Misc top-level test files
+/*.cpp
+/*.lua
