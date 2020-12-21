@@ -94,10 +94,10 @@ void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const const
 }
 
 bool dan::Entity::f2b(float f) {
-    return f > 0;
+    return static_cast<bool>(f);
 }
 float dan::Entity::b2f(bool b) {
-    return b ? 1 : -1;
+    return static_cast<float>(b);
 }
 
 bool dan::Entity::isGC() {

@@ -36,10 +36,11 @@ function start()
     mesh:setParam(0, 2, 4, 0)
     mesh:setParam(1, 2, 4, 2)
     shader = Shader.new("shaders/sprite.vert", "shaders/sprite.frag")
-    shader:setInt1("tex", 0)
+    shader:setInt("tex", 0)
 
     circleShader = Shader.new("shaders/circle.vert", "shaders/circle.frag");
-    shader:setInt1("tex", 0)
+    circleShader:setInt("tex", 0)
+    circleShader:setFloat("color", 1, 1, 1, 1)
 
     mat = Matrix.new()
     mat.width = 30
@@ -141,6 +142,9 @@ function start()
         height -= dt * 10;
         width -= dt * 10;
         rotation += dt;
+        if (height < 100) {
+            done := true;
+        }
     ]])
     effectPattern.width = 150
     effectPattern.height = 150

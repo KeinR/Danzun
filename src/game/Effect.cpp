@@ -12,7 +12,18 @@ void dan::Effect::render(Context &c) {
     sol::table params = lua.create_table();
     for (objects_t::iterator it = objects.begin(); it < objects.end();) {
         auto p = (*it)["done"];
-        if (p.get_type() == sol::type::boolean && p.get<bool>()) {
+        bool done;
+        switch (p.get_type()) {
+            case sol::type::boolean:
+                done = p.get<bool>();
+                break;
+            case sol::type::number:
+                done = static_cast<bool>(p.get<float>());
+                break;
+            default:
+                done = false;
+        }
+        if (done) {
             it = objects.erase(it);
         } else {
             params.add(*it);

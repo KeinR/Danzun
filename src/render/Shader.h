@@ -42,9 +42,18 @@ namespace dan {
         program_t getHandle() const;
 
         // NB: Binds this shader
+
         void setMatrix4fv(const std::string &name, const float *data);
-        void setInt1(const std::string &name, int value);
-        void set4fv(const std::string &name, const float *values);
+
+        void set1i(const std::string &name, int a);
+        void set2i(const std::string &name, int a, int b);
+        void set3i(const std::string &name, int a, int b, int c);
+        void set4i(const std::string &name, int a, int b, int c, int d);
+
+        void set1f(const std::string &name, float a);
+        void set2f(const std::string &name, float a, float b);
+        void set3f(const std::string &name, float a, float b, float c);
+        void set4f(const std::string &name, float a, float b, float c, float d);
     };
 }
 

@@ -11,7 +11,6 @@
 #include "../win/Window.h"
 #include "../win/WindowEvent.h"
 #include "../game/Game.h"
-#include "../render/Target.h"
 
 namespace dan {
     class Group;

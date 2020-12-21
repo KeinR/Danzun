@@ -166,13 +166,39 @@ void dan::Shader::setMatrix4fv(const std::string &name, const float *data) {
     use();
     glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, data);
 }
-void dan::Shader::setInt1(const std::string &name, int value) {
+
+void dan::Shader::set1i(const std::string &name, int a) {
     use();
-    glUniform1i(getUniform(name), value);
+    glUniform1i(getUniform(name), a);
 }
-void dan::Shader::set4fv(const std::string &name, const float *values) {
+void dan::Shader::set2i(const std::string &name, int a, int b) {
     use();
-    glUniform4fv(getUniform(name), 1, values);
+    glUniform2i(getUniform(name), a, b);
+}
+void dan::Shader::set3i(const std::string &name, int a, int b, int c) {
+    use();
+    glUniform3i(getUniform(name), a, b, c);
+}
+void dan::Shader::set4i(const std::string &name, int a, int b, int c, int d) {
+    use();
+    glUniform4i(getUniform(name), a, b, c, d);
+}
+
+void dan::Shader::set1f(const std::string &name, float a) {
+    use();
+    glUniform1f(getUniform(name), a);
+}
+void dan::Shader::set2f(const std::string &name, float a, float b) {
+    use();
+    glUniform2f(getUniform(name), a, b);
+}
+void dan::Shader::set3f(const std::string &name, float a, float b, float c) {
+    use();
+    glUniform3f(getUniform(name), a, b, c);
+}
+void dan::Shader::set4f(const std::string &name, float a, float b, float c, float d) {
+    use();
+    glUniform4f(getUniform(name), a, b, c, d);
 }
 
 // Static members
