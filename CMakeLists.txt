@@ -16,26 +16,23 @@ file(COPY "data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_library(danzun ${sources} ${libs})
 
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-# set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-add_subdirectory(extern/sub/glfw)
-add_subdirectory(extern/sub/lua)
-
-find_package(glm REQUIRED)
+find_package(glm 0.9 REQUIRED)
+find_package(glfw3 3.2 REQUIRED)
+find_package(Lua53 REQUIRED)
+find_package(OpenAL 1.19 REQUIRED)
 
 target_include_directories(danzun
     PUBLIC "extern"
     PUBLIC "${GLFW_INCLUDE_DIRS}"
     PUBLIC "${GLM_INCLUDE_DIRS}"
+    PUBLIC "${LUA53_INCLUDE_DIR}"
 )
 
 target_link_libraries(danzun
     glfw
-    lua_static
+    ${LUA53_LIBRARIES}
     stdc++fs
 )
 

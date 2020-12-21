@@ -16,9 +16,3 @@ bool dan::KeyMods::alt() const {
 bool dan::KeyMods::super() const {
     return (mods & (int)keyMod::SUPER) == (int)keyMod::SUPER;
 }
-bool dan::KeyMods::capsLock() const {
-    return (mods & (int)keyMod::CAPS_LOCK) == (int)keyMod::CAPS_LOCK;
-}
-bool dan::KeyMods::numLock() const {
-    return (mods & (int)keyMod::NUM_LOCK) == (int)keyMod::NUM_LOCK;
-}

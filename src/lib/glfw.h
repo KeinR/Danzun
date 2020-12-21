@@ -1,7 +1,6 @@
 #ifndef DANZUN_GLFW_WRAPPER_H_INCLUDED
 #define DANZUN_GLFW_WRAPPER_H_INCLUDED
 
-#define GLFW_DLL 1
 #include "opengl.h"
 #include <GLFW/glfw3.h>
 

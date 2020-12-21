@@ -10,8 +10,6 @@ namespace dan {
         bool control() const;
         bool alt() const;
         bool super() const;
-        bool capsLock() const;
-        bool numLock() const;
     };
 }
 

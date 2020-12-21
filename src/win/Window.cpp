@@ -104,12 +104,6 @@ void dan::Window::toggleInputMode(inputMode mode, bool toggle) {
         case STICKY_MOUSE_BUTTONS:
             m = GLFW_STICKY_MOUSE_BUTTONS;
             break;
-        case LOCK_KEYS_MODS:
-            m = GLFW_LOCK_KEY_MODS;
-            break;
-        case RAW_MOUSE_MOTION:
-            m = GLFW_RAW_MOUSE_MOTION;
-            break;
         default:
             return;
     }

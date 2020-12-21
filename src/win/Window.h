@@ -25,9 +25,7 @@ namespace dan {
 
         enum inputMode {
             STICKY_KEYS,
-            STICKY_MOUSE_BUTTONS,
-            LOCK_KEYS_MODS,
-            RAW_MOUSE_MOTION
+            STICKY_MOUSE_BUTTONS
         };
         enum cursorMode {
             CURSOR_NORMAL,

@@ -155,9 +155,7 @@ namespace dan {
         SHIFT = GLFW_MOD_SHIFT,
         CONTROL = GLFW_MOD_SHIFT,
         ALT = GLFW_MOD_ALT,
-        SUPER = GLFW_MOD_SUPER,
-        CAPS_LOCK = GLFW_MOD_CAPS_LOCK,
-        NUM_LOCK = GLFW_MOD_NUM_LOCK
+        SUPER = GLFW_MOD_SUPER
     };
 }
 
