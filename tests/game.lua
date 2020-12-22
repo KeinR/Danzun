@@ -42,6 +42,10 @@ function start()
     circleShader:setInt("tex", 0)
     circleShader:setFloat("color", 1, 1, 1, 1)
 
+    textShader = Shader.new("shaders/text.vert", "shaders/text.frag");
+    textShader:setInt("atlas", 0)
+    textShader:setFloat("color", 0, 0, 0, 1)
+
     mat = Matrix.new()
     mat.width = 30
     mat.height = 30
@@ -67,6 +71,7 @@ function start()
     pyrConf = RenderConfig.new(playerImg, mesh, shader);
 
 
+    font = BffFont.new("consolas18.bff")
 
 
     game:spawnEntityFull(
@@ -230,6 +235,23 @@ function magicCircleEffect(m, lst)
         mat:load()
         magicCircleImg:bind()
         m:render()
+
+
+
+        local text = "MAGIC CIRCLE"
+
+        local fmat = Matrix.new()
+        fmat.x = o.x
+        fmat.y = o.y - 10
+        fmat.width = font:getStrWidth(text)
+        fmat.height = font:getHeight()
+
+        local fm = font:makeMesh(text)
+
+        textShader:use()
+        fmat:load()
+        font:bind()
+        fm:render()
     end
 
 end

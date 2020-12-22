@@ -7,11 +7,11 @@
 
 #include "../core/error.h"
 #include "../core/debug.h"
-#include "../render/Color.h"
 #include "../render/Mesh.h"
-#include "../lib/opengl.h"
 
-static constexpr int VERTEX_SIZE = 8;
+// static constexpr int VERTEX_SIZE = 8;
+// Knock off colors and we get...
+static constexpr int VERTEX_SIZE = 4;
 
 
 static int readInt(std::ifstream &file) {
@@ -117,7 +117,7 @@ void dan::BffFont::bindAtlas() {
     atlas.bind();
 }
 
-void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsigned int> &indices, const std::string &str, const Color &color) const {
+void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsigned int> &indices, const std::string &str) const {
     DANZUN_ASSERT(str.size() > 0);
 
     vertices.reserve(vertices.size() + str.size() * 4 * 2 + str.size() * 4);
@@ -157,9 +157,13 @@ void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsig
             for (int i = 0; i < 4; i++) {
                 vertices.insert(vertices.end(), {
                     quad[i * 2] + x, quad[i * 2 + 1] + y,
-                    texBase[i * 2] + tx, texBase[i * 2 + 1] + ty,
-                    color[0], color[1], color[2], color[3]
+                    texBase[i * 2] + tx, texBase[i * 2 + 1] + ty//,
+                    // color[0], color[1], color[2], color[3]
                 });
+                // vertices.insert(vertices.end(), {
+                //     quad[i * 2 + 1] + y, quad[i * 2] + x,
+                //     texBase[i * 2 + 1] + ty, texBase[i * 2] + tx,
+                // });
             }
             indices.insert(indices.end(), {
                 vert + 0, vert + 1, vert + 2,
@@ -171,7 +175,7 @@ void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsig
     }
 }
 
-dan::Mesh dan::BffFont::genMesh(const std::string &str, const Color &color) const {
+dan::Mesh dan::BffFont::genMesh(const std::string &str) const {
     Mesh mesh;
 
     if (str.size() == 0) {
@@ -180,13 +184,13 @@ dan::Mesh dan::BffFont::genMesh(const std::string &str, const Color &color) cons
 
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
-    getRenderData(vertices, indices, str, color);
+    getRenderData(vertices, indices, str);
 
     mesh.setVertices(vertices.size(), vertices.data());
     mesh.setIndices(indices.size(), indices.data());
     mesh.setParam(0, 2, VERTEX_SIZE, 0); // Position
     mesh.setParam(1, 2, VERTEX_SIZE, 2); // Texture coords
-    mesh.setParam(2, 4, VERTEX_SIZE, 4); // Color
+    // mesh.setParam(2, 4, VERTEX_SIZE, 4); // Color
 
     return mesh;
 }

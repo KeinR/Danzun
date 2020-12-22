@@ -16,8 +16,8 @@ void dan::api::Matrix::open(sol::state_view &lua) {
 
     type["x"] = &Matrix::x;
     type["y"] = &Matrix::y;
-    type["width"] = &Matrix::height;
-    type["height"] = &Matrix::width;
+    type["width"] = &Matrix::width;
+    type["height"] = &Matrix::height;
     type["rotation"] = &Matrix::rotation;
     type["load"] = &Matrix::load;
 }

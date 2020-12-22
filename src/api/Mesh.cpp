@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
 #include <vector>
+#include <utility>
 
 template<typename T>
 std::vector<T> getTableData(sol::table data) {
@@ -15,6 +16,10 @@ std::vector<T> getTableData(sol::table data) {
 
 dan::api::Mesh::Mesh() {
 }
+
+dan::api::Mesh::Mesh(::dan::Mesh &&omesh): mesh(std::move(omesh)) {
+}
+
 void dan::api::Mesh::setVertices(sol::table rawData) {
     std::vector<float> data = getTableData<float>(rawData);
     mesh.setVertices(data.size(), data.data());

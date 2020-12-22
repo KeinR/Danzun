@@ -10,6 +10,7 @@ namespace dan::api {
         ::dan::Mesh mesh;
     public:
         Mesh();
+        Mesh(::dan::Mesh &&omesh);
         void setVertices(sol::table rawData);
         void setIndices(sol::table rawData);
         void setParam(unsigned int index, int size, int stride, int offset);
