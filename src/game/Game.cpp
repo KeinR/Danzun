@@ -75,47 +75,28 @@ dan::Game::collisionResult_t dan::Game::testCollisions(const std::string &a, con
     return result;
 }
 
-dan::Game::entities_t::iterator dan::Game::deleteEntity(const entities_t::iterator &it) {
-    Entity *ptr = &(*it);
-    // Will only be in one collision group, however arbitrary normal groups
-    for (auto &p : groups) {
-        if (p.second.erase(ptr)) {
-            break;
-        }
-    }
-    removeRenderable(ptr);
-    return entities.erase(it);
-}
-
-dan::Entity &dan::Game::addEntity(
+dan::Game::entity_t dan::Game::addEntity(
     sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation,
     const std::vector<Entity::symbolTable_t> &symbols, const Entity::constants_t &constants,
     float x, float y, float width, float height, bool autoGC)
 {
     std::vector<Entity::symbolTable_t> s = symbols;
     s.push_back(globalSymbols);
-    entities.emplace_back(*this, hitCallback, disp, equation, s, constants, x, y, width, height, autoGC);
+    entities.push_back(std::make_shared<Entity>(*this, hitCallback, disp, equation, s, constants, x, y, width, height, autoGC));
     return entities.back();
 }
 
-void dan::Game::submitRenderable(int priority, Renderable &rend) {
-    renderQueue.insert({priority, &rend});
+void dan::Game::submitRenderable(int priority, const renderable_t &rend) {
+    renderQueue.insert({priority, rend});
 }
 void dan::Game::removeRenderable(Renderable *rend) {
     for (renderQueue_t::iterator it = renderQueue.begin(); it != renderQueue.end();) {
-        if (it->second == rend) {
+        if (it->second.lock().get() == rend) {
             it = renderQueue.erase(it);
         } else {
             ++it;
         }
     }
-}
-
-void dan::Game::addEffect(const std::weak_ptr<Effect> &e, int renderPriority) {
-    Renderable *r = e.lock().get();
-    DANZUN_ASSERT(r != nullptr);
-    effects.push_back({e, r});
-    submitRenderable(renderPriority, *r);
 }
 
 void dan::Game::setWidth(int w) {
@@ -155,10 +136,11 @@ void dan::Game::logic(float deltaTime) {
     sol::state_view lua = engine->getState();
 
     for (entities_t::iterator it = entities.begin(); it != entities.end();) {
-        if (it->isGC()) {
-            it = deleteEntity(it);
+        entity_t &e = *it;
+        if (e->isGC()) {
+            it = entities.erase(it);
         } else {
-            it->run(lua);
+            e->run(lua);
             ++it;
         }
     }
@@ -170,10 +152,10 @@ void dan::Game::logic(float deltaTime) {
 
 void dan::Game::gc() {
     for (entities_t::iterator it = entities.begin(); it != entities.end();) {
-        if (it->isAutoGC()) {
-            if (false) {
-                // TODO
-                it = deleteEntity(it);
+        entity_t &e = *it;
+        if (e->isAutoGC()) {
+            if (false) { // TEMP - TODO: what conditions?
+                it = entities.erase(it);
             } else {
                 ++it;
             }
@@ -184,17 +166,14 @@ void dan::Game::gc() {
 }
 
 void dan::Game::render(Context &c) {
-    for (effects_t::iterator it = effects.begin(); it < effects.end();) {
-        if (it->first.expired()) {
-            removeRenderable(it->second);
-            it = effects.erase(it);
-        } else {
+    for (renderQueue_t::iterator it = renderQueue.begin(); it != renderQueue.end();) {
+        renderableLock_t r = it->second.lock();
+        if (r) {
+            r->render(c);
             ++it;
+        } else {
+            it = renderQueue.erase(it);
         }
-    }
-
-    for (auto &p : renderQueue) {
-        p.second->render(c);
     }
 }
 

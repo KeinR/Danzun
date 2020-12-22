@@ -4,7 +4,6 @@
 
 #include "../game/Game.h"
 #include "RenderConfig.h"
-#include "../game/LuaRef.h"
 #include "PatternVars.h"
 #include "../core/debug.h"
 
@@ -18,63 +17,58 @@ void dan::api::Game::setSize(int width, int height) {
 }
 
 void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
-    for (std::pair<::dan::Entity*, ::dan::Entity*> &p : handle->testCollisions(groupA, groupB)) {
-        p.first->getHitCallback().call(::dan::api::Entity(*p.first), ::dan::api::Entity(*p.second));
-        p.second->getHitCallback().call(::dan::api::Entity(*p.second), ::dan::api::Entity(*p.first));
+    for (std::pair<::dan::Game::entity_t, ::dan::Game::entity_t> &p : handle->testCollisions(groupA, groupB)) {
+        p.first->getHitCallback().call(::dan::api::Entity(p.first), ::dan::api::Entity(p.second));
+        p.second->getHitCallback().call(::dan::api::Entity(p.second), ::dan::api::Entity(p.first));
     }
 }
 
 dan::api::Entity dan::api::Game::spawnEntityFull(
-    sol::function hitCallback, sol::userdata disp, const std::string &equation,
+    sol::function hitCallback, const std::shared_ptr<RenderConfig> &disp, const std::string &equation,
     sol::table vars, sol::table constants,
     float x, float y, float width, float height, bool autoGC,
     const std::string &group, int renderPriority,
     sol::object points
 ) {
-    if (disp.is<RenderConfig>()) {
-        std::vector<sol::userdata> deps;
-        std::vector<PatternVars::symTable_t> tables;
-        deps.reserve(vars.size());
-        tables.reserve(vars.size());
-        for (auto &d : vars) {
-            if (d.second.is<PatternVars>()) {
-                deps.push_back(d.second);
-                tables.push_back(d.second.as<PatternVars>().getTable());
-            }
+    std::vector<sol::userdata> deps;
+    std::vector<PatternVars::symTable_t> tables;
+    deps.reserve(vars.size());
+    tables.reserve(vars.size());
+    for (auto &d : vars) {
+        if (d.second.is<PatternVars>()) {
+            deps.push_back(d.second);
+            tables.push_back(d.second.as<PatternVars>().getTable());
         }
-
-        std::vector<std::pair<std::string, float>> csts;
-        for (auto p : constants) {
-            if (p.first.get_type() == sol::type::string &&
-                p.second.get_type() == sol::type::number)
-            {
-                csts.push_back({p.first.as<std::string>(), p.second.as<float>()});
-            }
-        }
-
-        ::dan::Entity &e = handle->addEntity(
-            hitCallback, LuaRef<RenderConfig>(disp), equation,
-            tables, csts,
-            x, y, width, height, autoGC
-        );
-        for (sol::userdata d : deps) {
-            e.addReference(d);
-        }
-
-        handle->submitRenderable(renderPriority, e);
-
-        Group &g = handle->getGroup(group);
-
-        if (points.get_type() == sol::type::nil) {
-            g.pushCircle(e);
-        } else {
-            DANZUN_ASSERT(false); // NOT IMPLEMENTED
-        }
-
-        return ::dan::api::Entity(e);
-    } else {
-        throw std::runtime_error("Expected RenderConfig as second arg");
     }
+
+    std::vector<std::pair<std::string, float>> csts;
+    for (auto p : constants) {
+        if (p.first.get_type() == sol::type::string &&
+            p.second.get_type() == sol::type::number)
+        {
+            csts.push_back({p.first.as<std::string>(), p.second.as<float>()});
+        }
+    }
+
+    ::dan::Game::entity_t e = handle->addEntity(
+        hitCallback, disp, equation,
+        tables, csts,
+        x, y, width, height, autoGC
+    );
+
+    // TEMP
+
+    handle->submitRenderable(renderPriority, e);
+
+    Group &g = handle->getGroup(group);
+
+    if (points.get_type() == sol::type::nil) {
+        g.pushCircle(e);
+    } else {
+        DANZUN_ASSERT(false); // NOT IMPLEMENTED
+    }
+
+    return ::dan::api::Entity(e);
 }
 
 void dan::api::Game::resetGroups() {

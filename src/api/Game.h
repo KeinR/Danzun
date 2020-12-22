@@ -4,11 +4,14 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <memory>
 
 #include <sol/sol.hpp>
 
 #include "Entity.h"
+#include "../game/Entity.h"
 #include "Effect.h"
+#include "RenderConfig.h"
 
 namespace dan {
     class Game;
@@ -30,7 +33,7 @@ namespace dan::api {
         // void loadPatternsFromFile(const std::string &path);
 
         Entity spawnEntityFull(
-            sol::function hitCallback, sol::userdata disp, const std::string &equation,
+            sol::function hitCallback, const std::shared_ptr<RenderConfig> &disp, const std::string &equation,
             sol::table vars, sol::table constants,
             float x, float y, float width, float height, bool autoGC,
             const std::string &group, int renderPriority,

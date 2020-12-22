@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <utility>
+#include <memory>
 
 #include <sol/sol.hpp>
 
@@ -16,19 +17,24 @@ namespace dan {
 namespace dan {
     class Group {
     public:
-        typedef std::pair<Entity*, Circle> circle_t;
-        typedef std::pair<Entity*, Polygon> polygon_t;
+        typedef std::weak_ptr<Entity> entity_t;
+        typedef std::shared_ptr<Entity> entityLock_t;
+        typedef std::vector<std::pair<entityLock_t, entityLock_t>> output_t;
+        typedef std::pair<entity_t, Circle> circle_t;
+        typedef std::pair<entity_t, Polygon> polygon_t;
+        typedef std::vector<circle_t> circles_t;
+        typedef std::vector<polygon_t> polygons_t;
     private:
-        std::vector<circle_t> circles;
-        std::vector<polygon_t> polygons;
+        circles_t circles;
+        polygons_t polygons;
     public:
         Group();
-        void pushCircle(Entity &owner);
-        void pushPolygon(Entity &owner);
+        void pushCircle(const entity_t &owner);
+        void pushPolygon(const entity_t &owner);
         bool erase(Entity *ptr);
         void clear();
         void update();
-        void test(Group &other, std::vector<std::pair<Entity*, Entity*>> &output);
+        void test(Group &other, output_t &output);
     };
 }
 

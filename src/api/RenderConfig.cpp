@@ -24,14 +24,25 @@ void dan::api::RenderConfig::render() {
     mesh->render();
 }
 
+void dan::api::RenderConfig::setup(Context &c) {
+    setup();
+}
+void dan::api::RenderConfig::render(Context &c) {
+    render();
+}
+
 // Static members
 
+std::shared_ptr<dan::api::RenderConfig> dan::api::RenderConfig::make(sol::userdata image, sol::userdata mesh, sol::userdata shader) {
+    return std::make_shared<RenderConfig>(image, mesh, shader);
+}
+
 void dan::api::RenderConfig::open(sol::state_view lua) {
-    sol::usertype<RenderConfig> type = lua.new_usertype<RenderConfig>("RenderConfig",
-        sol::constructors<Image(sol::userdata,sol::userdata,sol::userdata)>()
-    );
+    sol::usertype<RenderConfig> type = lua.new_usertype<RenderConfig>("RenderConfig");
+
+    type[sol::meta_function::construct] = &RenderConfig::make;
 
     // yes no?
-    type["setup"] = &RenderConfig::setup;
-    type["render"] = &RenderConfig::render;
+    type["setup"] = static_cast<void (dan::api::RenderConfig::*)()>(&RenderConfig::setup);
+    type["render"] = static_cast<void (dan::api::RenderConfig::*)()>(&RenderConfig::render);
 }

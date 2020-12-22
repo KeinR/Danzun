@@ -1,12 +1,10 @@
 #ifndef DANZUN_ENGINE_H_INCLUDED
 #define DANZUN_ENGINE_H_INCLUDED
 
-#include <unordered_map>
 #include <filesystem>
 
 #include <sol/sol.hpp>
 
-#include "Data.h"
 #include "Context.h"
 #include "../win/Window.h"
 #include "../win/WindowEvent.h"
@@ -20,8 +18,8 @@ namespace dan {
 namespace dan {
     class Engine: private WindowEvent {
         Window window;
+
         Context rc;
-        Data data;
 
         WindowEvent *windowEventCallback;
         EventCallback *eventCallback;
@@ -51,7 +49,6 @@ namespace dan {
 
         Window &getWindow();
         Game &getGame();
-        Data &getData();
         sol::state_view getState();
 
         void setGameActive(bool flag);

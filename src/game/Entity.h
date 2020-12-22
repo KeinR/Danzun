@@ -3,7 +3,6 @@
 
 #include <array>
 #include <memory>
-#include <set>
 #include <vector>
 
 #include <arashpartow/exprtk.hpp>
@@ -11,8 +10,8 @@
 
 #include "../api/RenderConfig.h"
 #include "../sprite/Renderable.h"
+#include "../sprite/AbsRenderConf.h"
 #include "../api/Script.h"
-#include "LuaRef.h"
 
 namespace dan {
     class Game;
@@ -25,7 +24,7 @@ namespace dan {
         typedef exprtk::symbol_table<float> symbolTable_t;
         typedef exprtk::expression<float> expression_t;
         typedef exprtk::parser<float> parser_t;
-        typedef LuaRef<api::RenderConfig> disp_t;
+        typedef std::shared_ptr<AbsRenderConf> disp_t;
         typedef std::vector<std::pair<std::string, float>> constants_t;
 
     private:
@@ -47,14 +46,6 @@ namespace dan {
         disp_t disp;
 
         sol::function hitCallback;
-        
-        struct cmp {
-            bool operator()(const sol::reference &a, const sol::reference &b) const {
-                return a.registry_index() < b.registry_index();
-            }
-        };
-
-        std::set<sol::reference, cmp> refs;
 
         api::Script script;
 
@@ -85,14 +76,13 @@ namespace dan {
         int getHeight() const;
         float getRotation() const;
 
-        void setScript(sol::state_view lua, sol::function func, const std::vector<sol::object> &params);
+        // `self` == this
+        void setScript(const std::shared_ptr<Entity> &self, sol::state_view lua, sol::function func, const std::vector<sol::object> &params);
 
         void setParam(const std::string &name, float value);
 
         // NB: This action is irreversible!
         void regSymbolTable(symbolTable_t &table);
-
-        bool addReference(sol::reference ref);
 
         bool isGC();
         bool isAutoGC();

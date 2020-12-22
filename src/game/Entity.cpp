@@ -1,5 +1,6 @@
 #include "Entity.h"
 
+#include "../core/debug.h"
 #include "../game/Game.h"
 #include "../time/Clock.h"
 #include "../render/Matrix.h"
@@ -21,6 +22,8 @@ dan::Entity::Entity(
     disp(disp),
     hitCallback(hitCallback)
 {
+    DANZUN_ASSERT(disp); // Just in case...
+ 
     initEquation(as, constants, equation);
 }
 
@@ -40,9 +43,12 @@ float dan::Entity::getRotation() const {
     return rotation;
 }
 
-void dan::Entity::setScript(sol::state_view lua, sol::function func, const std::vector<sol::object> &params) {
+void dan::Entity::setScript(const std::shared_ptr<Entity> &self, sol::state_view lua, sol::function func, const std::vector<sol::object> &params) {
+    DANZUN_ASSERT(self.get() == this); // Must be the same object, just as a shared ptr.
+    // Perhaps instead use factory and store weak_ptr to self? Would be safer... Hmm...
+
     std::vector<sol::object> p = params;
-    p.insert(p.begin(), sol::make_object<api::Entity>(lua, *this));
+    p.insert(p.begin(), sol::make_object<api::Entity>(lua, self));
     this->script = api::Script(lua, func, p);
 }
 
@@ -52,10 +58,6 @@ void dan::Entity::setParam(const std::string &name, float value) {
 
 void dan::Entity::regSymbolTable(symbolTable_t &table) {
     exp.register_symbol_table(table);
-}
-
-bool dan::Entity::addReference(sol::reference ref) {
-    return refs.insert(ref).second;
 }
 
 void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const constants_t &constants, const std::string &eq) {
@@ -118,7 +120,7 @@ void dan::Entity::run(sol::state_view lua) {
 }
 
 void dan::Entity::render(Context &c) {
-    disp->setup();
+    disp->setup(c);
 
     Matrix mat;
         mat.x = pos[0];
@@ -128,5 +130,5 @@ void dan::Entity::render(Context &c) {
         mat.rotation = rotation;
     mat.load(c);
 
-    disp->render();
+    disp->render(c);
 }

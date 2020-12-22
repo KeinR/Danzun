@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-
+// FPS counter
 #include <chrono>
 #include <thread>
 
@@ -31,7 +31,6 @@
 dan::Engine::Engine():
     window("Danzun", 500, 500, 0),
     rc(this),
-    data(rc),
     windowEventCallback(nullptr),
     eventCallback(nullptr),
     game(*this),
@@ -97,9 +96,6 @@ dan::Window &dan::Engine::getWindow() {
 }
 dan::Game &dan::Engine::getGame() {
     return game;
-}
-dan::Data &dan::Engine::getData() {
-    return data;
 }
 sol::state_view dan::Engine::getState() {
     return s;

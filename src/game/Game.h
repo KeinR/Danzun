@@ -22,7 +22,6 @@
 #include "../time/Clock.h"
 #include "../api/RenderConfig.h"
 #include "Player.h"
-#include "Effect.h"
 
 namespace dan {
     class Context;
@@ -33,10 +32,12 @@ namespace dan {
 namespace dan {
     class Game {
     public:
-        typedef std::vector<std::pair<Entity*, Entity*>> collisionResult_t;
-        typedef std::list<Entity> entities_t;
-        typedef std::multimap<int, Renderable*, std::greater<int>> renderQueue_t;
-        typedef std::vector<std::pair<std::weak_ptr<Effect>, Renderable*>> effects_t;
+        typedef std::shared_ptr<Entity> entity_t;
+        typedef std::vector<std::pair<entity_t, entity_t>> collisionResult_t;
+        typedef std::list<entity_t> entities_t;
+        typedef std::weak_ptr<Renderable> renderable_t;
+        typedef std::shared_ptr<Renderable> renderableLock_t;
+        typedef std::multimap<int, renderable_t, std::greater<int>> renderQueue_t;
     private:
         // Not used internally - exlcusively for use by
         // client applications
@@ -52,18 +53,13 @@ namespace dan {
 
         std::map<std::string, Group> groups;
 
-        // Paths to
-        std::map<std::string, std::string> stages;
-
         entities_t entities;
-        effects_t effects;
         renderQueue_t renderQueue;
 
         Entity::symbolTable_t globalSymbols;
 
         // Clean up entities
         void gc();
-        entities_t::iterator deleteEntity(const entities_t::iterator &it);
     public:
         Game(Engine &e);
 
@@ -77,19 +73,13 @@ namespace dan {
         void resetGroups();
         collisionResult_t testCollisions(const std::string &a, const std::string &b);
 
-        Entity &addEntity(
+        entity_t addEntity(
             sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation,
             const std::vector<Entity::symbolTable_t> &symbols, const Entity::constants_t &constants,
             float x, float y, float width, float height, bool autoGC
         );
-        // REF MUST STAY VALID
-        void submitRenderable(int priority, Renderable &rend);
+        void submitRenderable(int priority, const renderable_t &rend);
         void removeRenderable(Renderable *rend);
-
-        void addEffect(const std::weak_ptr<Effect> &e, int renderPriority);
-
-        void addStage(const std::string &name, const std::string &path);
-        std::string &getStage(const std::string &name);
 
         void setWidth(int w);
         void setHeight(int h);
