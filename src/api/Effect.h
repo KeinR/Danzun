@@ -1,28 +1,26 @@
 #ifndef DAN_API_EFFECT_H_INCLUDED
 #define DAN_API_EFFECT_H_INCLUDED
 
-#include <vector>
+#include <memory>
 
 #include <sol/sol.hpp>
 
-#include "../sprite/Renderable.h"
+#include "../game/Effect.h"
 
 namespace dan::api {
-    class Effect: public Renderable {
-        typedef std::vector<sol::table> objects_t;
-        sol::table masterObject;
-        objects_t objects;
-        sol::function callback;
-        sol::state_view lua;
+    class Effect {
+        std::shared_ptr<::dan::Effect> effect;
+        int renderPriority;
     public:
-        Effect(sol::this_state l, sol::table masterObject, sol::function callback);
-        void spawn(sol::table obj);
-        void render(Context &c) override;
+        Effect(sol::this_state l, int renderPriority, sol::function callback, sol::object masterObject);
 
-        static std::shared_ptr<Effect> make(sol::this_state l,
-            sol::table masterObject, sol::function callback, int renderPriority);
+        void spawn(sol::table obj);
+        void setRenderPriority(sol::this_state l, int value);
+        void activate(sol::this_state l);
+        void deactivate(sol::this_state l);
 
         static void open(sol::state_view lua);
+
     };
 }
 

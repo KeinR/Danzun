@@ -1,6 +1,10 @@
 - Animations
+    - Change used image from renderconf
 - 3D API
 - Texture atlas support
 
 - Sound
 - UI design
+
+Entity should be build local like effect and element
+Clean up errors

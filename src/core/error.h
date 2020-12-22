@@ -13,7 +13,7 @@ namespace dan {
         // If this is set WARNING does nothing
         constexpr static flag_t SEVERE = 1 << 0;
         // If not set, assume error.
-        // Does noting if SEVERE is set
+        // Does nothing if SEVERE is set
         constexpr static flag_t WARNING = 1 << 1;
     private:
         std::string location;

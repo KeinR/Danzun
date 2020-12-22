@@ -1,4 +1,6 @@
 
+uiElements = {}
+
 -- First thing that runs, before window
 -- opens
 function preInit()
@@ -63,7 +65,6 @@ function start()
 
     bvars = PatternVars.new(bvars_data)
 
-    -- script = Script.new(loadfile("test.dzs"))
     script = Script.new(loadfile("test.dzs"))
 
     playerImg = Image.new("sprites/charge.png");
@@ -135,11 +136,8 @@ function start()
 
     magicCircleImg = Image.new("magic circle.png")
 
-    effect = Effect.new(
-        {},
-        magicCircleEffect,
-        1
-    )
+    effect = Effect.new(1, magicCircleEffect, nil)
+    effect:deactivate()
 
     effectPattern = Pattern.new([[
         x := px;
@@ -253,6 +251,15 @@ function magicCircleEffect(m, lst)
         font:bind()
         fm:render()
     end
+
+
+    -- uiLayer = Element.new(
+    --     2,
+    --     function(e)
+
+    --     end,
+    --     nil
+    -- )
 
 end
 

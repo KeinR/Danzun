@@ -19,6 +19,7 @@
 #include "../api/Effect.h"
 #include "../api/Pattern.h"
 #include "../api/BffFont.h"
+#include "../api/Element.h"
 
 #include "EventCallback.h"
 
@@ -207,6 +208,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
 
     std::cout << "start open windows" << '\n';
 
+    // Register all the classes
     api::Engine::open(s);
     api::Shader::open(s);
     api::Mesh::open(s);
@@ -222,6 +224,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Effect::open(s);
     api::Pattern::open(s);
     api::BffFont::open(s);
+    api::Element::open(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);

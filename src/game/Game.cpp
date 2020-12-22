@@ -90,13 +90,7 @@ void dan::Game::submitRenderable(int priority, const renderable_t &rend) {
     renderQueue.insert({priority, rend});
 }
 void dan::Game::removeRenderable(Renderable *rend) {
-    for (renderQueue_t::iterator it = renderQueue.begin(); it != renderQueue.end();) {
-        if (it->second.lock().get() == rend) {
-            it = renderQueue.erase(it);
-        } else {
-            ++it;
-        }
-    }
+    remRenderQueue.insert(rend);
 }
 
 void dan::Game::setWidth(int w) {
@@ -166,14 +160,18 @@ void dan::Game::gc() {
 }
 
 void dan::Game::render(Context &c) {
-    for (renderQueue_t::iterator it = renderQueue.begin(); it != renderQueue.end();) {
-        renderableLock_t r = it->second.lock();
-        if (r) {
-            r->render(c);
-            ++it;
-        } else {
-            it = renderQueue.erase(it);
+    if (!remRenderQueue.empty()) {
+        for (renderQueue_t::iterator it = renderQueue.begin(); it != renderQueue.end();) {
+            if (remRenderQueue.find(it->second.get()) != remRenderQueue.end()) {
+                it = renderQueue.erase(it);
+            } else {
+                ++it;
+            }
         }
+        remRenderQueue.clear();
+    }
+    for (auto &p : renderQueue) {
+        p.second->render(c);
     }
 }
 

@@ -1,60 +1,39 @@
 #include "Effect.h"
 
-#include <iostream>
-
-#include "../game/Entity.h"
 #include "../game/Game.h"
 
-dan::api::Effect::Effect(sol::this_state l, sol::table masterObject, sol::function callback):
-    masterObject(masterObject), callback(callback), lua(l) {
+dan::api::Effect::Effect(sol::this_state l, int renderPriority, sol::function callback, sol::object masterObject):
+    effect(std::make_shared<::dan::Effect>(l, masterObject, callback)),
+    renderPriority(renderPriority)
+{
+    activate(l);
 }
+
 void dan::api::Effect::spawn(sol::table obj) {
-    objects.push_back(obj);
+    effect->spawn(obj);
 }
-void dan::api::Effect::render(Context &c) {
-    sol::table params = lua.create_table();
-    for (objects_t::iterator it = objects.begin(); it < objects.end();) {
-        auto p = (*it)["done"];
-        bool done;
-        switch (p.get_type()) {
-            case sol::type::boolean:
-                done = p.get<bool>();
-                break;
-            case sol::type::number:
-                done = static_cast<bool>(p.get<float>());
-                break;
-            default:
-                done = false;
-        }
-        if (done) {
-            it = objects.erase(it);
-        } else {
-            params.add(*it);
-            ++it;
-        }
-    }
-    sol::function_result result = callback.call(masterObject, params);
-    if (!result.valid()) {
-        // TEMP
-        sol::error e = result;
-        std::cerr << "Effect: CALLBACK ERROR'd: " << e.what() << '\n';
-    }
+
+void dan::api::Effect::setRenderPriority(sol::this_state l, int value) {
+    deactivate(l);
+    renderPriority = value;
+    activate(l);
+}
+void dan::api::Effect::activate(sol::this_state l) {
+    Game::fromLua(l).submitRenderable(renderPriority, effect);
+}
+void dan::api::Effect::deactivate(sol::this_state l) {
+    Game::fromLua(l).removeRenderable(effect.get());
 }
 
 // Static members
 
-std::shared_ptr<dan::api::Effect> dan::api::Effect::make(sol::this_state l,
-    sol::table masterObject, sol::function callback, int renderPriority)
-{
-    std::shared_ptr<Effect> ptr = std::make_shared<Effect>(l, masterObject, callback);
-    Game::fromLua(l).submitRenderable(renderPriority, ptr);
-    return ptr;
-}
-
 void dan::api::Effect::open(sol::state_view lua) {
-    sol::usertype<Effect> type = lua.new_usertype<Effect>("Effect");
-
-    type[sol::meta_function::construct] = &Effect::make;
+    sol::usertype<Effect> type = lua.new_usertype<Effect>("Effect",
+        sol::constructors<Effect(sol::this_state,int,sol::function,sol::object)>()
+    );
 
     type["spawn"] = &Effect::spawn;
+    type["setRenderPriority"] = &Effect::setRenderPriority;
+    type["activate"] = &Effect::activate;
+    type["deactivate"] = &Effect::deactivate;
 }

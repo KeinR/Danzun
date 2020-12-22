@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <functional>
 #include <memory>
+#include <unordered_set>
 
 #include <sol/sol.hpp>
 
@@ -35,8 +36,8 @@ namespace dan {
         typedef std::shared_ptr<Entity> entity_t;
         typedef std::vector<std::pair<entity_t, entity_t>> collisionResult_t;
         typedef std::list<entity_t> entities_t;
-        typedef std::weak_ptr<Renderable> renderable_t;
-        typedef std::shared_ptr<Renderable> renderableLock_t;
+        typedef std::shared_ptr<Renderable> renderable_t;
+        typedef std::unordered_set<Renderable*> remRenderQueue_t;
         typedef std::multimap<int, renderable_t, std::greater<int>> renderQueue_t;
     private:
         // Not used internally - exlcusively for use by
@@ -55,6 +56,8 @@ namespace dan {
 
         entities_t entities;
         renderQueue_t renderQueue;
+        // To prevent concurrent modification, also batch removals...
+        remRenderQueue_t remRenderQueue;
 
         Entity::symbolTable_t globalSymbols;
 
