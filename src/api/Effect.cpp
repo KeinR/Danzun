@@ -4,13 +4,10 @@
 #include "../game/Effect.h"
 
 dan::api::Effect::Effect(sol::this_state l, sol::table masterObject, sol::function callback, int renderPriority) {
-    game = &Game::fromLua(l);
-    handle = &game->createEffect(masterObject, callback);
-    game->submitRenderable(renderPriority, *handle);
+    handle = std::make_shared<::dan::Effect>(l, masterObject, callback);
+    Game::fromLua(l).addEffect(handle, renderPriority);
 }
-dan::api::Effect::~Effect() {
-    game->deleteEffect(handle);
-}
+
 void dan::api::Effect::spawn(sol::table object) {
     handle->spawn(object);
 }

@@ -118,9 +118,9 @@ bool dan::Polygon::intersects(const Circle &c) const {
 
 bool dan::Polygon::hasPoint(const Point &p) const {
     int hits = 0;
-    for (int i = 0; i < lines.size(); i++) {
-        if (lines[i].inDomain(x)) {
-            float iy = lines[i].solveForY(p.x);
+    for (const Line &l : lines) {
+        if (l.inDomain(x)) {
+            float iy = l.solveForY(p.x);
             if (iy > p.y || std::isinf(iy)) {
                 hits++;
             } else if (iy == p.y) {

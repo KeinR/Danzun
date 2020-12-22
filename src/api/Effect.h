@@ -1,6 +1,8 @@
 #ifndef DAN_API_EFFECT_H_INCLUDED
 #define DAN_API_EFFECT_H_INCLUDED
 
+#include <memory>
+
 #include <sol/sol.hpp>
 
 namespace dan {
@@ -10,11 +12,12 @@ namespace dan {
 
 namespace dan::api {
     class Effect {
-        ::dan::Effect *handle;
-        Game *game;
+    public:
+        typedef std::shared_ptr<::dan::Effect> handle_t;
+    private:
+        handle_t handle;
     public:
         Effect(sol::this_state l, sol::table masterObject, sol::function callback, int renderPriority);
-        ~Effect();
 
         void spawn(sol::table object);
 

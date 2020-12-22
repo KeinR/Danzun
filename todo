@@ -1,7 +1,5 @@
 - Animations
 - 3D API
 - Texture atlas support
-- Clock
 
-- Abort on end bc of Effect refs (tries to destruct)
 - Sound

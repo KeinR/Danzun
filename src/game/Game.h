@@ -7,6 +7,7 @@
 #include <list>
 #include <unordered_set>
 #include <functional>
+#include <memory>
 
 #include <sol/sol.hpp>
 
@@ -14,7 +15,6 @@
 
 #include "../win/WindowEvent.h"
 
-#include "../ui/Node.h"
 #include "../time/RealTimer.h"
 
 #include "Group.h"
@@ -31,12 +31,12 @@ namespace dan {
 }
 
 namespace dan {
-    class Game: public Node {
+    class Game {
     public:
         typedef std::vector<std::pair<Entity*, Entity*>> collisionResult_t;
         typedef std::list<Entity> entities_t;
         typedef std::multimap<int, Renderable*, std::greater<int>> renderQueue_t;
-        typedef std::list<Effect> effects_t;
+        typedef std::vector<std::pair<std::weak_ptr<Effect>, Renderable*>> effects_t;
     private:
         // Not used internally - exlcusively for use by
         // client applications
@@ -86,8 +86,7 @@ namespace dan {
         void submitRenderable(int priority, Renderable &rend);
         void removeRenderable(Renderable *rend);
 
-        Effect &createEffect(sol::table masterObject, sol::function callback);
-        void deleteEffect(Effect *e);
+        void addEffect(const std::weak_ptr<Effect> &e, int renderPriority);
 
         void addStage(const std::string &name, const std::string &path);
         std::string &getStage(const std::string &name);
@@ -99,7 +98,7 @@ namespace dan {
         int getHeight();
 
         void logic(float deltaTime);
-        void render(Context &c) override;
+        void render(Context &c);
 
 
         static Game &fromLua(sol::state_view lua);

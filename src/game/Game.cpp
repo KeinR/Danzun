@@ -111,19 +111,11 @@ void dan::Game::removeRenderable(Renderable *rend) {
     }
 }
 
-dan::Effect &dan::Game::createEffect(sol::table masterObject, sol::function callback) {
-    effects.emplace_back(engine->getState(), masterObject, callback);
-    return effects.back();
-}
-void dan::Game::deleteEffect(Effect *e) {
-    for (effects_t::iterator it = effects.begin(); it != effects.end();) {
-        if (&(*it) == e) {
-            it = effects.erase(it);
-        } else {
-            ++it;
-        }
-    }
-    removeRenderable(e);
+void dan::Game::addEffect(const std::weak_ptr<Effect> &e, int renderPriority) {
+    Renderable *r = e.lock().get();
+    DANZUN_ASSERT(r != nullptr);
+    effects.push_back({e, r});
+    submitRenderable(renderPriority, *r);
 }
 
 void dan::Game::setWidth(int w) {
@@ -192,6 +184,15 @@ void dan::Game::gc() {
 }
 
 void dan::Game::render(Context &c) {
+    for (effects_t::iterator it = effects.begin(); it < effects.end();) {
+        if (it->first.expired()) {
+            removeRenderable(it->second);
+            it = effects.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
     for (auto &p : renderQueue) {
         p.second->render(c);
     }

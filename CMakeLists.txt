@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
+set(BUILD_SHARED_LIBS true)
 
 file(GLOB_RECURSE sources src/*.cpp src/*.c)
 set(libs
@@ -14,7 +15,7 @@ set(libs
 
 file(COPY "data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
-add_library(danzun ${sources} ${libs})
+add_library(danzun STATIC ${sources} ${libs})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
