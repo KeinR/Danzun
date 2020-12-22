@@ -33,6 +33,7 @@ namespace dan {
         void setY(float y);
         void setWidth(float w);
         void setHeight(float h);
+        void setSpeed(float v);
 
         void move(Game &g, const dir &d, float deltaTime);
     };

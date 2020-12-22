@@ -12,14 +12,11 @@
 dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
 }
 
-// void dan::api::Game::regCircleCol(sol::table self, const std::string &groupName, float xCenter, float yCenter, float radius) {
-//     dan::Group::circle c;
-//     c.obj = self;
-//     c.hitbox.setX(xCenter);
-//     c.hitbox.setY(yCenter);
-//     c.hitbox.setRadius(radius);
-//     handle->getGroup(groupName).pushCircle(c);
-// }
+void dan::api::Game::setSize(int width, int height) {
+    handle->setWidth(width);
+    handle->setHeight(height);
+}
+
 void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
     for (std::pair<::dan::Entity*, ::dan::Entity*> &p : handle->testCollisions(groupA, groupB)) {
         p.first->getHitCallback().call(::dan::api::Entity(*p.first), ::dan::api::Entity(*p.second));
@@ -101,7 +98,6 @@ void dan::api::Game::open(sol::state_view &lua) {
     type["getTime"] = &Game::getTime;
     type["getDeltaTime"] = &Game::getDeltaTime;
     type["spawnEntityFull"] = &Game::spawnEntityFull;
-    type["submitRenderable"] = &Game::spawnEntityFull;
-    type["addCircle"] = &Game::spawnEntityFull;
+    type["setSize"] = &Game::setSize;
 
 }

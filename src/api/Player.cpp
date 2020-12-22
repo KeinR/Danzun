@@ -17,6 +17,9 @@ void dan::api::Player::setWidth(float w) {
 void dan::api::Player::setHeight(float h) {
     handle->setHeight(h);
 }
+void dan::api::Player::setSpeed(float v) {
+    handle->setSpeed(v);
+}
 
 float dan::api::Player::getX() {
     return handle->getX();
@@ -32,6 +35,7 @@ void dan::api::Player::open(sol::state_view lua) {
     type["setY"] = &Player::setY;
     type["setWidth"] = &Player::setWidth;
     type["setHeight"] = &Player::setHeight;
+    type["setSpeed"] = &Player::setSpeed;
     type["getX"] = &Player::getX;
     type["getY"] = &Player::getY;
 }

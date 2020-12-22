@@ -34,6 +34,9 @@ void dan::Player::setWidth(float w) {
 void dan::Player::setHeight(float h) {
     semiMinor = h / 2.0f;
 }
+void dan::Player::setSpeed(float v) {
+    speed = v;
+}
 
 void dan::Player::move(Game &g, const dir &d, float deltaTime) {
     float m = speed * deltaTime;

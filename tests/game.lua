@@ -1,13 +1,11 @@
 
-entities = {}
-
 -- First thing that runs, before window
 -- opens
 function preInit()
-    -- window.setTitle("DAnzun test")
-    -- window.setSize(500, 700)
+    window:setTitle("Danzun test")
+    window:setSize(500, 700)
+    game:setSize(500, 700)
     -- loadingScreen = Image.new("load.jpg")
-    -- clock = Clock.new();
 end
 
 -- This is looped over as init() blocks
@@ -21,6 +19,8 @@ function init()
 end
 
 function start()
+
+    player:setSpeed(150)
 
     mesh = Mesh.new()
     mesh:setVertices{
