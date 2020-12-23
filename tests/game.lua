@@ -279,7 +279,7 @@ function main() -- main(e)
 
     -- bvars:push()
 
-    -- script:run()
+    script:run()
 
     -- shader:use()
     -- mat.x = player:getX();

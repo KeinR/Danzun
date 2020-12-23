@@ -35,6 +35,9 @@ void dan::api::Pattern::newIndex(const std::string &name, float value) {
         v->ref() = value;
     }
 }
+void dan::api::Pattern::newIndexBool(const std::string &name, bool value) {
+    newIndexBool(name, static_cast<float>(value));
+}
 
 float dan::api::Pattern::run() {
     return expression.value();
@@ -46,7 +49,7 @@ void dan::api::Pattern::open(sol::state_view &lua) {
     );
 
     type[sol::meta_function::index] = &Pattern::index;
-    type[sol::meta_function::new_index] = &Pattern::newIndex;
+    type[sol::meta_function::new_index] = sol::overload(&Pattern::newIndex, &Pattern::newIndexBool);
     type[sol::meta_function::call] = &Pattern::run;
     type["run"] = &Pattern::run;
 }

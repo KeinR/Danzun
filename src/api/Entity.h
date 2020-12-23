@@ -42,6 +42,7 @@ namespace dan::api {
         float index(const std::string &name);
         // foo[fef] = bar
         void newIndex(const std::string &name, float value);
+        void newIndexBool(const std::string &name, bool value);
 
         static void open(sol::state_view &lua);
     };

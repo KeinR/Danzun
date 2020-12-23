@@ -89,6 +89,9 @@ void dan::api::Entity::newIndex(const std::string &name, float value) {
         v->ref() = value;
     }
 }
+void dan::api::Entity::newIndexBool(const std::string &name, bool value) {
+    newIndex(name, static_cast<float>(value));
+}
 
 // Static members
 
@@ -100,7 +103,7 @@ void dan::api::Entity::open(sol::state_view &lua) {
     );
 
     type[sol::meta_function::index] = &Entity::index;
-    type[sol::meta_function::new_index] = &Entity::newIndex;
+    type[sol::meta_function::new_index] = sol::overload(&Entity::newIndex, &Entity::newIndexBool);
 
     type["setScript"] = &Entity::setScript;
     type["activate"] = &Entity::activate;

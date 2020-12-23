@@ -1,7 +1,4 @@
 
-function wait(sec)
-    coroutine.yield(sec)
-end
 
 function spawn(x, y, vx, vy)
     local e = Entity.new(
@@ -24,10 +21,10 @@ function spawn(x, y, vx, vy)
     e.autoGC = false
     e:regCircle("enemies")
 
-    e:setScript(function(e)
+    e:setScript(Script.new(function(e)
         while true do
-            local x = player:getX() - e:getX()
-            local y = player:getY() - e:getY()
+            local x = player:getX() - e.x
+            local y = player:getY() - e.y
             local mag = math.sqrt(x^2 + y^2)
             x = x / mag
             y = y / mag
@@ -41,8 +38,8 @@ function spawn(x, y, vx, vy)
                     p := p + v * 10 * dt;
                 ]]
             );
-            b.x = e:getX()
-            b.y = e:getY()
+            b.x = e.x
+            b.y = e.y
             b.vx = x
             b.vy = y
             b.width = 10
@@ -50,18 +47,15 @@ function spawn(x, y, vx, vy)
             b.autoGC = false
             b:regCircle("enemyBullets")
 
-            wait(1);
+            pause(1);
         end
-    end);
+    end,
+    e
+    ));
 end
 
 spawn(40, 0, -0.5, 1)
 spawn(80, 0, 0.5, 1)
 
-wait(50)
+pause(50)
 
--- spawn()
-
--- wait(5)
-
--- spawn()
