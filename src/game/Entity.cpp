@@ -8,23 +8,26 @@
 
 dan::Entity::Entity(
     Game &g, sol::function hitCallback, const disp_t &disp,
-    const std::string &equation, const std::vector<symbolTable_t> &as,
-    const constants_t &constants,
-    float x, float y, float width, float height, bool autoGC
+    const std::string &equation, const std::vector<symbolTable_t> &as
 ):
-    pos{x, y},
+    pos{0, 0},
     startingTime(g.getClock().getTime()),
     rotation(0),
-    width(width),
-    height(height),
-    autoGC(b2f(autoGC)),
+    width(30),
+    height(30),
+    autoGC(b2f(true)),
     gc(b2f(false)),
+    display(b2f(true)),
+    tangible(b2f(true)),
     disp(disp),
-    hitCallback(hitCallback)
+    hitCallback(hitCallback),
+    renderPriority(0)
 {
-    DANZUN_ASSERT(disp); // Just in case...
- 
-    initEquation(as, constants, equation);
+    initEquation(as, equation);
+}
+
+dan::Entity::symbolTable_t &dan::Entity::getTable() {
+    return symbols;
 }
 
 int dan::Entity::getX() const {
@@ -43,24 +46,22 @@ float dan::Entity::getRotation() const {
     return rotation;
 }
 
-void dan::Entity::setScript(const std::shared_ptr<Entity> &self, sol::state_view lua, sol::function func, const std::vector<sol::object> &params) {
-    DANZUN_ASSERT(self.get() == this); // Must be the same object, just as a shared ptr.
-    // Perhaps instead use factory and store weak_ptr to self? Would be safer... Hmm...
-
-    std::vector<sol::object> p = params;
-    p.insert(p.begin(), sol::make_object<api::Entity>(lua, self));
-    this->script = api::Script(lua, func, p);
+int dan::Entity::getRenderPriority() {
+    return renderPriority;
+}
+void dan::Entity::setRenderPriority(int value) {
+    renderPriority = value;
 }
 
-void dan::Entity::setParam(const std::string &name, float value) {
-    symbols.add_constant(name, value);
+std::set<std::string> &dan::Entity::getGroups() {
+    return groups;
 }
 
-void dan::Entity::regSymbolTable(symbolTable_t &table) {
-    exp.register_symbol_table(table);
+void dan::Entity::setScript(const api::Script &s) {
+    this->script = s;
 }
 
-void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const constants_t &constants, const std::string &eq) {
+void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const std::string &eq) {
 
     symbols.add_vector("p", pos.data(), pos.size());
     symbols.add_variable("x", pos[0]);
@@ -71,14 +72,8 @@ void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const const
     symbols.add_variable("height", height);
     symbols.add_variable("autoGC", autoGC);
     symbols.add_variable("gc", gc);
-
-    for (const std::pair<std::string, float> &c : constants) {
-        symbols.add_constant(c.first, c.second);
-    }
-
-    // I don't see a way in exprtk to make vectors const. Oh well, guess entities get to change the player's position...
-    // [[ PLAYER NOT YET IMPLEMENTED ]]
-    // symbols.add_variable("plp", g.getPlayer().getPos().data(), g.getPlayer().getPos().size());
+    symbols.add_variable("disp", display);
+    symbols.add_variable("tang", tangible);
 
     symbols.add_constants();
 
@@ -89,6 +84,8 @@ void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const const
     }
 
     parser_t parser;
+    parser.enable_unknown_symbol_resolver();
+
     if (!parser.compile(eq, exp)) {
         // TEMP - should notify once then ignore, not spam console
         std::cerr << "Entity: Failed to compile expression, " << parser.error() << '\n';
@@ -110,6 +107,10 @@ bool dan::Entity::isAutoGC() {
     return f2b(autoGC);
 }
 
+bool dan::Entity::isTangible() {
+    return f2b(tangible);
+}
+
 sol::function dan::Entity::getHitCallback() {
     return hitCallback;
 }
@@ -120,15 +121,17 @@ void dan::Entity::run(sol::state_view lua) {
 }
 
 void dan::Entity::render(Context &c) {
-    disp->setup(c);
+    if (disp && f2b(display)) {
+        disp->setup(c);
 
-    Matrix mat;
-        mat.x = pos[0];
-        mat.y = pos[1];
-        mat.width = width;
-        mat.height = height;
-        mat.rotation = rotation;
-    mat.load(c);
+        Matrix mat;
+            mat.x = pos[0];
+            mat.y = pos[1];
+            mat.width = width;
+            mat.height = height;
+            mat.rotation = rotation;
+        mat.load(c);
 
-    disp->render(c);
+        disp->render(c);
+    }
 }

@@ -14,8 +14,15 @@ namespace dan {
         objects_t objects;
         sol::function callback;
         sol::state_view lua;
+        int renderPriority;
+        bool detached;
     public:
         Effect(sol::state_view l, sol::object masterObject, sol::function callback);
+
+        void setDetached(bool value);
+
+        void setRenderPriority(int value);
+        int getRenderPriority();
 
         void spawn(sol::table obj);
 

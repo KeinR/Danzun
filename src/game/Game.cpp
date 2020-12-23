@@ -60,6 +60,23 @@ dan::Group &dan::Game::getGroup(const std::string &name) {
     return groups[name];
 }
 
+dan::Game::entities_t::iterator dan::Game::eraseEntity(const entities_t::iterator &it) {
+    for (const std::string &name : (*it)->getGroups()) {
+        getGroup(name).erase(it->get());
+    }
+    (*it)->getGroups().clear();
+
+    removeRenderable(it->get());
+
+    return entities.erase(it);
+}
+
+void dan::Game::remFromGroups(Entity *ptr) {
+    for (auto &p : groups) {
+        p.second.erase(ptr);
+    }
+}
+
 void dan::Game::resetGroups() {
     for (auto &g : groups) {
         g.second.clear();
@@ -75,15 +92,8 @@ dan::Game::collisionResult_t dan::Game::testCollisions(const std::string &a, con
     return result;
 }
 
-dan::Game::entity_t dan::Game::addEntity(
-    sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation,
-    const std::vector<Entity::symbolTable_t> &symbols, const Entity::constants_t &constants,
-    float x, float y, float width, float height, bool autoGC)
-{
-    std::vector<Entity::symbolTable_t> s = symbols;
-    s.push_back(globalSymbols);
-    entities.push_back(std::make_shared<Entity>(*this, hitCallback, disp, equation, s, constants, x, y, width, height, autoGC));
-    return entities.back();
+void dan::Game::addEntity(const entity_t &e) {
+    entities.push_back(e);
 }
 
 void dan::Game::submitRenderable(int priority, const renderable_t &rend) {
@@ -132,7 +142,7 @@ void dan::Game::logic(float deltaTime) {
     for (entities_t::iterator it = entities.begin(); it != entities.end();) {
         entity_t &e = *it;
         if (e->isGC()) {
-            it = entities.erase(it);
+            it = eraseEntity(it);
         } else {
             e->run(lua);
             ++it;
@@ -149,7 +159,7 @@ void dan::Game::gc() {
         entity_t &e = *it;
         if (e->isAutoGC()) {
             if (false) { // TEMP - TODO: what conditions?
-                it = entities.erase(it);
+                it = eraseEntity(it);
             } else {
                 ++it;
             }

@@ -1,12 +1,17 @@
 #include "Effect.h"
 
+#include <iostream>
+
 #include "../game/Game.h"
 
 dan::api::Effect::Effect(sol::this_state l, int renderPriority, sol::function callback, sol::object masterObject):
-    effect(std::make_shared<::dan::Effect>(l, masterObject, callback)),
-    renderPriority(renderPriority)
+    effect(std::make_shared<::dan::Effect>(l, masterObject, callback))
 {
+    effect->setRenderPriority(renderPriority);
     activate(l);
+}
+dan::api::Effect::~Effect() {
+    effect->setDetached(true);
 }
 
 void dan::api::Effect::spawn(sol::table obj) {
@@ -15,13 +20,15 @@ void dan::api::Effect::spawn(sol::table obj) {
 
 void dan::api::Effect::setRenderPriority(sol::this_state l, int value) {
     deactivate(l);
-    renderPriority = value;
+    effect->setRenderPriority(value);
     activate(l);
 }
 void dan::api::Effect::activate(sol::this_state l) {
-    Game::fromLua(l).submitRenderable(renderPriority, effect);
+    std::cout << "Activate effect" << '\n';
+    Game::fromLua(l).submitRenderable(effect->getRenderPriority(), effect);
 }
 void dan::api::Effect::deactivate(sol::this_state l) {
+    std::cout << "Deactivate effect" << '\n';
     Game::fromLua(l).removeRenderable(effect.get());
 }
 

@@ -4,11 +4,12 @@
 #include <array>
 #include <memory>
 #include <vector>
+#include <set>
+#include <string>
 
 #include <arashpartow/exprtk.hpp>
 #include <sol/sol.hpp>
 
-#include "../api/RenderConfig.h"
 #include "../sprite/Renderable.h"
 #include "../sprite/AbsRenderConf.h"
 #include "../api/Script.h"
@@ -25,7 +26,6 @@ namespace dan {
         typedef exprtk::expression<float> expression_t;
         typedef exprtk::parser<float> parser_t;
         typedef std::shared_ptr<AbsRenderConf> disp_t;
-        typedef std::vector<std::pair<std::string, float>> constants_t;
 
     private:
 
@@ -37,6 +37,8 @@ namespace dan {
         float height;
         float autoGC;
         float gc;
+        float display;
+        float tangible;
 
         // Each having one increases mem and construction penalty, but increases
         // performance frame-to-frame
@@ -49,7 +51,10 @@ namespace dan {
 
         api::Script script;
 
-        void initEquation(const std::vector<symbolTable_t> &symbols, const constants_t &constants, const std::string &eq);
+        std::set<std::string> groups;
+        int renderPriority;
+
+        void initEquation(const std::vector<symbolTable_t> &symbols, const std::string &eq);
 
         bool f2b(float f);
         float b2f(bool b);
@@ -58,8 +63,7 @@ namespace dan {
 
         Entity(
             Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation,
-            const std::vector<symbolTable_t> &as, const constants_t &constants,
-            float x, float y, float width, float height, bool autoGC
+            const std::vector<symbolTable_t> &as
         );
 
         // Cannot move or copy due to symbol table
@@ -69,6 +73,8 @@ namespace dan {
         Entity &operator=(Entity&) = delete;
         Entity &operator=(Entity&&) = delete;
 
+        symbolTable_t &getTable();
+
         // TODO: Seperation of sprite and hitbox
         int getX() const;
         int getY() const;
@@ -76,16 +82,16 @@ namespace dan {
         int getHeight() const;
         float getRotation() const;
 
-        // `self` == this
-        void setScript(const std::shared_ptr<Entity> &self, sol::state_view lua, sol::function func, const std::vector<sol::object> &params);
+        int getRenderPriority();
+        void setRenderPriority(int value);
 
-        void setParam(const std::string &name, float value);
+        std::set<std::string> &getGroups();
 
-        // NB: This action is irreversible!
-        void regSymbolTable(symbolTable_t &table);
+        void setScript(const api::Script &s);
 
         bool isGC();
         bool isAutoGC();
+        bool isTangible();
         sol::function getHitCallback();
 
         void run(sol::state_view lua);

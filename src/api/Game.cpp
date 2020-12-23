@@ -23,54 +23,6 @@ void dan::api::Game::testCollisions(const std::string &groupA, const std::string
     }
 }
 
-dan::api::Entity dan::api::Game::spawnEntityFull(
-    sol::function hitCallback, const std::shared_ptr<RenderConfig> &disp, const std::string &equation,
-    sol::table vars, sol::table constants,
-    float x, float y, float width, float height, bool autoGC,
-    const std::string &group, int renderPriority,
-    sol::object points
-) {
-    std::vector<sol::userdata> deps;
-    std::vector<PatternVars::symTable_t> tables;
-    deps.reserve(vars.size());
-    tables.reserve(vars.size());
-    for (auto &d : vars) {
-        if (d.second.is<PatternVars>()) {
-            deps.push_back(d.second);
-            tables.push_back(d.second.as<PatternVars>().getTable());
-        }
-    }
-
-    std::vector<std::pair<std::string, float>> csts;
-    for (auto p : constants) {
-        if (p.first.get_type() == sol::type::string &&
-            p.second.get_type() == sol::type::number)
-        {
-            csts.push_back({p.first.as<std::string>(), p.second.as<float>()});
-        }
-    }
-
-    ::dan::Game::entity_t e = handle->addEntity(
-        hitCallback, disp, equation,
-        tables, csts,
-        x, y, width, height, autoGC
-    );
-
-    // TEMP
-
-    handle->submitRenderable(renderPriority, e);
-
-    Group &g = handle->getGroup(group);
-
-    if (points.get_type() == sol::type::nil) {
-        g.pushCircle(e);
-    } else {
-        DANZUN_ASSERT(false); // NOT IMPLEMENTED
-    }
-
-    return ::dan::api::Entity(e);
-}
-
 void dan::api::Game::resetGroups() {
     handle->resetGroups();
 }
@@ -86,12 +38,10 @@ float dan::api::Game::getDeltaTime() {
 void dan::api::Game::open(sol::state_view &lua) {
     sol::usertype<Game> type = lua.new_usertype<Game>("Game");
 
-    // type["regCircleCol"] = &Game::regCircleCol;
     type["testCollisions"] = &Game::testCollisions;
     type["resetGroups"] = &Game::resetGroups;
     type["getTime"] = &Game::getTime;
     type["getDeltaTime"] = &Game::getDeltaTime;
-    type["spawnEntityFull"] = &Game::spawnEntityFull;
     type["setSize"] = &Game::setSize;
 
 }

@@ -30,15 +30,6 @@ namespace dan::api {
         void resetGroups();
         float getTime();
         float getDeltaTime();
-        // void loadPatternsFromFile(const std::string &path);
-
-        Entity spawnEntityFull(
-            sol::function hitCallback, const std::shared_ptr<RenderConfig> &disp, const std::string &equation,
-            sol::table vars, sol::table constants,
-            float x, float y, float width, float height, bool autoGC,
-            const std::string &group, int renderPriority,
-            sol::object points // If not nil, assumes that hitbox is polygon. Else, circle.
-        );
 
         static void open(sol::state_view &lua);
 

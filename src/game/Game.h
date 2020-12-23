@@ -63,6 +63,7 @@ namespace dan {
 
         // Clean up entities
         void gc();
+        entities_t::iterator eraseEntity(const entities_t::iterator &it);
     public:
         Game(Engine &e);
 
@@ -74,13 +75,10 @@ namespace dan {
         Group &getGroup(const std::string &name);
         void clearGroups();
         void resetGroups();
+        void remFromGroups(Entity *ptr);
         collisionResult_t testCollisions(const std::string &a, const std::string &b);
 
-        entity_t addEntity(
-            sol::function hitCallback, const Entity::disp_t &disp, const std::string &equation,
-            const std::vector<Entity::symbolTable_t> &symbols, const Entity::constants_t &constants,
-            float x, float y, float width, float height, bool autoGC
-        );
+        void addEntity(const entity_t &e);
         void submitRenderable(int priority, const renderable_t &rend);
         void removeRenderable(Renderable *rend);
 

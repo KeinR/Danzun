@@ -12,13 +12,13 @@ void dan::Group::pushPolygon(const entity_t &owner) {
 }
 bool dan::Group::erase(Entity *ptr) {
     for (circles_t::iterator it = circles.begin(); it < circles.end(); ++it) {
-        if (it->first.lock().get() == ptr) {
+        if (it->first.get() == ptr) {
             circles.erase(it);
             return true;
         }
     }
     for (polygons_t::iterator it = polygons.begin(); it < polygons.end(); ++it) {
-        if (it->first.lock().get() == ptr) {
+        if (it->first.get() == ptr) {
             polygons.erase(it);
             return true;
         }
@@ -31,54 +31,45 @@ void dan::Group::clear() {
 }
 void dan::Group::update() {
 
-    for (circles_t::iterator it = circles.begin(); it < circles.end();) {
-        entityLock_t e = it->first.lock();
-        if (e) {
-            it->second.setX(e->getX());
-            it->second.setY(e->getY());
-            it->second.setRadius(std::min(e->getWidth(), e->getHeight()) / 2);
-            ++it;
-        } else {
-            it = circles.erase(it);
-        }
+    for (circles_t::iterator it = circles.begin(); it < circles.end(); ++it) {
+        it->second.setX(it->first->getX());
+        it->second.setY(it->first->getY());
+        it->second.setRadius(std::min(it->first->getWidth(), it->first->getHeight()) / 2);
     }
-    for (polygons_t::iterator it = polygons.begin(); it < polygons.end();) {
-        entityLock_t e = it->first.lock();
-        if (e) {
-            it->second.setX(e->getX());
-            it->second.setY(e->getY());
-            it->second.setRotation(e->getRotation());
-            ++it;
-        } else {
-            it = polygons.erase(it);
-        }
+    for (polygons_t::iterator it = polygons.begin(); it < polygons.end(); ++it) {
+        it->second.setX(it->first->getX());
+        it->second.setY(it->first->getY());
+        it->second.setRotation(it->first->getRotation());
     }
 }
+
 void dan::Group::test(Group &other, output_t &output) {
 
-    // Not thread safe: update() results could be outdated 
-
     for (circle_t &c : other.circles) {
-        for (circle_t &c1 : circles) {
-            if (c1.second.intersects(c.second)) {
-                output.emplace_back(c1.first.lock(), c.first.lock());
+        if (c.first->isTangible()) {
+            for (circle_t &c1 : circles) {
+                if (c1.first->isTangible() && c1.second.intersects(c.second)) {
+                    output.emplace_back(c1.first, c.first);
+                }
             }
-        }
-        for (polygon_t &p : polygons) {
-            if (p.second.intersects(c.second)) {
-                output.emplace_back(p.first.lock(), c.first.lock());
+            for (polygon_t &p : polygons) {
+                if (p.first->isTangible() && p.second.intersects(c.second)) {
+                    output.emplace_back(p.first, c.first);
+                }
             }
         }
     }
     for (polygon_t &c : other.polygons) {
-        for (circle_t &c1 : circles) {
-            if (c1.second.intersects(c.second)) {
-                output.emplace_back(c1.first.lock(), c.first.lock());
+        if (c.first->isTangible()) {
+            for (circle_t &c1 : circles) {
+                if (c1.first->isTangible() && c1.second.intersects(c.second)) {
+                    output.emplace_back(c1.first, c.first);
+                }
             }
-        }
-        for (polygon_t &p : polygons) {
-            if (p.second.intersects(c.second)) {
-                output.emplace_back(p.first.lock(), c.first.lock());
+            for (polygon_t &p : polygons) {
+                if (p.first->isTangible() && p.second.intersects(c.second)) {
+                    output.emplace_back(p.first, c.first);
+                }
             }
         }
     }

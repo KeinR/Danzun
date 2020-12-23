@@ -4,7 +4,7 @@ function wait(sec)
 end
 
 function spawn(x, y, vx, vy)
-    local e = game:spawnEntityFull(
+    local e = Entity.new(
         function(self, other)
             print ("nice hit!")
         end,
@@ -13,26 +13,25 @@ function spawn(x, y, vx, vy)
             x += dt * m * 10 * vx;
             y += dt * m * 10 * vy;
         ]],
-        {
-            bvars
-        },
-        {
-            vx = vx,
-            vy = vy
-        },
-        x, y,
-        10, 10,
-        false,
-        "enemies", 0
+        bvars
     );
+    e.x = x
+    e.y = y
+    e.vx = vx
+    e.vy = vy
+    e.width = 10
+    e.height = 10
+    e.autoGC = false
+    e:regCircle("enemies")
+
     e:setScript(function(e)
         while true do
-            local x = player:getX() - e:getX();
-            local y = player:getY() - e:getY();
-            local mag = math.sqrt(x^2 + y^2);
-            x = x / mag;
-            y = y / mag;
-            game:spawnEntityFull(
+            local x = player:getX() - e:getX()
+            local y = player:getY() - e:getY()
+            local mag = math.sqrt(x^2 + y^2)
+            x = x / mag
+            y = y / mag
+            local b = Entity.new(
                 function(self, other)
                     print ("nice hit!")
                 end,
@@ -40,17 +39,17 @@ function spawn(x, y, vx, vy)
                 [[
                     var v[2] := { vx, vy };
                     p := p + v * 10 * dt;
-                ]],
-                {},
-                {
-                    vx = x,
-                    vy = y
-                },
-                e:getX(), e:getY(),
-                10, 10,
-                false,
-                "enemyBullets", 0
+                ]]
             );
+            b.x = e:getX()
+            b.y = e:getY()
+            b.vx = x
+            b.vy = y
+            b.width = 10
+            b.height = 10
+            b.autoGC = false
+            b:regCircle("enemyBullets")
+
             wait(1);
         end
     end);

@@ -17,9 +17,8 @@ namespace dan {
 namespace dan {
     class Group {
     public:
-        typedef std::weak_ptr<Entity> entity_t;
-        typedef std::shared_ptr<Entity> entityLock_t;
-        typedef std::vector<std::pair<entityLock_t, entityLock_t>> output_t;
+        typedef std::shared_ptr<Entity> entity_t;
+        typedef std::vector<std::pair<entity_t, entity_t>> output_t;
         typedef std::pair<entity_t, Circle> circle_t;
         typedef std::pair<entity_t, Polygon> polygon_t;
         typedef std::vector<circle_t> circles_t;

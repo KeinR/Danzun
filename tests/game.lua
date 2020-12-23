@@ -75,7 +75,7 @@ function start()
     font = BffFont.new("consolas18.bff")
 
 
-    game:spawnEntityFull(
+    local e = Entity.new(
         function(self, other)
             print ("player hit!")
         end,
@@ -83,14 +83,11 @@ function start()
         [[
             x := px;
             y := py;
-        ]],
-        {},
-        {},
-        0, 0,
-        30, 30,
-        false,
-        "player", 0
+        ]]
     );
+    e:regCircle("player")
+    e.width = 40
+    e.height = 40
 
 
     -- for y=0,400,5 do
@@ -137,7 +134,6 @@ function start()
     magicCircleImg = Image.new("magic circle.png")
 
     effect = Effect.new(1, magicCircleEffect, nil)
-    effect:deactivate()
 
     effectPattern = Pattern.new([[
         x := px;
@@ -154,6 +150,9 @@ function start()
     effectPattern.rotation = 0
 
     effect:spawn(effectPattern)
+
+    player:setX(100)
+    player:setY(100)
 end
 
 function magicCircleEffect(m, lst)

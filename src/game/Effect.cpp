@@ -6,8 +6,20 @@
 #include "../game/Game.h"
 
 dan::Effect::Effect(sol::state_view l, sol::object masterObject, sol::function callback):
-    masterObject(masterObject), callback(callback), lua(l) {
+    masterObject(masterObject), callback(callback), lua(l), renderPriority(0), detached(false) {
 }
+
+void dan::Effect::setDetached(bool value) {
+    detached = value;
+}
+
+void dan::Effect::setRenderPriority(int value) {
+    renderPriority = value;
+}
+int dan::Effect::getRenderPriority() {
+    return renderPriority;
+}
+
 void dan::Effect::spawn(sol::table obj) {
     objects.push_back(obj);
 }
@@ -28,6 +40,15 @@ void dan::Effect::render(Context &c) {
         }
         if (done) {
             it = objects.erase(it);
+
+            // If detached is true, the Lua client object has been GC'd.
+            // If there also are no objects left, there is no point
+            // for this to exist anymore, as we do not expect that any
+            // more objects can be added...
+            // It is a given that it exists in the render queue.
+            if (objects.empty() && detached) {
+                Game::fromLua(lua).removeRenderable(this);
+            }
         } else {
             params.add(*it);
             ++it;
