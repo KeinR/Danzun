@@ -7,10 +7,15 @@
 
 namespace dan::api {
     class Element {
-        std::shared_ptr<::dan::Element> elem;
+    public:
+        typedef std::shared_ptr<::dan::Element> elem_t;
+    private:
+        elem_t elem;
         int renderPriority;
     public:
-        Element(sol::this_state l, int renderPriority, sol::function callback, sol::object self);
+        Element(sol::this_state l, sol::function callback, sol::object self);
+
+        elem_t getHandle() const;
 
         void render();
         void setRenderPriority(sol::this_state l, int value);

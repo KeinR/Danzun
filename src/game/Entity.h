@@ -11,7 +11,7 @@
 #include <sol/sol.hpp>
 
 #include "../sprite/Renderable.h"
-#include "../sprite/AbsRenderConf.h"
+#include "Element.h"
 #include "../api/Script.h"
 
 namespace dan {
@@ -25,9 +25,10 @@ namespace dan {
         typedef exprtk::symbol_table<float> symbolTable_t;
         typedef exprtk::expression<float> expression_t;
         typedef exprtk::parser<float> parser_t;
-        typedef std::shared_ptr<AbsRenderConf> disp_t;
+        typedef std::shared_ptr<Element> disp_t;
 
     private:
+        std::weak_ptr<Entity> self;
 
         // x, y
         std::array<float, 2> pos;
@@ -66,8 +67,10 @@ namespace dan {
             const std::vector<symbolTable_t> &as
         );
 
-        // Cannot move or copy due to symbol table
-        // (I mean, COULD write custom move funcs, but nahhh)
+        static std::shared_ptr<Entity> make(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation,
+            const std::vector<symbolTable_t> &as);
+
+        // Cannot default move or copy due to symbol table referencing members
         Entity(Entity&) = delete;
         Entity(Entity&&) = delete;
         Entity &operator=(Entity&) = delete;

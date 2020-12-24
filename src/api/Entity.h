@@ -7,10 +7,12 @@
 
 #include <sol/sol.hpp>
 
-#include "RenderConfig.h"
 #include "Script.h"
 
 namespace dan {
+    namespace api {
+        class Element;
+    }
     class Entity;
 }
 
@@ -23,7 +25,7 @@ namespace dan::api {
     public:
         Entity(const handle_t &v);
         Entity(sol::this_state l,
-            sol::function hitCallback, const std::shared_ptr<RenderConfig> &disp,
+            sol::function hitCallback, const Element &disp,
             const std::string &equation, sol::variadic_args vars);
 
         handle_t getHandle();

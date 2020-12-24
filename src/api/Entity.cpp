@@ -7,13 +7,14 @@
 #include "PatternVars.h"
 #include "../core/debug.h"
 #include "Script.h"
+#include "Element.h"
 
 dan::api::Entity::Entity(const handle_t &v): handle(v) {
 }
 
 dan::api::Entity::Entity(
     sol::this_state l,
-    sol::function hitCallback, const std::shared_ptr<RenderConfig> &disp,
+    sol::function hitCallback, const Element &disp,
     const std::string &equation, sol::variadic_args vars
 ) {
 
@@ -29,10 +30,10 @@ dan::api::Entity::Entity(
     // Lowest priority
     tables.push_back(g.getGlobalSymbols());
 
-    handle = std::make_shared<::dan::Entity>(
+    handle = ::dan::Entity::make(
         g,
         hitCallback,
-        disp,
+        disp.getHandle(),
         equation,
         tables
     );
@@ -98,7 +99,7 @@ void dan::api::Entity::newIndexBool(const std::string &name, bool value) {
 void dan::api::Entity::open(sol::state_view &lua) {
     sol::usertype<Entity> type = lua.new_usertype<Entity>("Entity",
         sol::constructors<Entity(sol::this_state,
-            sol::function,const std::shared_ptr<RenderConfig>&,
+            sol::function,const Element&,
             const std::string&,sol::variadic_args)>()
     );
 

@@ -3,7 +3,6 @@
 #include <stdexcept>
 
 #include "../game/Game.h"
-#include "RenderConfig.h"
 #include "PatternVars.h"
 #include "../core/debug.h"
 

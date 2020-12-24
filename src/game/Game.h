@@ -21,7 +21,6 @@
 #include "Group.h"
 #include "Entity.h"
 #include "../time/Clock.h"
-#include "../api/RenderConfig.h"
 #include "Player.h"
 
 namespace dan {

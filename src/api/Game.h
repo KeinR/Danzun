@@ -11,7 +11,6 @@
 #include "Entity.h"
 #include "../game/Entity.h"
 #include "Effect.h"
-#include "RenderConfig.h"
 
 namespace dan {
     class Game;

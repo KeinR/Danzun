@@ -13,7 +13,6 @@
 #include "../api/Matrix.h"
 #include "../api/Entity.h"
 #include "../api/PatternVars.h"
-#include "../api/RenderConfig.h"
 #include "../api/Script.h"
 #include "../api/Player.h"
 #include "../api/Effect.h"
@@ -218,7 +217,6 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Matrix::open(s);
     api::PatternVars::open(s);
     api::Entity::open(s);
-    api::RenderConfig::open(s);
     api::Script::open(s);
     api::Player::open(s);
     api::Effect::open(s);

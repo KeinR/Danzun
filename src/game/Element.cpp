@@ -7,10 +7,18 @@ dan::Element::Element(sol::function callback, sol::object self):
 }
 
 void dan::Element::doRender() {
-    sol::function_result result = callback.call();
+    sol::function_result result = callback.call(self);
     if (!result.valid()) {
         sol::error msg = result;
-        err("api::Element::render") << "callback.call() failed: " << msg.what();
+        err("api::Element::doRender") << "callback.call() failed: " << msg.what();
+    }
+}
+
+void dan::Element::augRender(const api::Entity &self0) {
+    sol::function_result result = callback.call(self0, self);
+    if (!result.valid()) {
+        sol::error msg = result;
+        err("api::Element::augRender") << "callback.call() failed: " << msg.what();
     }
 }
 

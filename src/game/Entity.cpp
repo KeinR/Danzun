@@ -26,6 +26,15 @@ dan::Entity::Entity(
     initEquation(as, equation);
 }
 
+// Static
+std::shared_ptr<dan::Entity> dan::Entity::make(Game &g, sol::function hitCallback, const disp_t &disp, const std::string &equation,
+        const std::vector<symbolTable_t> &as)
+{
+    std::shared_ptr<Entity> result = std::make_shared<Entity>(g, hitCallback, disp, equation, as);
+    result->self = result;
+    return result;
+}
+
 dan::Entity::symbolTable_t &dan::Entity::getTable() {
     return symbols;
 }
@@ -122,16 +131,8 @@ void dan::Entity::run(sol::state_view lua) {
 
 void dan::Entity::render(Context &c) {
     if (disp && f2b(display)) {
-        disp->setup(c);
-
-        Matrix mat;
-            mat.x = pos[0];
-            mat.y = pos[1];
-            mat.width = width;
-            mat.height = height;
-            mat.rotation = rotation;
-        mat.load(c);
-
-        disp->render(c);
+        // disp cannot have ref to `this` else `this` would never destruct.
+        // Therefore, it must be passed as arg
+        disp->augRender(::dan::api::Entity(self.lock()));
     }
 }

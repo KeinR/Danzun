@@ -54,11 +54,11 @@ function start()
 
     img = Image.new("sprites/bullet.png");
 
-    conf = RenderConfig.new(img, mesh, shader);
+    conf = BasicSprite.new(img, mesh, shader);
 
     img = Image.new("sprites/ghost.png");
 
-    entConf = RenderConfig.new(img, mesh, shader);
+    entConf = BasicSprite.new(img, mesh, shader);
 
 
     bvars_data = {m = 4};
@@ -69,7 +69,7 @@ function start()
 
     playerImg = Image.new("sprites/charge.png");
 
-    pyrConf = RenderConfig.new(playerImg, mesh, shader);
+    pyrConf = BasicSprite.new(playerImg, mesh, shader);
 
 
     font = BffFont.new("consolas18.bff")

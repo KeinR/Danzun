@@ -4,6 +4,7 @@
 #include <sol/sol.hpp>
 
 #include "../sprite/Renderable.h"
+#include "../api/Entity.h"
 
 namespace dan {
     class Element: public Renderable {
@@ -13,6 +14,7 @@ namespace dan {
         Element(sol::function callback, sol::object self);
 
         void doRender();
+        void augRender(const api::Entity &self0);
         // Calls doRender()
         void render(Context &c) override;
     };

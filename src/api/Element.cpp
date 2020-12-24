@@ -2,10 +2,13 @@
 
 #include "../game/Game.h"
 
-dan::api::Element::Element(sol::this_state l, int renderPriority, sol::function callback, sol::object self):
-    elem(std::make_shared<::dan::Element>(callback, self)), renderPriority(renderPriority)
+dan::api::Element::Element(sol::this_state l, sol::function callback, sol::object self):
+    elem(std::make_shared<::dan::Element>(callback, self)), renderPriority(0)
 {
-    activate(l);
+}
+
+dan::api::Element::elem_t dan::api::Element::getHandle() const {
+    return elem;
 }
 
 void dan::api::Element::render() {
@@ -28,7 +31,7 @@ void dan::api::Element::deactivate(sol::this_state l) {
 
 void dan::api::Element::open(sol::state_view lua) {
     sol::usertype<Element> type = lua.new_usertype<Element>("Element",
-        sol::constructors<Element(sol::this_state,int,sol::function,sol::object)>()
+        sol::constructors<Element(sol::this_state,sol::function,sol::object)>()
     );
 
     type["render"] = &Element::render;
