@@ -40,49 +40,12 @@ target_link_libraries(Danzun
 
 set_target_properties(Danzun PROPERTIES OUTPUT_NAME "danzun")
 
-include(GNUInstallDirs)
-
-set(DANZUN_VERSION "${VERSION}")
-set(DANZUN_DATA_DIR "${CMAKE_INSTALL_FULL_DATADIR}/lib/danzun")
+set(DANZUN_DATA_DIR_PARENT "${CMAKE_INSTALL_PREFIX}")
+set(DANZUN_VERSION "${CMAKE_PROJECT_VERSION}")
+set(DANZUN_DATA_DIR "${DANZUN_DATA_DIR_PARENT}/danzun")
 set(DANZUN_INIT_SCRIPT "${DANZUN_DATA_DIR}/data/lua/init.lua")
 
 configure_file(src/cmake/config.h.in include/cmake/config.h)
-
-# include(GNUInstallDirs)
-
-# install(
-#     TARGETS Danzun
-#     EXPORT DanzunConfig
-#     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-# )
-# install(
-#     FILES LICENSE
-#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Danzun"
-# )
-# install(
-#     DIRECTORY "src/"
-#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Danzun"
-#     FILES_MATCHING REGEX "^.*\\.(h|inl)$"
-# )
-# export(TARGETS Danzun
-#     FILE "${CMAKE_CURRENT_BINARY_DIR}/DanzunConfig.cmake"
-# )
-# install(EXPORT DanzunConfig
-#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/Danzun"
-# )
-# include(CMakePackageConfigHelpers)
-# write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/DanzunConfigVersion.cmake" COMPATIBILITY SameMajorVersion)
-# install(FILES "${CMAKE_CURRENT_BINARY_DIR}/DanzunConfigVersion.cmake"
-#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/Danzun"
-# )
-
-# if (WIN32 OR CYGWIN)
-#   set(CPACK_GENERATOR ZIP)
-# else()
-#   set(CPACK_GENERATOR TGZ)
-# endif()
-
-# include(CPack)
 
 install(
     TARGETS Danzun
@@ -91,19 +54,48 @@ install(
 
 install(
     DIRECTORY "data"
-    DESTINATION "${DANZUN_DATA_DIR}"
+    DESTINATION share/danzun
 )
 
-set(CPACK_DEBIAN_PACKAGE_VERSION ${VERSION})
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Orion Musselman <orionmusselman@gmail.com>")
-set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "A basic 'Shoot em' up' bullet hell game engine (runtime)")
-set(CPACK_DEBIAN_PACKAGE_SECTION "games")
-set(CPACK_DEBIAN_PACKAGE_DEBUG ON)
-set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
-set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS_POLICY ">=")
+if (UNIX)
 
-set(CPACK_GENERATOR DEB)
+    # ty Stack https://stackoverflow.com/a/41592428/10821333
+    find_program(LSB_RELEASE_EXEC lsb_release)
+    execute_process(COMMAND ${LSB_RELEASE_EXEC} -is
+        OUTPUT_VARIABLE DISTRO
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if (DISTRO MATCHES "Debian")
+
+        message(STATUS "Using debain packages")
+
+        set(CPACK_DEBIAN_PACKAGE_VERSION ${VERSION})
+        set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Orion Musselman <orionmusselman@gmail.com>")
+        set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "A basic 'Shoot em' up' bullet hell game engine (runtime)")
+        set(CPACK_DEBIAN_PACKAGE_SECTION "games")
+        set(CPACK_DEBIAN_PACKAGE_DEBUG ON)
+        set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+        set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
+        set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS_POLICY ">=")
+        set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "${CMAKE_PROJECT_HOMEPAGE_URL}")
+        set(CPACK_DEBIAN_FILE_NAME "Danzun-${DANZUN_VERSION}-Debian-${CMAKE_SYSTEM_PROCESSOR}.deb")
+
+        set(CPACK_GENERATOR DEB)
+
+    else()
+
+        message(STATUS "Using generic tgz packages")
+
+        set(CPACK_GENERATOR TGZ)
+
+    endif()
+
+else()
+
+    set(CPACK_GENERATOR ZIP)
+
+endif()
 
 include(CPack)
 
