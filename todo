@@ -10,3 +10,5 @@ Entity should be build local like effect and element
 Clean up errors
 Select bullets (custom hitboxes)
     - No, entities will be the hitbox abstraction...
+
+- It does break if in the same dir as start script, fix
