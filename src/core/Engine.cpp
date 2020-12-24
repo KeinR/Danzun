@@ -28,6 +28,7 @@
 #include <chrono>
 #include <thread>
 
+#include <cmake/config.h>
 
 dan::Engine::Engine():
     window("Danzun", 500, 500, 0),
@@ -195,7 +196,7 @@ void dan::Engine::cCall(const std::string &functionGlobalName) {
 
 void dan::Engine::open(const std::filesystem::path &filePath) {
 
-    std::filesystem::path p = std::filesystem::absolute("../data/lua/game.lua");
+    std::filesystem::path p = std::filesystem::absolute(DANZUN_INIT_SCRIPT);
     std::filesystem::path t = std::filesystem::absolute(filePath);
 
     // IMPORTANT: Set working directory to that of the init script

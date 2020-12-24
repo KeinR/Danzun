@@ -1,21 +1,21 @@
 cmake_minimum_required(VERSION 3.13)
-project(danzun VERSION 0.1 LANGUAGES CXX C)
+project(Danzun VERSION 0.1 LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
 set(BUILD_SHARED_LIBS true)
+set(CMAKE_PROJECT_HOMEPAGE_URL "https://github.com/keinr/Danzun")
 
 file(GLOB_RECURSE sources src/*.cpp src/*.c)
 set(libs
-    extern/stb/stb_image.c
-    extern/pugixml/pugixml.cpp
+    deps/stb/stb_image.c
 )
 
 file(COPY "data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
-add_library(danzun STATIC ${sources} ${libs})
+add_executable(Danzun ${sources} ${libs})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
@@ -24,47 +24,56 @@ find_package(glfw3 3.2 REQUIRED)
 find_package(Lua53 REQUIRED)
 find_package(OpenAL 1.19 REQUIRED)
 
-target_include_directories(danzun
-    PUBLIC "extern"
+target_include_directories(Danzun
+    PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/include"
+    PUBLIC "deps"
     PUBLIC "${GLFW_INCLUDE_DIRS}"
     PUBLIC "${GLM_INCLUDE_DIRS}"
     PUBLIC "${LUA53_INCLUDE_DIR}"
 )
 
-target_link_libraries(danzun
+target_link_libraries(Danzun
     glfw
     ${LUA53_LIBRARIES}
     stdc++fs
 )
 
-add_subdirectory(frontend)
+set_target_properties(Danzun PROPERTIES OUTPUT_NAME "danzun")
+
+include(GNUInstallDirs)
+
+set(DANZUN_VERSION "${VERSION}")
+set(DANZUN_DATA_DIR "${CMAKE_INSTALL_FULL_DATADIR}/lib/danzun")
+set(DANZUN_INIT_SCRIPT "${DANZUN_DATA_DIR}/data/lua/init.lua")
+
+configure_file(src/cmake/config.h.in include/cmake/config.h)
 
 # include(GNUInstallDirs)
 
 # install(
-#     TARGETS danzun
-#     EXPORT danzunConfig
+#     TARGETS Danzun
+#     EXPORT DanzunConfig
 #     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 # )
 # install(
 #     FILES LICENSE
-#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/danzun"
+#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Danzun"
 # )
 # install(
 #     DIRECTORY "src/"
-#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/danzun"
+#     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Danzun"
 #     FILES_MATCHING REGEX "^.*\\.(h|inl)$"
 # )
-# export(TARGETS danzun
-#     FILE "${CMAKE_CURRENT_BINARY_DIR}/danzunConfig.cmake"
+# export(TARGETS Danzun
+#     FILE "${CMAKE_CURRENT_BINARY_DIR}/DanzunConfig.cmake"
 # )
-# install(EXPORT danzunConfig
-#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/danzun"
+# install(EXPORT DanzunConfig
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/Danzun"
 # )
 # include(CMakePackageConfigHelpers)
-# write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/danzunConfigVersion.cmake" COMPATIBILITY SameMajorVersion)
-# install(FILES "${CMAKE_CURRENT_BINARY_DIR}/danzunConfigVersion.cmake"
-#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/danzun"
+# write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/DanzunConfigVersion.cmake" COMPATIBILITY SameMajorVersion)
+# install(FILES "${CMAKE_CURRENT_BINARY_DIR}/DanzunConfigVersion.cmake"
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/Danzun"
 # )
 
 # if (WIN32 OR CYGWIN)
@@ -74,3 +83,27 @@ add_subdirectory(frontend)
 # endif()
 
 # include(CPack)
+
+install(
+    TARGETS Danzun
+    RUNTIME DESTINATION bin
+)
+
+install(
+    DIRECTORY "data"
+    DESTINATION "${DANZUN_DATA_DIR}"
+)
+
+set(CPACK_DEBIAN_PACKAGE_VERSION ${VERSION})
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Orion Musselman <orionmusselman@gmail.com>")
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "A basic 'Shoot em' up' bullet hell game engine (runtime)")
+set(CPACK_DEBIAN_PACKAGE_SECTION "games")
+set(CPACK_DEBIAN_PACKAGE_DEBUG ON)
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
+set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS_POLICY ">=")
+
+set(CPACK_GENERATOR DEB)
+
+include(CPack)
+
