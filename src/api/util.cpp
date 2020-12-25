@@ -5,12 +5,9 @@
 
 #include <nlohmann/json.hpp>
 
-#include "../core/error.h"
-
 static std::string stripAseExt(const std::string &in);
 
 sol::table dan::api::util::loadAsepriteJSONArray(sol::this_state l, const std::string &path) {
-#define FUNC_SIG "api::Image::getFramesAseprite"
 
     sol::state_view lua = l;
     sol::table results = lua.create_table();
@@ -26,8 +23,7 @@ sol::table dan::api::util::loadAsepriteJSONArray(sol::this_state l, const std::s
     try {
         std::ifstream file(path);
         if (!file.good()) {
-            err(FUNC_SIG) << "\"" << path << "\" does not exist or cannot be opened";
-            return results;
+            throw std::invalid_argument("Cannot open file");
         }
 
         using json = nlohmann::json;
@@ -69,12 +65,10 @@ sol::table dan::api::util::loadAsepriteJSONArray(sol::this_state l, const std::s
             hash[stripAseExt(frm.at("filename").get<std::string>())] = array.size(); // This is OK, since Lua arrays aren't zero-index'd
         }
     } catch (std::exception &e) {
-        err(FUNC_SIG) << "Failed to parse JSON \"" << path << "\": " << e.what();
+        throw std::runtime_error(std::string("JSON error: ") + e.what());
     }
 
     return results;
-
-#undef FUNC_SIG
 }
 
 std::string stripAseExt(const std::string &in) {

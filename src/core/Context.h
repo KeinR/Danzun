@@ -1,12 +1,7 @@
 #ifndef DANZUN_CONTEXT_H_INCLUDED
 #define DANZUN_CONTEXT_H_INCLUDED
 
-#include <string>
-
 #include <sol/sol.hpp>
-
-#include "../render/Mesh.h"
-#include "../time/Clock.h"
 
 namespace dan {
     class Engine;
@@ -15,15 +10,12 @@ namespace dan {
 
 namespace dan {
     class Context {
-        Mesh quad_;
         // Is only for use by client code - The context has
         // no use for this
         Engine *engine;
         Shader *currentShader;
         int vWidth;
         int vHeight;
-
-        Clock clock;
 
     public:
         Context(Engine *e);
@@ -38,9 +30,6 @@ namespace dan {
         int getVPHeight() const;
         Shader &getShader() const;
         Engine &getEngine() const;
-        Clock &getClock();
-
-        void renderQuad() const;
 
         static Context &fromLua(sol::state_view lua);
     };

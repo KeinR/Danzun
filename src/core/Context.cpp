@@ -1,7 +1,5 @@
 #include "Context.h"
 
-#include <array>
-
 #include "debug.h"
 #include "Engine.h"
 
@@ -14,21 +12,6 @@ dan::Context::Context(Engine *e):
     vWidth(50),
     vHeight(50)
 {
-    std::array<float, 16> v = {
-        -1, -1, 0, 0,
-        -1, 1, 0, 1,
-        1, 1, 1, 1,
-        1, -1, 1, 0
-    };
-    std::array<unsigned int, 6> i = {
-        0, 1, 2,
-        0, 2, 3
-    };
-
-    quad_.setIndices(i.size(), i.data());
-    quad_.setVertices(v.size(), v.data());
-    quad_.setParam(0, 2, 4, 0);
-    quad_.setParam(1, 2, 4, 2);
 }
 
 void dan::Context::setShader(Shader &s) {
@@ -64,14 +47,6 @@ dan::Shader &dan::Context::getShader() const {
 dan::Engine &dan::Context::getEngine() const {
     DANZUN_ASSERT(engine != nullptr);
     return *engine;
-}
-
-dan::Clock &dan::Context::getClock() {
-    return clock;
-}
-
-void dan::Context::renderQuad() const {
-    quad_.render();
 }
 
 // Static members

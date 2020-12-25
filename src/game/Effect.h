@@ -1,5 +1,5 @@
-#ifndef DAN_EFFECT_H_INCLUDED
-#define DAN_EFFECT_H_INCLUDED
+#ifndef DANZUN_EFFECT_H_INCLUDED
+#define DANZUN_EFFECT_H_INCLUDED
 
 #include <vector>
 

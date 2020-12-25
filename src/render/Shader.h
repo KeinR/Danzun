@@ -2,7 +2,7 @@
 #define DANZUN_SHADER_H_INCLUDED
 
 #include <string>
-#include <map>
+#include <unordered_map>
 
 namespace dan {
     class Context;
@@ -14,7 +14,7 @@ namespace dan {
         typedef int uniform_t;
         typedef unsigned int program_t;
     private:
-        typedef std::map<std::string, uniform_t> uniforms_t;
+        typedef std::unordered_map<std::string, uniform_t> uniforms_t;
 
         Context *c;
         program_t handle;

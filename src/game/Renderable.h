@@ -1,5 +1,5 @@
-#ifndef DAN_RENDERABLE_H_INCLUDED
-#define DAN_RENDERABLE_H_INCLUDED
+#ifndef DANZUN_RENDERABLE_H_INCLUDED
+#define DANZUN_RENDERABLE_H_INCLUDED
 
 namespace dan {
     class Context;

@@ -1,6 +1,5 @@
 #include "Window.h"
 
-#include <map>
 #include <string>
 #include <stdexcept>
 
@@ -33,7 +32,7 @@ bool dan::api::Window::keyDown(const std::string &name) {
     if (it != keyMappings.end()) {
         return handle->keyPressed(it->second);
     } else {
-        throw std::invalid_argument("Key not found: " + name);
+        throw std::invalid_argument("Key not found");
     }
 }
 

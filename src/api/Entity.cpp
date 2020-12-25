@@ -5,9 +5,10 @@
 #include "../game/Game.h"
 #include "../game/Entity.h"
 #include "PatternVars.h"
-#include "../core/debug.h"
 #include "Script.h"
 #include "Element.h"
+
+#include "../core/debug.h"
 
 dan::api::Entity::Entity(const handle_t &v): handle(v) {
 }

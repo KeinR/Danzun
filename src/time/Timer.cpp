@@ -1,17 +1,16 @@
 #include "Timer.h"
 
-#include "Clock.h"
-
-dan::Timer::Timer(const Clock &clock): clock(&clock) {
-    set(0);
-    reset();
+dan::Timer::Timer(): Timer(0) {
 }
-void dan::Timer::set(float s) {
-    duration = s;
+dan::Timer::Timer(unsigned int ms): end(clock::now()) {
+    setTime(ms);
 }
-void dan::Timer::reset() {
-    end = clock->getTime() + duration;
+void dan::Timer::setTime(unsigned int ms) {
+    time = std::chrono::milliseconds(ms);
 }
-bool dan::Timer::done() const {
-    return clock->getTime() >= end;
+void dan::Timer::start() {
+    end = clock::now() + time;
+}
+bool dan::Timer::done() {
+    return clock::now() >= end;
 }

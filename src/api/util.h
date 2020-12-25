@@ -1,5 +1,5 @@
-#ifndef DAN_API_UTIL_H_INCLUDED
-#define DAN_API_UTIL_H_INCLUDED
+#ifndef DANZUN_API_UTIL_H_INCLUDED
+#define DANZUN_API_UTIL_H_INCLUDED
 
 #include <string>
 

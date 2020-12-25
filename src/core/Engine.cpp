@@ -174,7 +174,6 @@ void dan::Engine::run() {
 #endif
 
         start = time;
-        rc.getClock().pushDeltaTime(deltaTime);
         if (gameActive) {
             game.logic(deltaTime);
         }

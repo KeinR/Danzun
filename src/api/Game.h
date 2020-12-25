@@ -2,15 +2,8 @@
 #define DANZUN_API_GAME_H_INCLUDED
 
 #include <string>
-#include <vector>
-#include <utility>
-#include <memory>
 
 #include <sol/sol.hpp>
-
-#include "Entity.h"
-#include "../game/Entity.h"
-#include "Effect.h"
 
 namespace dan {
     class Game;

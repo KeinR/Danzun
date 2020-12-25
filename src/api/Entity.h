@@ -1,5 +1,5 @@
-#ifndef DAN_API_ENTITY_H_INCLUDED
-#define DAN_API_ENTITY_H_INCLUDED
+#ifndef DANZUN_API_ENTITY_H_INCLUDED
+#define DANZUN_API_ENTITY_H_INCLUDED
 
 #include <memory>
 #include <set>

@@ -2,7 +2,7 @@
 
 #include <stb/stb_image.h>
 
-#include "../core/error.h"
+#include <stdexcept>
 
 dan::api::Image::Image(const std::string &path) {
 
@@ -10,7 +10,7 @@ dan::api::Image::Image(const std::string &path) {
     int channels;
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
     if (data == NULL) {
-        err("api::Image::Image") << "Failed to load image \"" << path << "\"";
+        throw std::invalid_argument("Failed to open image file");
     }
 
     int format = Texture::getFormat(channels);
@@ -20,7 +20,7 @@ dan::api::Image::Image(const std::string &path) {
         stbi_image_free(data);
     } else {
         stbi_image_free(data);
-        err("api::Image::Image") << "Failed to load image \"" << path << "\"";
+        throw std::invalid_argument("Failed to parse image");
     }
 }
 

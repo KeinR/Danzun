@@ -10,7 +10,6 @@ struct GLFWwindow;
 namespace dan {
     class WindowEvent;
     class Cursor;
-    class Color;
 }
 
 namespace dan {
@@ -47,7 +46,6 @@ namespace dan {
         void setCursorMode(cursorMode mode);
         void toggleInputMode(inputMode mode, bool toggle);
 
-        void clearColorBuffer(const Color &color);
         void clearDepthBuffer();
         void clearStencilBuffer();
         void swapBuffers();
@@ -80,7 +78,7 @@ namespace dan {
         int getFramebufferWidth() const;
         int getFramebufferHeight() const;
         void getFramebufferSize(int &width, int &height) const;
-        
+
         void setVisible(bool toggle);
         void setSize(int width, int height);
         void setTitle(const std::string &title);

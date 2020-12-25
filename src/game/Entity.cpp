@@ -1,9 +1,10 @@
 #include "Entity.h"
 
+#include <stdexcept>
+
 #include "../core/debug.h"
 #include "../game/Game.h"
 #include "../time/Clock.h"
-#include "../render/Matrix.h"
 #include "../api/Entity.h"
 
 dan::Entity::Entity(
@@ -96,8 +97,7 @@ void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const std::
     parser.enable_unknown_symbol_resolver();
 
     if (!parser.compile(eq, exp)) {
-        // TEMP - should notify once then ignore, not spam console
-        std::cerr << "Entity: Failed to compile expression, " << parser.error() << '\n';
+        throw std::runtime_error(std::string("Failed to compile expression: ") + parser.error());
     }
 }
 

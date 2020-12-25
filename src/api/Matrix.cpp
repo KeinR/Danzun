@@ -6,7 +6,7 @@
 dan::api::Matrix::Matrix(): x(0), y(0), width(10), height(10), rotation(0) {
 }
 void dan::api::Matrix::load(sol::this_state l) {
-    ::dan::Matrix(x, y, width, height, rotation).load(Context::fromLua(l));
+    ::dan::Matrix(x, y, width, height, rotation, false).load(Context::fromLua(l));
 }
 
 void dan::api::Matrix::open(sol::state_view &lua) {

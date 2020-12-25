@@ -25,7 +25,7 @@ namespace dan {
         float rotation;
 
         bool reflectAcrossYAxis;
-        Matrix(float x = 0.0f, float y = 0.0f, float width = 0.0f, float height = 0.0f, float rotation = 0.0f, bool reflectAcrossYAxis = false);
+        Matrix(float x, float y, float width, float height, float rotation, bool reflectAcrossYAxis);
 
         void load(Context &c, const std::string &location = "model");
     };

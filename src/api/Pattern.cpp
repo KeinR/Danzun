@@ -10,8 +10,9 @@ dan::api::Pattern::Pattern(sol::this_state l, const std::string &pattern, sol::v
     expression.register_symbol_table(symbols);
 
     for (auto o : patternVars) {
-        // Unchecked danger
-        expression.register_symbol_table(o.as<PatternVars>().getTable());
+        if (o.is<PatternVars>()) {
+            expression.register_symbol_table(o.as<PatternVars>().getTable());
+        }
     }
 
     expression.register_symbol_table(Game::fromLua(l).getGlobalSymbols());
@@ -51,5 +52,6 @@ void dan::api::Pattern::open(sol::state_view &lua) {
     type[sol::meta_function::index] = &Pattern::index;
     type[sol::meta_function::new_index] = sol::overload(&Pattern::newIndex, &Pattern::newIndexBool);
     type[sol::meta_function::call] = &Pattern::run;
+
     type["run"] = &Pattern::run;
 }

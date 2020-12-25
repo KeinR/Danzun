@@ -24,11 +24,11 @@ namespace dan {
         WindowEvent *windowEventCallback;
         EventCallback *eventCallback;
 
-        sol::state s;
-
         Game game;
         bool gameActive;
         float gameSpeed;
+
+        sol::state s;
 
         // Cautious call - don't call if nil
         void cCall(const std::string &functionGlobalName);

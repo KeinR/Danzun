@@ -1,11 +1,6 @@
 #include "Game.h"
 
-#include <stdexcept>
-
 #include "../game/Game.h"
-#include "PatternVars.h"
-#include "../core/debug.h"
-
 
 dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
 }

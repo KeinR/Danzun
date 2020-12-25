@@ -1,5 +1,5 @@
-#ifndef DAN_ELEMENT_H_INCLUDED
-#define DAN_ELEMENT_H_INCLUDED
+#ifndef DANZUN_ELEMENT_H_INCLUDED
+#define DANZUN_ELEMENT_H_INCLUDED
 
 #include <sol/sol.hpp>
 

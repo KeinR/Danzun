@@ -1,6 +1,7 @@
 #include "Game.h"
 
-#include "../core/debug.h"
+#include <iostream>
+
 #include "../core/Engine.h"
 
 template <typename T>

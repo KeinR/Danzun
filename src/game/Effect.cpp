@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "../game/Entity.h"
 #include "../game/Game.h"
+#include "../core/error.h"
 
 dan::Effect::Effect(sol::state_view l, sol::object masterObject, sol::function callback):
     masterObject(masterObject), callback(callback), lua(l), renderPriority(0), detached(false) {
@@ -56,8 +56,7 @@ void dan::Effect::render(Context &c) {
     }
     sol::function_result result = callback.call(masterObject, params);
     if (!result.valid()) {
-        // TEMP
         sol::error e = result;
-        std::cerr << "Effect: CALLBACK ERROR'd: " << e.what() << '\n';
+        err("Effect::render") << "Lua callback error'd: " << e.what() << '\n';
     }
 }

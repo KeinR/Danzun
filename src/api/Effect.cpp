@@ -1,7 +1,5 @@
 #include "Effect.h"
 
-#include <iostream>
-
 #include "../game/Game.h"
 
 dan::api::Effect::Effect(sol::this_state l, int renderPriority, sol::function callback, sol::object masterObject):
@@ -24,11 +22,9 @@ void dan::api::Effect::setRenderPriority(sol::this_state l, int value) {
     activate(l);
 }
 void dan::api::Effect::activate(sol::this_state l) {
-    std::cout << "Activate effect" << '\n';
     Game::fromLua(l).submitRenderable(effect->getRenderPriority(), effect);
 }
 void dan::api::Effect::deactivate(sol::this_state l) {
-    std::cout << "Deactivate effect" << '\n';
     Game::fromLua(l).removeRenderable(effect.get());
 }
 

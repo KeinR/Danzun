@@ -1,5 +1,5 @@
-#ifndef DAN_ENTITY_H_INCLUDED
-#define DAN_ENTITY_H_INCLUDED
+#ifndef DANZUN_ENTITY_H_INCLUDED
+#define DANZUN_ENTITY_H_INCLUDED
 
 #include <array>
 #include <memory>

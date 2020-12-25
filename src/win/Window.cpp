@@ -11,7 +11,6 @@
 #include "../core/debug.h"
 #include "../core/error.h"
 #include "../lib/glfw.h"
-#include "../render/Color.h"
 
 struct winparams {
     const char *title;
@@ -111,15 +110,7 @@ void dan::Window::toggleInputMode(inputMode mode, bool toggle) {
     glfwSetInputMode(handle, m, val);
 }
 
-void dan::Window::clearColorBuffer(const Color &color) {
-    glClearColor(
-        color[0],
-        color[1],
-        color[2],
-        color[3]
-    );
-    glClear(GL_COLOR_BUFFER_BIT);
-}
+
 void dan::Window::clearDepthBuffer() {
     glClear(GL_DEPTH_BUFFER_BIT);
 }

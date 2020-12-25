@@ -111,7 +111,7 @@ function start()
     effectPattern.height = 150
     effectPattern.rotation = 0
 
-    -- effect:spawn(effectPattern)
+    effect:spawn(effectPattern)
 
     player:setX(100)
     player:setY(100)
@@ -219,7 +219,7 @@ end
 
 function main() -- main(e)
 
-    -- script:run()
+    script:run()
 
     game:testCollisions("player", "enemyBullets")
     game:testCollisions("enemies", "playerBullets")

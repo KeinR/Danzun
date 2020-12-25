@@ -1,12 +1,20 @@
 cmake_minimum_required(VERSION 3.13)
 project(Danzun VERSION 0.2 LANGUAGES CXX C)
 
+option(BUILD_DOCS "Whether the documentation target should be generated" OFF)
+option(BUILD_PRIVATE_DOCS "If MAKE_DOCS is turned on, will build docs for the codebase as opposed to the Lua API" OFF)
+
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED true)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
-set(BUILD_SHARED_LIBS true)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(BUILD_SHARED_LIBS ON)
 set(CMAKE_PROJECT_HOMEPAGE_URL "https://github.com/keinr/Danzun")
+
+# Thanks stack https://stackoverflow.com/a/61381440/10821333
+if (MSVC)
+    add_compile_options(/W4)
+else()
+    add_compile_options(-Wall -pedantic)
+endif()
 
 file(GLOB_RECURSE sources src/*.cpp src/*.c)
 set(libs
@@ -14,6 +22,8 @@ set(libs
 )
 
 add_executable(Danzun ${sources} ${libs})
+
+set_target_properties(Danzun PROPERTIES OUTPUT_NAME "danzun")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
@@ -36,11 +46,19 @@ target_link_libraries(Danzun
     stdc++fs
 )
 
-set_target_properties(Danzun PROPERTIES OUTPUT_NAME "danzun")
+# Subdirectories
+
+if (BUILD_DOCS)
+    add_subdirectory(docs)
+endif()
+
+# Configuration
 
 set(DANZUN_VERSION "${CMAKE_PROJECT_VERSION}")
 
 configure_file(src/cmake/config.h.in include/cmake/config.h)
+
+# Packaging
 
 install(
     TARGETS Danzun

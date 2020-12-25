@@ -6,18 +6,12 @@
 #include <utility>
 #include <list>
 #include <unordered_set>
-#include <functional>
 #include <memory>
-#include <unordered_set>
 
 #include <sol/sol.hpp>
-
 #include <arashpartow/exprtk.hpp>
 
-#include "../win/WindowEvent.h"
-
-#include "../time/RealTimer.h"
-
+#include "../time/Timer.h"
 #include "Group.h"
 #include "Entity.h"
 #include "../time/Clock.h"
@@ -25,7 +19,6 @@
 
 namespace dan {
     class Context;
-    class Player;
     class Engine;
 }
 
@@ -46,7 +39,7 @@ namespace dan {
         int width;
         int height;
 
-        RealTimer gcTimer;
+        Timer gcTimer;
         Clock clock;
 
         Player player;

@@ -6,3 +6,5 @@
 Clean up errors
 
 - Remove dumb callbacks
+
+- Still have to do entity GC
