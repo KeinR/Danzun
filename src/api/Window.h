@@ -1,9 +1,9 @@
 #ifndef DANZUN_API_WINDOW_H_INCLUDED
 #define DANZUN_API_WINDOW_H_INCLUDED
 
-#include <map>
+#include <unordered_map>
 
-#include <sol/forward.hpp>
+#include <sol/sol.hpp>
 
 #include "../win/enums.h"
 
@@ -13,8 +13,9 @@ namespace dan {
 
 namespace dan::api {
     class Window {
+        typedef std::unordered_map<std::string, dan::keyt> keyMappings_t;
         ::dan::Window *handle;
-        std::map<std::string, dan::keyt> keyMappings;
+        keyMappings_t keyMappings;
     public:
         Window(::dan::Window &handle);
 
@@ -23,7 +24,7 @@ namespace dan::api {
         void setVisible(bool toggle);
         bool keyDown(const std::string &name);
 
-        static void open(sol::state_view &lua);
+        static void open(sol::state_view lua);
     };
 }
 

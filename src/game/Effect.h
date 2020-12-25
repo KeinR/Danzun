@@ -5,7 +5,7 @@
 
 #include <sol/sol.hpp>
 
-#include "../sprite/Renderable.h"
+#include "Renderable.h"
 
 namespace dan {
     class Effect: public Renderable {

@@ -1,18 +1,13 @@
 #ifndef DANZUN_TEXTURE_H_INCLUDED
 #define DANZUN_TEXTURE_H_INCLUDED
 
-#include <string>
-
-#include "../sprite/AbsTexture.h"
-#include "../sprite/AbsRenderConf.h"
-
 namespace dan {
     class Image;
     class Context;
 }
 
 namespace dan {
-    class Texture: public AbsTexture {
+    class Texture {
     public:
         /// Type of data accepted by the Texture
         /// @see setData(int format, unsigned int width, unsigned int height, const data_t *data)
@@ -49,9 +44,6 @@ namespace dan {
     private:
         /// Handle to the managed OpenGL buffer
         unsigned int buffer;
-
-        int iWidth;
-        int iHeight;
 
         /**
         * Initializes the Texture.
@@ -114,18 +106,12 @@ namespace dan {
         */
         unsigned int getHandle();
 
-        void loadImage(const std::string &imgPath, bool flipOnLoad = true);
-        void setImage(const Image &image);
-
         /**
         * Sets this texture as current, so that it'll be used in
         * whatever texture slot is active (via glActiveTexture(...))
         */
-        void bind() override;
+        void bind();
         static void unbind();
-
-        // Does nothing
-        void setup(Context &c) override;
 
         /**
         * Set the content of the texture.
@@ -134,8 +120,7 @@ namespace dan {
         * @param [in] height The @e pixel height of the texture
         * @param [in] data Pointer to the raw pixel data.
         */
-        void setData(format fmt, unsigned int width, unsigned int height, const data_t *data);
-        void setData(int channels, unsigned int width, unsigned int height, const data_t *data);
+        void setData(int fmt, unsigned int width, unsigned int height, const data_t *data);
         // Reduces data to zero.
         // Equivilent to setData(Texture::[RGBA], 0, 0, NULL)
         void clear();
@@ -157,14 +142,8 @@ namespace dan {
         */
         void setParams(const tparam &params);
 
-        int getWidth();
-        int getHeight();
-
-        // Calls c.renderQuad()
-        void render(Context &c) override;
-
-        // Returns INVALID_FORMAT if `channels` < 1 or > 4
-        static format getFormat(int channels);
+        // Returns 0 if `channels` < 1 or > 4
+        static int getFormat(int channels);
     };
 }
 

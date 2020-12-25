@@ -10,7 +10,7 @@
 #include <arashpartow/exprtk.hpp>
 #include <sol/sol.hpp>
 
-#include "../sprite/Renderable.h"
+#include "Renderable.h"
 #include "Element.h"
 #include "../api/Script.h"
 

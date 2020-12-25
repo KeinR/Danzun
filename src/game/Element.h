@@ -3,7 +3,7 @@
 
 #include <sol/sol.hpp>
 
-#include "../sprite/Renderable.h"
+#include "Renderable.h"
 #include "../api/Entity.h"
 
 namespace dan {

@@ -1,10 +1,8 @@
 #include "Texture.h"
 
-#include "../sprite/ManImage.h"
-#include "../sprite/Image.h"
+#include <cstddef>
+
 #include "../lib/opengl.h"
-#include "../core/error.h"
-#include "../core/Context.h"
 
 // In-use enum values for Texture.
 // def'd to be extra safe.
@@ -15,10 +13,6 @@
 constexpr dan::Texture::tparam dan::Texture::defaultParams{
     GL_CLAMP_TO_EDGE,
     GL_CLAMP_TO_EDGE,
-    // GL_REPEAT,
-    // GL_REPEAT,
-    // GL_NEAREST,
-    // GL_NEAREST
     GL_LINEAR,
     GL_LINEAR
 };
@@ -38,8 +32,6 @@ dan::Texture::~Texture() {
 void dan::Texture::init(const tparam &params) {
     glGenTextures(1, &buffer);
     setParams(params);
-    iWidth = 0;
-    iHeight = 0;
 }
 
 void dan::Texture::deInit() {
@@ -59,6 +51,12 @@ dan::Texture &dan::Texture::operator=(Texture &&other) {
     return *this;
 }
 
+void dan::Texture::setData(int fmt, unsigned int width, unsigned int height, const data_t *data) {
+    bind();
+    glTexImage2D(TEXTURE_TYPE, 0, fmt, width, height, 0, fmt, TEXTURE_PIXEL_TYPE, data);
+    unbind();
+}
+
 unsigned int dan::Texture::getHandle() {
     return buffer;
 }
@@ -70,72 +68,10 @@ void dan::Texture::unbind() {
     glBindTexture(TEXTURE_TYPE, 0);
 }
 
-void dan::Texture::setup(Context &c) {
-    bind();
-}
-
-void dan::Texture::loadImage(const std::string &imgPath, bool flipOnLoad) {
-    ManImage img(imgPath, flipOnLoad);
-    setImage(img);
-}
-
-void dan::Texture::setImage(const Image &image) {
-    GLenum f;
-    switch (image.getChannels()) {
-        case 4: f = GL_RGBA; break;
-        case 3: f = GL_RGB; break;
-        case 2: f = GL_RG; break;
-        case 1: f = GL_RED; break;
-        default:
-            err("Texture::setImage") << "Invalid image channels [" << image.getChannels() << "]; channels must be > 0 and <= 4 ";
-            return;
-    }
-
-    bind();
-    glTexImage2D(TEXTURE_TYPE, 0, f, image.getWidth(), image.getHeight(), 0, f, TEXTURE_PIXEL_TYPE, image.getData());
-    unbind();
-
-    iWidth = image.getWidth();
-    iHeight = image.getHeight();
-}
-
-void dan::Texture::setData(format fmt, unsigned int width, unsigned int height, const data_t *data) {
-    GLenum f;
-    switch (fmt) {
-        case RGBA: f = GL_RGBA; break;
-        case RGB: f = GL_RGB; break;
-        case RG: f = GL_RG; break;
-        case RED: f = GL_RED; break;
-        case INVALID_FORMAT: // Fallthrough
-        default:
-            err("Texture::setData(format...)") << "Invalid format enum";
-            return;
-    }
-
-    bind();
-    glTexImage2D(TEXTURE_TYPE, 0, f, width, height, 0, f, TEXTURE_PIXEL_TYPE, data);
-    unbind();
-
-    iWidth = width;
-    iHeight = height;
-}
-
-void dan::Texture::setData(int channels, unsigned int width, unsigned int height, const data_t *data) {
-    format f = getFormat(channels);
-    if (f == INVALID_FORMAT) {
-        err("Texture::setData(int...)") << "Invalid number of channels [" << channels << "]; channels must be > 0 and <= 4 ";
-        return;
-    }
-    setData(f, width, height, data);
-}
-
 void dan::Texture::clear() {
     bind();
     glTexImage2D(TEXTURE_TYPE, 0, GL_RED, 0, 0, 0, GL_RED, TEXTURE_PIXEL_TYPE, NULL);
     unbind();
-
-    iWidth = 0;
-    iHeight = 0;
 }
 
 void dan::Texture::genMipmap() {
@@ -161,23 +97,12 @@ void dan::Texture::setParams(const tparam &params) {
     unbind();
 }
 
-int dan::Texture::getWidth() {
-    return iWidth;
-}
-int dan::Texture::getHeight() {
-    return iHeight;
-}
-
-void dan::Texture::render(Context &c) {
-    c.renderQuad();
-}
-
-dan::Texture::format dan::Texture::getFormat(int channels) {
+int dan::Texture::getFormat(int channels) {
     switch (channels) {
-        case 4: return format::RGBA;
-        case 3: return format::RGB;
-        case 2: return format::RG;
-        case 1: return format::RED;
-        default: return format::INVALID_FORMAT;
+        case 4: return GL_RGBA;
+        case 3: return GL_RGB;
+        case 2: return GL_RG;
+        case 1: return GL_RED;
+        default: return 0;
     }
 }

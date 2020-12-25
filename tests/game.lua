@@ -1,5 +1,7 @@
 
-uiElements = {}
+
+require("nice")
+
 
 -- First thing that runs, before window
 -- opens
@@ -90,46 +92,6 @@ function start()
     e.height = 40
 
 
-    -- for y=0,400,5 do
-    --     game:spawnEntityFull(
-    --         function(self, other)
-    --             print ("something hit...")
-    --         end,
-    --         conf,
-    --         [[
-    --             if (t - ti < 5) {
-    --                 x += sgn(px - x) * dt * 10;
-    --             } else {
-    --                 y += sgn(px - y) * dt * 10;
-    --             }
-    --         ]],
-    --         {}, {},
-    --         300, y,
-    --         10, 10,
-    --         false,
-    --         "enemyBullets", 0
-    --     );
-    -- end
-    -- for y=0,400,5 do
-    --     game:spawnEntityFull(
-    --         function(self, other)
-    --             print ("something hit...")
-    --         end,
-    --         conf,
-    --         [[
-    --             if (t - ti < 5) {
-    --                 x += sgn(px - x) * dt * 10;
-    --             } else {
-    --                 y += sgn(px - y) * dt * 10;
-    --             }
-    --         ]],
-    --         {}, {},
-    --         200, y,
-    --         10, 10,
-    --         false,
-    --         "enemyBullets", 0
-    --     );
-    -- end
 
     magicCircleImg = Image.new("magic circle.png")
 
@@ -149,10 +111,11 @@ function start()
     effectPattern.height = 150
     effectPattern.rotation = 0
 
-    effect:spawn(effectPattern)
+    -- effect:spawn(effectPattern)
 
     player:setX(100)
     player:setY(100)
+
 end
 
 function magicCircleEffect(m, lst)
@@ -251,42 +214,12 @@ function magicCircleEffect(m, lst)
         fm:render()
     end
 
-
-    -- uiLayer = Element.new(
-    --     2,
-    --     function(e)
-
-    --     end,
-    --     nil
-    -- )
-
 end
 
 
 function main() -- main(e)
 
-
-    -- shader:use()
-    -- mat:load()
-    -- img:bind()
-    -- mesh:render()
-
-    -- conf:setup()
-    -- mat:load()
-    -- conf:render()
-
-    -- bvars_data.m = bvars_data.m + 0.1
-
-    -- bvars:push()
-
-    script:run()
-
-    -- shader:use()
-    -- mat.x = player:getX();
-    -- mat.y = player:getY();
-    -- mat:load()
-    -- playerImg:bind()
-    -- mesh:render()
+    -- script:run()
 
     game:testCollisions("player", "enemyBullets")
     game:testCollisions("enemies", "playerBullets")

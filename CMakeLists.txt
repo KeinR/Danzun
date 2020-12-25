@@ -13,8 +13,6 @@ set(libs
     deps/stb/stb_image.c
 )
 
-file(COPY "data" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-
 add_executable(Danzun ${sources} ${libs})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -40,21 +38,13 @@ target_link_libraries(Danzun
 
 set_target_properties(Danzun PROPERTIES OUTPUT_NAME "danzun")
 
-set(DANZUN_DATA_DIR_PARENT "${CMAKE_INSTALL_PREFIX}")
 set(DANZUN_VERSION "${CMAKE_PROJECT_VERSION}")
-set(DANZUN_DATA_DIR "${DANZUN_DATA_DIR_PARENT}/danzun")
-set(DANZUN_INIT_SCRIPT "${DANZUN_DATA_DIR}/data/lua/init.lua")
 
 configure_file(src/cmake/config.h.in include/cmake/config.h)
 
 install(
     TARGETS Danzun
     RUNTIME DESTINATION bin
-)
-
-install(
-    DIRECTORY "data"
-    DESTINATION share/danzun
 )
 
 if (UNIX)
@@ -66,7 +56,7 @@ if (UNIX)
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
-    if (DISTRO MATCHES "Debian")
+    if (DISTRO MATCHES "Debian" OR DISTRO MATCHES "Ubuntu")
 
         message(STATUS "Using debain packages")
 
@@ -79,21 +69,17 @@ if (UNIX)
         set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
         set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS_POLICY ">=")
         set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "${CMAKE_PROJECT_HOMEPAGE_URL}")
-        set(CPACK_DEBIAN_FILE_NAME "Danzun-${DANZUN_VERSION}-Debian-${CMAKE_SYSTEM_PROCESSOR}.deb")
+        set(CPACK_DEBIAN_FILE_NAME "Danzun-${DANZUN_VERSION}-${DISTRO}-${CMAKE_SYSTEM_PROCESSOR}.deb")
 
-        set(CPACK_GENERATOR DEB)
-
-    else()
-
-        message(STATUS "Using generic tgz packages")
-
-        set(CPACK_GENERATOR TGZ)
+        set(CPACK_GENERATOR ${CPACK_GENERATOR} DEB)
 
     endif()
 
+    set(CPACK_GENERATOR ${CPACK_GENERATOR} TGZ)
+
 else()
 
-    set(CPACK_GENERATOR ZIP)
+    set(CPACK_GENERATOR ${CPACK_GENERATOR} ZIP)
 
 endif()
 

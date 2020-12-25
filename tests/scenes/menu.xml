@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<scene>
-    <head>
-        <title>Textbook</title>
-    </head>
-    <body>
-        <button id="start">Start</button>
-    </body>
-</scene>

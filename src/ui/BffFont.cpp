@@ -54,10 +54,16 @@ dan::BffFont::BffFont(const std::string &path) {
         return;
     }
 
+    int format = Texture::getFormat(channels);
+
+    if (format == 0) {
+        err("BffFont::BffFont") << "BFF File \"" + path + "\" corrupted (channels)";
+    }
+
     char *data = new char[dataSize];
     file.read(data, dataSize);
 
-    atlas.setData(channels, imgWidth, imgHeight, reinterpret_cast<unsigned char*>(data));
+    atlas.setData(format, imgWidth, imgHeight, reinterpret_cast<unsigned char*>(data));
 
     delete[] data;
 
@@ -160,10 +166,6 @@ void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsig
                     texBase[i * 2] + tx, texBase[i * 2 + 1] + ty//,
                     // color[0], color[1], color[2], color[3]
                 });
-                // vertices.insert(vertices.end(), {
-                //     quad[i * 2 + 1] + y, quad[i * 2] + x,
-                //     texBase[i * 2 + 1] + ty, texBase[i * 2] + tx,
-                // });
             }
             indices.insert(indices.end(), {
                 vert + 0, vert + 1, vert + 2,

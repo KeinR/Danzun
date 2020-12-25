@@ -19,6 +19,7 @@
 #include "../api/Pattern.h"
 #include "../api/BffFont.h"
 #include "../api/Element.h"
+#include "../api/util.h"
 
 #include "EventCallback.h"
 
@@ -196,17 +197,18 @@ void dan::Engine::cCall(const std::string &functionGlobalName) {
 
 void dan::Engine::open(const std::filesystem::path &filePath) {
 
-    std::filesystem::path p = std::filesystem::absolute(DANZUN_INIT_SCRIPT);
     std::filesystem::path t = std::filesystem::absolute(filePath);
 
     // IMPORTANT: Set working directory to that of the init script
     // so that clients can use I/O sanely
     std::filesystem::current_path(filePath.parent_path());
 
-    t = std::filesystem::relative(t);
-    s.script_file(t.string());
+    sol::function_result result = s.script_file(filePath.filename().string());
 
-    std::cout << "start open windows" << '\n';
+    if (!result.valid()) {
+        sol::error e = result;
+        err("Engine:open") << "Error while executing init script: " << filePath << ": " << e.what();
+    }
 
     // Register all the classes
     api::Engine::open(s);
@@ -224,23 +226,14 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     api::Pattern::open(s);
     api::BffFont::open(s);
     api::Element::open(s);
+    api::util::open(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);
     s["player"] = api::Player(game.getPlayer());
     s["window"] = api::Window(window);
 
-    std::cout << "libs done" << '\n';
-
-    s.script_file(p.string());
-
-    std::cout << "Setup done" << '\n';
-
     cCall("preInit");
-
-    std::cout << "Pre done" << '\n';
-
-    std::cout << "Engine opened" << '\n';
 
     window.setVisible(true);
 

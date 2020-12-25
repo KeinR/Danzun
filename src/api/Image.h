@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <sol/forward.hpp>
+#include <sol/sol.hpp>
 
 #include "../render/Texture.h"
 
@@ -14,9 +14,10 @@ namespace dan::api {
         int height;
     public:
         Image(const std::string &path);
+
         void bind();
 
-        static void open(sol::state_view &lua);
+        static void open(sol::state_view lua);
     };
 }
 

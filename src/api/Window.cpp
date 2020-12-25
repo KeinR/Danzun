@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <stdexcept>
 
 #include <sol/sol.hpp>
 
@@ -28,12 +29,17 @@ void dan::api::Window::setVisible(bool toggle) {
     handle->setVisible(toggle);
 }
 bool dan::api::Window::keyDown(const std::string &name) {
-    return handle->keyPressed(keyMappings[ut::lowercase(name)]);
+    keyMappings_t::iterator it = keyMappings.find(ut::lowercase(name));
+    if (it != keyMappings.end()) {
+        return handle->keyPressed(it->second);
+    } else {
+        throw std::invalid_argument("Key not found: " + name);
+    }
 }
 
 // Static members
 
-void dan::api::Window::open(sol::state_view &lua) {
+void dan::api::Window::open(sol::state_view lua) {
     sol::usertype<Window> type = lua.new_usertype<Window>("Window");
 
     type["setTitle"] = &Window::setTitle;
