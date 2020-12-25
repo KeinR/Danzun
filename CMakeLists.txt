@@ -18,14 +18,8 @@ endif()
 
 file(GLOB_RECURSE sources src/*.cpp src/*.c)
 set(libs
+    deps/GLAD/glad.c
     deps/stb/stb_image.c
-)
-
-# If my libs are spitting warnings, it's not my problem...
-set_source_files_properties(
-  src/lib/glad.c ${libs}
-  PROPERTIES
-  COMPILE_FLAGS ""
 )
 
 add_executable(Danzun ${sources} ${libs})
