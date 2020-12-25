@@ -29,6 +29,6 @@ namespace dan {
 
         void load(Context &c, const std::string &location = "model");
     };
-};
+}
 
 #endif

@@ -13,12 +13,19 @@ set(CMAKE_PROJECT_HOMEPAGE_URL "https://github.com/keinr/Danzun")
 if (MSVC)
     add_compile_options(/W4)
 else()
-    add_compile_options(-Wall -pedantic)
+    add_compile_options(-Wall)
 endif()
 
 file(GLOB_RECURSE sources src/*.cpp src/*.c)
 set(libs
     deps/stb/stb_image.c
+)
+
+# If my libs are spitting warnings, it's not my problem...
+set_source_files_properties(
+  src/lib/glad.c ${libs}
+  PROPERTIES
+  COMPILE_FLAGS ""
 )
 
 add_executable(Danzun ${sources} ${libs})
