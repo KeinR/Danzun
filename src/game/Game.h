@@ -36,6 +36,9 @@ namespace dan {
         // client applications
         Engine *engine;
 
+        float speed;
+        bool running;
+
         int width;
         int height;
 
@@ -59,6 +62,7 @@ namespace dan {
         // Clean up entities
         void gc();
         entities_t::iterator eraseEntity(const entities_t::iterator &it);
+
     public:
         Game(Engine &e);
 
@@ -81,6 +85,8 @@ namespace dan {
         void setHeight(int h);
         void setGCFactor(float f);
         void setGCConstant(float c);
+        void setRunning(bool v);
+        void setSpeed(float v);
 
         void setGCTimeMilliseconds(unsigned int v);
         unsigned int getGCTimeMilliseconds();
@@ -89,10 +95,11 @@ namespace dan {
         int getHeight();
         float getGCFactor();
         float getGCConstant();
+        bool isRunning();
+        float getSpeed();
 
         void logic(float deltaTime);
         void render(Context &c);
-
 
         static Game &fromLua(sol::state_view lua);
     };

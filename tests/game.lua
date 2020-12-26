@@ -117,6 +117,10 @@ function start()
     player:setY(100)
 
     game.gcInterval = 1
+    game.running = true
+
+    engine.vSync = false
+    engine.maxFPS = 60
 
 end
 

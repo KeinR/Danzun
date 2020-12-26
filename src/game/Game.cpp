@@ -26,6 +26,8 @@ static PrintFunc<float> printFunc;
 
 dan::Game::Game(Engine &e):
     engine(&e),
+    speed(1),
+    running(false),
     width(e.getWindow().getWidth()),
     height(e.getWindow().getHeight()),
     gcFactor(1.5),
@@ -118,6 +120,12 @@ void dan::Game::setGCFactor(float f) {
 void dan::Game::setGCConstant(float c) {
     gcConstant = c;
 }
+void dan::Game::setRunning(bool v) {
+    running = v;
+}
+void dan::Game::setSpeed(float v) {
+    speed = v;
+}
 
 
 
@@ -133,6 +141,12 @@ float dan::Game::getGCFactor() {
 float dan::Game::getGCConstant() {
     return gcConstant;
 }
+bool dan::Game::isRunning() {
+    return running;
+}
+float dan::Game::getSpeed() {
+    return speed;
+}
 
 void dan::Game::setGCTimeMilliseconds(unsigned int v) {
     gcTimer.setTime(v);
@@ -144,6 +158,10 @@ unsigned int dan::Game::getGCTimeMilliseconds() {
 }
 
 void dan::Game::logic(float deltaTime) {
+    if (!running) return;
+
+    deltaTime *= speed;
+
     clock.pushDeltaTime(deltaTime);
 
     if (gcTimer.done()) {

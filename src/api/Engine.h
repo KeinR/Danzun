@@ -15,6 +15,10 @@ namespace dan::api {
 
         ::dan::Engine *getHandle();
         void term(int status);
+        void setMaxFPS(float value);
+        void toggleVSync(bool value);
+
+        float getMaxFPS();
 
         static void open(sol::state_view &lua);
     };

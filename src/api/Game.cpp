@@ -31,6 +31,12 @@ void dan::api::Game::setGCFactor(float f) {
 void dan::api::Game::setGCConstant(float c) {
     handle->setGCConstant(c);
 }
+void dan::api::Game::setRunning(bool v) {
+    handle->setRunning(v);
+}
+void dan::api::Game::setSpeed(float v) {
+    handle->setSpeed(v);
+}
 
 void dan::api::Game::setGCTimeSeconds(float v) {
     handle->setGCTimeMilliseconds(static_cast<unsigned int>(std::ceil(v * 1000.0f)));
@@ -51,6 +57,13 @@ float dan::api::Game::getGCFactor() {
 float dan::api::Game::getGCConstant() {
     return handle->getGCConstant();
 }
+bool dan::api::Game::isRunning() {
+    return handle->isRunning();
+}
+float dan::api::Game::getSpeed() {
+    return handle->getSpeed();
+}
+
 
 void dan::api::Game::resetGroups() {
     handle->resetGroups();
@@ -78,5 +91,7 @@ void dan::api::Game::open(sol::state_view &lua) {
     type["width"] = sol::property(&Game::getWidth, &Game::setWidth);
     type["heigth"] = sol::property(&Game::getHeight, &Game::setHeight);
     type["gcInterval"] = sol::property(&Game::getGCTimeSeconds, &Game::setGCTimeSeconds);
+    type["running"] = sol::property(&Game::isRunning, &Game::setRunning);
+    type["speed"] = sol::property(&Game::getSpeed, &Game::setSpeed);
 
 }

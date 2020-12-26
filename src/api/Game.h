@@ -27,6 +27,8 @@ namespace dan::api {
         void setHeight(int h);
         void setGCFactor(float f);
         void setGCConstant(float c);
+        void setRunning(bool v);
+        void setSpeed(float v);
 
         void setGCTimeSeconds(float v);
         float getGCTimeSeconds();
@@ -35,6 +37,8 @@ namespace dan::api {
         int getHeight();
         float getGCFactor();
         float getGCConstant();
+        bool isRunning();
+        float getSpeed();
 
         static void open(sol::state_view &lua);
 

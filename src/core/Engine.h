@@ -27,8 +27,9 @@ namespace dan {
         sol::state s;
 
         Game game;
-        bool gameActive;
-        float gameSpeed;
+
+        float maxFPS;
+        float frameInterval;
 
         // Cautious call - don't call if nil
         void cCall(const std::string &functionGlobalName);
@@ -51,13 +52,10 @@ namespace dan {
         Game &getGame();
         sol::state_view getState();
 
-        void setGameActive(bool flag);
-        bool isGameActive() const;
-
-        void setGameSpeed(float s);
-        float getGameSpeed() const;
-
         Context &getContext();
+
+        void setMaxFPS(float value);
+        float getMaxFPS();
 
         void open(const std::filesystem::path &filePath);
         void run();

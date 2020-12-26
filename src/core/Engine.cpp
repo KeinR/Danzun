@@ -36,10 +36,9 @@ dan::Engine::Engine():
     rc(this),
     windowEventCallback(nullptr),
     eventCallback(nullptr),
-    game(*this),
-    gameActive(false),
-    gameSpeed(1)
+    game(*this)
 {
+    setMaxFPS(120);
     window.setEventCallback(*this);
     s.open_libraries(
         sol::lib::base,
@@ -104,22 +103,16 @@ sol::state_view dan::Engine::getState() {
     return s;
 }
 
-void dan::Engine::setGameActive(bool flag) {
-    gameActive = flag;
-}
-bool dan::Engine::isGameActive() const {
-    return gameActive;
-}
-
-void dan::Engine::setGameSpeed(float s) {
-    gameSpeed = s;
-}
-float dan::Engine::getGameSpeed() const {
-    return gameSpeed;
-}
-
 dan::Context &dan::Engine::getContext() {
     return rc;
+}
+
+void dan::Engine::setMaxFPS(float value) {
+    maxFPS = value;
+    frameInterval = 1.0f / maxFPS;
+}
+float dan::Engine::getMaxFPS() {
+    return maxFPS;
 }
 
 void dan::Engine::run() {
@@ -135,7 +128,6 @@ void dan::Engine::run() {
     float deltaTime = 0;
 
 // #define DANZUN_FPS_COUNTER 1
-
 
 #ifdef DANZUN_FPS_COUNTER
     int sampleSize = 100;
@@ -162,8 +154,11 @@ void dan::Engine::run() {
 
         Window::pollEvents();
 
-        const float time = glfwGetTime();
-        deltaTime = (time - start) * gameSpeed;
+        float time;
+        do {
+            time = glfwGetTime();
+            deltaTime = time - start;
+        } while (deltaTime < frameInterval);
 
 #ifdef DANZUN_FPS_COUNTER
         secondsTaken += deltaTime;
@@ -174,9 +169,7 @@ void dan::Engine::run() {
 #endif
 
         start = time;
-        if (gameActive) {
-            game.logic(deltaTime);
-        }
+        game.logic(deltaTime);
         if (eventCallback != nullptr) {
             eventCallback->onFrame(*this, deltaTime);
         }
@@ -239,9 +232,6 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     cCall("init");
 
     cCall("start");
-
-    // Temp
-    gameActive = true;
 }
 
 void dan::Engine::start(const std::filesystem::path &filePath) {
