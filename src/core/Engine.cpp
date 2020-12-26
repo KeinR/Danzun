@@ -6,20 +6,10 @@
 
 #include "../api/Engine.h"
 #include "../api/Game.h"
-#include "../api/Shader.h"
-#include "../api/Window.h"
-#include "../api/Mesh.h"
-#include "../api/Image.h"
-#include "../api/Matrix.h"
-#include "../api/Entity.h"
-#include "../api/PatternVars.h"
-#include "../api/Script.h"
 #include "../api/Player.h"
-#include "../api/Effect.h"
-#include "../api/Pattern.h"
-#include "../api/BffFont.h"
-#include "../api/Element.h"
-#include "../api/util.h"
+#include "../api/Window.h"
+
+#include "../api/manifest.h"
 
 #include "EventCallback.h"
 
@@ -203,22 +193,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     }
 
     // Register all the classes
-    api::Engine::open(s);
-    api::Shader::open(s);
-    api::Mesh::open(s);
-    api::Image::open(s);
-    api::Game::open(s);
-    api::Window::open(s);
-    api::Matrix::open(s);
-    api::PatternVars::open(s);
-    api::Entity::open(s);
-    api::Script::open(s);
-    api::Player::open(s);
-    api::Effect::open(s);
-    api::Pattern::open(s);
-    api::BffFont::open(s);
-    api::Element::open(s);
-    api::util::open(s);
+    api::manifest::openAll(s);
 
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);
@@ -242,6 +217,6 @@ void dan::Engine::start(const std::filesystem::path &filePath) {
 // Static members
 
 dan::Engine &dan::Engine::fromLua(sol::state_view lua) {
-    sol::table engine = lua["engine"];
-    return *engine["getHandle"].call(engine).get<dan::Engine*>();
+    api::Engine &engine = lua["engine"];
+    return *engine.getHandle();
 }
