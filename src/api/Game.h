@@ -23,6 +23,19 @@ namespace dan::api {
         float getTime();
         float getDeltaTime();
 
+        void setWidth(int w);
+        void setHeight(int h);
+        void setGCFactor(float f);
+        void setGCConstant(float c);
+
+        void setGCTimeSeconds(float v);
+        float getGCTimeSeconds();
+
+        int getWidth();
+        int getHeight();
+        float getGCFactor();
+        float getGCConstant();
+
         static void open(sol::state_view &lua);
 
     };

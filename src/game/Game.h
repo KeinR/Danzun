@@ -79,8 +79,11 @@ namespace dan {
 
         void setWidth(int w);
         void setHeight(int h);
-        void setGGFactor(float f);
-        void setGGConstant(float c);
+        void setGCFactor(float f);
+        void setGCConstant(float c);
+
+        void setGCTimeMilliseconds(unsigned int v);
+        unsigned int getGCTimeMilliseconds();
 
         int getWidth();
         int getHeight();

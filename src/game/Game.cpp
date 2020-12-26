@@ -112,10 +112,10 @@ void dan::Game::setWidth(int w) {
 void dan::Game::setHeight(int h) {
     height = h;
 }
-void dan::Game::setGGFactor(float f) {
+void dan::Game::setGCFactor(float f) {
     gcFactor = f;
 }
-void dan::Game::setGGConstant(float c) {
+void dan::Game::setGCConstant(float c) {
     gcConstant = c;
 }
 
@@ -134,6 +134,14 @@ float dan::Game::getGCConstant() {
     return gcConstant;
 }
 
+void dan::Game::setGCTimeMilliseconds(unsigned int v) {
+    gcTimer.setTime(v);
+    gcTimer.start();
+}
+
+unsigned int dan::Game::getGCTimeMilliseconds() {
+    return gcTimer.getTime();
+}
 
 void dan::Game::logic(float deltaTime) {
     clock.pushDeltaTime(deltaTime);
@@ -183,7 +191,6 @@ void dan::Game::gc() {
             float bottom = y + minor;
             if (right < 0 || left > width || bottom < 0 || top > height) {
                 it = eraseEntity(it);
-                std::cout << "GC entity @ (" << x << ", " << ")" << '\n';
             } else {
                 ++it;
             }

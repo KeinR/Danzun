@@ -15,6 +15,7 @@ namespace dan {
         Timer();
         Timer(unsigned int ms);
         void setTime(unsigned int ms);
+        unsigned int getTime();
         void start();
         bool done();
     };

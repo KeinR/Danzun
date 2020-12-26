@@ -116,6 +116,8 @@ function start()
     player:setX(100)
     player:setY(100)
 
+    game.gcInterval = 1
+
 end
 
 function magicCircleEffect(m, lst)

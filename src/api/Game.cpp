@@ -1,5 +1,7 @@
 #include "Game.h"
 
+#include <algorithm>
+
 #include "../game/Game.h"
 
 dan::api::Game::Game(::dan::Game &handle): handle(&handle) {
@@ -15,6 +17,39 @@ void dan::api::Game::testCollisions(const std::string &groupA, const std::string
         p.first->getHitCallback().call(::dan::api::Entity(p.first), ::dan::api::Entity(p.second));
         p.second->getHitCallback().call(::dan::api::Entity(p.second), ::dan::api::Entity(p.first));
     }
+}
+
+void dan::api::Game::setWidth(int w) {
+    handle->setWidth(w);
+}
+void dan::api::Game::setHeight(int h) {
+    handle->setHeight(h);
+}
+void dan::api::Game::setGCFactor(float f) {
+    handle->setGCFactor(f);
+}
+void dan::api::Game::setGCConstant(float c) {
+    handle->setGCConstant(c);
+}
+
+void dan::api::Game::setGCTimeSeconds(float v) {
+    handle->setGCTimeMilliseconds(static_cast<unsigned int>(std::ceil(v * 1000.0f)));
+}
+float dan::api::Game::getGCTimeSeconds() {
+    return handle->getGCTimeMilliseconds() / 1000.0f;
+}
+
+int dan::api::Game::getWidth() {
+    return handle->getWidth();
+}
+int dan::api::Game::getHeight() {
+    return handle->getHeight();
+}
+float dan::api::Game::getGCFactor() {
+    return handle->getGCFactor();
+}
+float dan::api::Game::getGCConstant() {
+    return handle->getGCConstant();
 }
 
 void dan::api::Game::resetGroups() {
@@ -37,5 +72,11 @@ void dan::api::Game::open(sol::state_view &lua) {
     type["getTime"] = &Game::getTime;
     type["getDeltaTime"] = &Game::getDeltaTime;
     type["setSize"] = &Game::setSize;
+
+    type["gcConstant"] = sol::property(&Game::getGCConstant, &Game::setGCConstant);
+    type["gcFactor"] = sol::property(&Game::getGCFactor, &Game::setGCFactor);
+    type["width"] = sol::property(&Game::getWidth, &Game::setWidth);
+    type["heigth"] = sol::property(&Game::getHeight, &Game::setHeight);
+    type["gcInterval"] = sol::property(&Game::getGCTimeSeconds, &Game::setGCTimeSeconds);
 
 }

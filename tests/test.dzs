@@ -18,7 +18,6 @@ function spawn(x, y, vx, vy)
     e.vy = vy
     e.width = 10
     e.height = 10
-    e.autoGC = false
     e:regCircle("enemies")
 
     e:setScript(Script.new(function(e)
@@ -35,7 +34,7 @@ function spawn(x, y, vx, vy)
                 conf,
                 [[
                     var v[2] := { vx, vy };
-                    p := p + v * 10 * dt;
+                    p := p + v * 100 * dt;
                 ]]
             );
             b.x = e.x
@@ -44,7 +43,6 @@ function spawn(x, y, vx, vy)
             b.vy = y
             b.width = 10
             b.height = 10
-            b.autoGC = false
             b:regCircle("enemyBullets")
 
             pause(1);
