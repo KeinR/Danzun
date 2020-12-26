@@ -28,6 +28,8 @@ dan::Game::Game(Engine &e):
     engine(&e),
     width(e.getWindow().getWidth()),
     height(e.getWindow().getHeight()),
+    gcFactor(1.5),
+    gcConstant(50),
     // Clean up entities every ~5 seconds
     // (Not happening much, as there aren't many entities...)
     gcTimer(5000)
@@ -110,6 +112,12 @@ void dan::Game::setWidth(int w) {
 void dan::Game::setHeight(int h) {
     height = h;
 }
+void dan::Game::setGGFactor(float f) {
+    gcFactor = f;
+}
+void dan::Game::setGGConstant(float c) {
+    gcConstant = c;
+}
 
 
 
@@ -118,6 +126,12 @@ int dan::Game::getWidth() {
 }
 int dan::Game::getHeight() {
     return height;
+}
+float dan::Game::getGCFactor() {
+    return gcFactor;
+}
+float dan::Game::getGCConstant() {
+    return gcConstant;
 }
 
 
@@ -159,8 +173,17 @@ void dan::Game::gc() {
     for (entities_t::iterator it = entities.begin(); it != entities.end();) {
         entity_t &e = *it;
         if (e->isAutoGC()) {
-            if (false) { // TEMP - TODO: what conditions?
+            float x = e->getX();
+            float y = e->getY();
+            float major = e->getWidth() * gcFactor + gcConstant; // x
+            float minor = e->getHeight() * gcFactor + gcConstant; // y
+            float left = x - major;
+            float right = x + major;
+            float top = y - minor;
+            float bottom = y + minor;
+            if (right < 0 || left > width || bottom < 0 || top > height) {
                 it = eraseEntity(it);
+                std::cout << "GC entity @ (" << x << ", " << ")" << '\n';
             } else {
                 ++it;
             }

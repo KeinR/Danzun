@@ -39,6 +39,9 @@ namespace dan {
         int width;
         int height;
 
+        float gcFactor;
+        float gcConstant;
+
         Timer gcTimer;
         Clock clock;
 
@@ -76,9 +79,13 @@ namespace dan {
 
         void setWidth(int w);
         void setHeight(int h);
+        void setGGFactor(float f);
+        void setGGConstant(float c);
 
         int getWidth();
         int getHeight();
+        float getGCFactor();
+        float getGCConstant();
 
         void logic(float deltaTime);
         void render(Context &c);

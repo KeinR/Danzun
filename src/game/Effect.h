@@ -17,7 +17,7 @@ namespace dan {
         int renderPriority;
         bool detached;
     public:
-        Effect(sol::state_view l, sol::object masterObject, sol::function callback);
+        Effect(sol::state_view lua, sol::object masterObject, sol::function callback);
 
         void setDetached(bool value);
 

@@ -5,8 +5,8 @@
 #include "../game/Game.h"
 #include "../core/error.h"
 
-dan::Effect::Effect(sol::state_view l, sol::object masterObject, sol::function callback):
-    masterObject(masterObject), callback(callback), lua(l), renderPriority(0), detached(false) {
+dan::Effect::Effect(sol::state_view lua, sol::object masterObject, sol::function callback):
+    masterObject(masterObject), callback(callback), lua(lua), renderPriority(0), detached(false) {
 }
 
 void dan::Effect::setDetached(bool value) {
