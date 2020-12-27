@@ -1,9 +1,10 @@
 #include "util.h"
 
 #include <fstream>
-#include <stdexcept>
 
 #include <nlohmann/json.hpp>
+
+#include "../core/error.h"
 
 static std::string stripAseExt(const std::string &in);
 
@@ -65,7 +66,7 @@ sol::table dan::api::util::loadAsepriteJSONArray(sol::this_state l, const std::s
             hash[stripAseExt(frm.at("filename").get<std::string>())] = array.size(); // This is OK, since Lua arrays aren't zero-index'd
         }
     } catch (std::exception &e) {
-        throw std::runtime_error(std::string("JSON error: ") + e.what());
+        err("api::util::loadAsepriteJSONArray", l) << "Failed to load Aseprite JSON metadata \"" << path << "\": " << e.what();
     }
 
     return results;

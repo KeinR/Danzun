@@ -2,8 +2,12 @@
 
 #include <vector>
 
-dan::api::BffFont::BffFont(const std::string &path) {
-    font = std::make_shared<::dan::BffFont>(path);
+dan::api::BffFont::BffFont(sol::this_state l, const std::string &path) {
+    font = std::make_shared<::dan::BffFont>(l ,path);
+}
+
+bool dan::api::BffFont::isFailed() {
+    return font->isFailed();
 }
 
 int dan::api::BffFont::getCharWidth(char c) const {
@@ -47,7 +51,7 @@ dan::api::Mesh dan::api::BffFont::makeMesh(const std::string &str) {
 
 void dan::api::BffFont::open(sol::state_view lua) {
     sol::usertype<BffFont> type = lua.new_usertype<BffFont>("BffFont",
-        sol::constructors<BffFont(const std::string&)>()
+        sol::constructors<BffFont(sol::this_state,const std::string&)>()
     );
 
     type["getCharWidth"] = &BffFont::getCharWidth;
@@ -58,5 +62,6 @@ void dan::api::BffFont::open(sol::state_view lua) {
     type["bind"] = &BffFont::bind;
     type["getVertexData"] = &BffFont::getVertexData;
     type["makeMesh"] = &BffFont::makeMesh;
+    type["failed"] = sol::property(&BffFont::isFailed);
 
 }

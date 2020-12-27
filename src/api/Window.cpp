@@ -1,12 +1,8 @@
 #include "Window.h"
 
-#include <string>
-#include <stdexcept>
-
-#include <sol/sol.hpp>
-
-#include "../win/Window.h"
+#include "../core/error.h"
 #include "../core/util.h"
+#include "../win/Window.h"
 
 dan::api::Window::Window(::dan::Window &handle): handle(&handle) {
     keyMappings["up"] = dan::keyt::UP;
@@ -32,7 +28,8 @@ bool dan::api::Window::keyDown(const std::string &name) {
     if (it != keyMappings.end()) {
         return handle->keyPressed(it->second);
     } else {
-        throw std::invalid_argument("Key not found");
+        err("api::Window::keyDown") << "No key mapping for \"" << name << "\"";
+        return false;
     }
 }
 

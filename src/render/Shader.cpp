@@ -10,6 +10,7 @@
 #include "../core/Context.h"
 #include "../core/debug.h"
 #include "../core/error.h"
+#include "../core/Engine.h"
 #include "../lib/opengl.h"
 
 static constexpr unsigned int LOG_BUFFER_SIZE = 512;
@@ -63,7 +64,7 @@ dan::Shader::Shader(Context &c, const std::string &vertexPath, const std::string
         if (fragData != nullptr) {
             delete[] fragData;
         }
-        err("dan::Shader::Shader(strings...)") << "Failed to load shader resource files: " << e.what();
+        err("dan::Shader::Shader(strings...)", c.getEngine().getState()) << "Failed to load shader resource files: " << e.what();
     }
 
 }
@@ -81,7 +82,6 @@ dan::Shader &dan::Shader::operator=(Shader &&other) {
 }
 
 void dan::Shader::createShader(const char *vertexData, unsigned int vertexLength, const char *fragmentData, unsigned int fragmentLength) {
-    #define FUNC_SIG "dan::Shader::createShader"
     #define FCLEAN delShaders(vertShader, fragShader)
 
     GLuint vertShader = 0;
@@ -90,20 +90,14 @@ void dan::Shader::createShader(const char *vertexData, unsigned int vertexLength
     try {
         vertShader = compileShader(GL_VERTEX_SHADER, vertexData, vertexLength);
         fragShader = compileShader(GL_FRAGMENT_SHADER, fragmentData, fragmentLength);
-        try {
-            handle = linkShaders(vertShader, fragShader);
-            FCLEAN;
-        } catch (std::exception &e) {
-            FCLEAN;
-            err(FUNC_SIG) << "Failed to link shaders: " << e.what();
-        }
+        handle = linkShaders(vertShader, fragShader);
     } catch (std::exception &e) {
         FCLEAN;
-        err(FUNC_SIG) << "Failed to compile shaders: " << e.what();
+        throw e;
     }
+    FCLEAN;
 
     #undef FCLEAN
-    #undef FUNC_SIG
 }
 
 void dan::Shader::steal(Shader &other) {
@@ -115,8 +109,6 @@ void dan::Shader::steal(Shader &other) {
 }
 
 dan::Shader::uniform_t dan::Shader::uni(const std::string &name) {
-    #define FUNC_SIG "Shader::uni(const char*)"
-
     uniforms_t::iterator loc = uniforms.find(name);
     uniform_t location;
     if (loc == uniforms.end()) {
@@ -124,20 +116,18 @@ dan::Shader::uniform_t dan::Shader::uni(const std::string &name) {
         GLenum error;
         error = glGetError();
         if (error != GL_NO_ERROR) {
-            err(FUNC_SIG) << "OpenGL error BEFORE getting uniform location: " << err::glErrStr(error);
+            err("Shader::uni", c->getEngine().getState()) << "OpenGL error BEFORE getting uniform location: " << err::glErrStr(error);
         }
         location = glGetUniformLocation(handle, name.c_str());
         uniforms[name] = location;
         error = glGetError();
         if (error != GL_NO_ERROR) {
-            err(FUNC_SIG) << "OpenGL error AFTER getting uniform location: " << err::glErrStr(error);
+            err("Shader::uni", c->getEngine().getState()) << "OpenGL error AFTER getting uniform location: " << err::glErrStr(error);
         }
     } else {
         location = loc->second;
     }
     return location;
-
-    #undef FUNC_SIG
 }
 
 void dan::Shader::free() {
@@ -152,6 +142,10 @@ void dan::Shader::doUse() const {
 
 void dan::Shader::use() {
     c->setShader(*this);
+}
+
+bool dan::Shader::isFailed() {
+    return handle == 0;
 }
 
 dan::Shader::uniform_t dan::Shader::getUniform(const std::string &name) {
@@ -245,7 +239,7 @@ GLuint linkShaders(GLuint vertObject, GLuint fragObject) {
         std::array<char, LOG_BUFFER_SIZE> log;
         glGetProgramInfoLog(shaderProgram, log.size(), NULL, log.data());
         glDeleteProgram(shaderProgram);
-        throw std::runtime_error("\n " + std::string(log.data()));
+        throw std::runtime_error("Shader linking failed:\n " + std::string(log.data()));
     }
     return shaderProgram;
 }

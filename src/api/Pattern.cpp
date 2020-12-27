@@ -1,7 +1,6 @@
 #include "Pattern.h"
 
-#include <stdexcept>
-
+#include "../core/error.h"
 #include "../game/Game.h"
 #include "PatternVars.h"
 
@@ -20,8 +19,10 @@ dan::api::Pattern::Pattern(sol::this_state l, const std::string &pattern, sol::v
     parser_t parser;
     parser.enable_unknown_symbol_resolver();
 
-    if (!parser.compile(pattern, expression)) {
-        throw std::runtime_error("Failed to compile expression: " + parser.error());
+    failed = !parser.compile(pattern, expression);
+
+    if (failed) {
+        err("api::Pattern::Pattern", l) << "Failed to compile expression: " << parser.error();
     }
 
 }
@@ -40,6 +41,10 @@ void dan::api::Pattern::newIndexBool(const std::string &name, bool value) {
     newIndexBool(name, static_cast<float>(value));
 }
 
+bool dan::api::Pattern::isFailed() {
+    return failed;
+}
+
 float dan::api::Pattern::run() {
     return expression.value();
 }
@@ -54,4 +59,5 @@ void dan::api::Pattern::open(sol::state_view &lua) {
     type[sol::meta_function::call] = &Pattern::run;
 
     type["run"] = &Pattern::run;
+    type["failed"] = sol::property(&Pattern::isFailed);
 }

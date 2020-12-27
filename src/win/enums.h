@@ -4,7 +4,7 @@
 #include "../lib/glfw.h"
 
 /**
-* enum class abstraction to reduce library dependence
+* A nice enum class abstraction
 */
 
 namespace dan {

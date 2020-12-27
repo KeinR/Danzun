@@ -21,6 +21,8 @@ namespace dan::api {
 
         void use();
 
+        bool isFailed();
+
         static void open(sol::state_view &lua);
     };
 }

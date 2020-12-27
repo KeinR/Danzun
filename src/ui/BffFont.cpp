@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
-#include <iostream>
+#include <exception>
 
 #include "../core/error.h"
 #include "../core/debug.h"
@@ -21,43 +21,66 @@ static int readInt(std::ifstream &file) {
             (static_cast<unsigned int>(file.get()) << 24);
 }
 
-dan::BffFont::BffFont(const std::string &path) {
+dan::BffFont::BffFont(sol::state_view lua, const std::string &path) {
+
+    failed = true;
+
+    static const char *const funcSig = "BffFont::BffFont";
 
     std::ifstream file(path, std::ios::binary);
     if (!file.good()) {
-        err("BffFont::BffFont") << "Failed to open \"" + path + "\"";
+        err(funcSig, lua) << "Failed to open \"" << path << "\"";
         return;
     }
 
-    if (file.get() != 0xBF || file.get() != 0xF2) {
-        err("BffFont::BffFont") << "BFF File \"" + path + "\" corrupted (header)";
+    int imgWidth, imgHeight, channels, dataSize; 
+
+    try {
+        file.exceptions(std::ifstream::badbit | std::ifstream::failbit);
+
+        // Read header
+
+        if (file.get() != 0xBF || file.get() != 0xF2) {
+            err(funcSig, lua) << "BFF File \"" << path << "\" corrupted (header)";
+            return;
+        }
+
+        imgWidth = readInt(file);
+        imgHeight = readInt(file);
+        cellWidth = readInt(file);
+        cellHeight = readInt(file);
+        channels = file.get() / 8;
+        startChar = file.get();
+
+        file.read(charWidths.data(), charWidths.size());
+
+        constexpr int HEADER_SIZE = 276;
+
+        file.seekg(0, file.end);
+        dataSize = static_cast<int>(file.tellg()) - HEADER_SIZE;
+        file.seekg(HEADER_SIZE);
+
+        file.exceptions(std::ifstream::goodbit);
+
+    } catch (std::exception &e) {
+        err(funcSig, lua) << "Failed to read BFF file header: " << e.what();
         return;
     }
 
-    int imgWidth = readInt(file);
-    int imgHeight = readInt(file);
-    cellWidth = readInt(file);
-    cellHeight = readInt(file);
-    int channels = file.get() / 8;
-    startChar = file.get();
-
-    file.read(charWidths.data(), charWidths.size());
-
-    constexpr int HEADER_SIZE = 276;
-
-    file.seekg(0, file.end);
-    const int dataSize = static_cast<int>(file.tellg()) - HEADER_SIZE;
-    file.seekg(HEADER_SIZE);
+    if (dataSize == 0) {
+        err(funcSig, lua) << "Cannot use empty bitmaps \"" << path << "\"";
+        return;
+    }
 
     if (dataSize != imgWidth * imgHeight * channels) {
-        err("BffFont::BffFont") << "BFF File \"" + path + "\" corrupted (size)";
+        err(funcSig, lua) << "BFF File \"" + path + "\" corrupted (size discrepancy)";
         return;
     }
 
     int format = Texture::getFormat(channels);
 
     if (format == 0) {
-        err("BffFont::BffFont") << "BFF File \"" + path + "\" corrupted (channels)";
+        err(funcSig, lua) << "BFF File \"" + path + "\" corrupted (channels)";
     }
 
     char *data = new char[dataSize];
@@ -66,6 +89,13 @@ dan::BffFont::BffFont(const std::string &path) {
     atlas.setData(format, imgWidth, imgHeight, reinterpret_cast<unsigned char*>(data));
 
     delete[] data;
+
+    if (!file.good()) {
+        err(funcSig, lua) << "Failed to read data chunk from BFF file \"" << path << "\"";
+        // return // Don't return, as we can at the very least set metadata so that the font MIGHT be usable
+    } else {
+        failed = false;
+    }
 
     rowSize = imgWidth / cellWidth;
     int columnSize = imgHeight / cellHeight;
@@ -78,6 +108,10 @@ dan::BffFont::BffFont(const std::string &path) {
         texX, 0,
         texX, texY
     };
+}
+
+bool dan::BffFont::isFailed() {
+    return failed;
 }
 
 int dan::BffFont::getWidth(char_t c) const {

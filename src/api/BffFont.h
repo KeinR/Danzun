@@ -12,7 +12,9 @@ namespace dan::api {
     class BffFont {
         std::shared_ptr<::dan::BffFont> font;
     public:
-        BffFont(const std::string &path);
+        BffFont(sol::this_state l, const std::string &path);
+
+        bool isFailed();
 
         int getCharWidth(char c) const;
         int getStrWidth(const std::string &str) const;

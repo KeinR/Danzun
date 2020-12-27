@@ -1,7 +1,5 @@
 #include "Effect.h"
 
-#include <iostream>
-
 #include "../game/Game.h"
 #include "../core/error.h"
 
@@ -57,6 +55,6 @@ void dan::Effect::render(Context &c) {
     sol::function_result result = callback.call(masterObject, params);
     if (!result.valid()) {
         sol::error e = result;
-        err("Effect::render") << "Lua callback error'd: " << e.what() << '\n';
+        err("Effect::render") << "Effect callback failed: " << e.what() << '\n';
     }
 }

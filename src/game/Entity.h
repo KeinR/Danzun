@@ -55,7 +55,7 @@ namespace dan {
         std::set<std::string> groups;
         int renderPriority;
 
-        void initEquation(const std::vector<symbolTable_t> &symbols, const std::string &eq);
+        void initEquation(Game &g, const std::vector<symbolTable_t> &symbols, const std::string &eq);
 
         bool f2b(float f);
         float b2f(bool b);

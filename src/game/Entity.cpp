@@ -1,8 +1,8 @@
 #include "Entity.h"
 
-#include <stdexcept>
-
 #include "../core/debug.h"
+#include "../core/error.h"
+#include "../core/Engine.h"
 #include "../game/Game.h"
 #include "../time/Clock.h"
 #include "../api/Entity.h"
@@ -24,7 +24,7 @@ dan::Entity::Entity(
     hitCallback(hitCallback),
     renderPriority(0)
 {
-    initEquation(as, equation);
+    initEquation(g, as, equation);
 }
 
 // Static
@@ -71,7 +71,7 @@ void dan::Entity::setScript(const api::Script &s) {
     this->script = s;
 }
 
-void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const std::string &eq) {
+void dan::Entity::initEquation(Game &g, const std::vector<symbolTable_t> &as, const std::string &eq) {
 
     symbols.add_vector("p", pos.data(), pos.size());
     symbols.add_variable("x", pos[0]);
@@ -97,7 +97,7 @@ void dan::Entity::initEquation(const std::vector<symbolTable_t> &as, const std::
     parser.enable_unknown_symbol_resolver();
 
     if (!parser.compile(eq, exp)) {
-        throw std::runtime_error(std::string("Failed to compile expression: ") + parser.error());
+        err("Entity::initEquation", g.getEngine().getState()) << "Failed to compile expression: " << parser.error();
     }
 }
 

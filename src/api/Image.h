@@ -12,10 +12,15 @@ namespace dan::api {
         ::dan::Texture tex;
         int width;
         int height;
+        bool failed;
     public:
-        Image(const std::string &path);
+        Image(sol::this_state l, const std::string &path);
 
         void bind();
+
+        int getWidth();
+        int getHeight();
+        bool isFailed();
 
         static void open(sol::state_view lua);
     };

@@ -1,6 +1,5 @@
 #include "Window.h"
 
-#include <stdexcept>
 #include <string>
 #include <map>
 
@@ -235,16 +234,16 @@ void dan::Window::setSwapInterval(int val) {
 // Internal members
 
 void errorCallback(int error, const char* description) {
-    dan::err("Window.cpp:errorCallback") << "GLFW Error [0x" << std::hex << error << std::dec << "]: " << description << '\n';
+    dan::err("Window.cpp:errorCallback (GLFW error callback)") << "GLFW Error [0x" << std::hex << error << std::dec << "]: " << description << '\n';
 }
 
 GLFWwindow *init(const winparams &p) {
-    #define FUNC_SIG "Window.cpp:init"
+    static const char *const funcSig = "Window.cpp:init";
 
     glfwSetErrorCallback(errorCallback);
 
     if (glfwInit() == GLFW_FALSE) {
-        dan::err(FUNC_SIG, true) << "Failed to init GLFW";
+        dan::err(funcSig, dan::err::SEVERE) << "Failed to init GLFW";
         return nullptr;
     }
     // A glfw window is required to properly initialize GLAD
@@ -252,14 +251,14 @@ GLFWwindow *init(const winparams &p) {
     if (window == NULL) {
         deInit();
         contextCount = 0;
-        dan::err(FUNC_SIG, true) << "Failed to make GLFW window (just after init)";
+        dan::err(funcSig, dan::err::SEVERE) << "Failed to make GLFW window (just after init)";
         return nullptr;
     }
     glfwMakeContextCurrent(window);
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         deInit();
         contextCount = 0;
-        dan::err(FUNC_SIG, true) << "Failed to initialize OpenGL loader (GLAD)";
+        dan::err(funcSig, dan::err::SEVERE) << "Failed to initialize OpenGL loader (GLAD)";
         return nullptr;
     }
     contextCount = 1;
@@ -303,7 +302,7 @@ GLFWwindow *makeWindow(const winparams &p) {
         contextCount++;
         window = doCreateWindow(p);
         if (window == NULL) {
-            dan::err("Window.cpp:makeWindow") << "Failed to make GLFW window";
+            dan::err("Window.cpp:makeWindow", dan::err::SEVERE) << "Failed to make GLFW window";
             return nullptr;
         }
     }

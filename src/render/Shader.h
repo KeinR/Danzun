@@ -39,6 +39,9 @@ namespace dan {
         void use();
         static void disuse();
 
+        // Checks if this shader is in a valid state
+        bool isFailed();
+
         program_t getHandle() const;
 
         // NB: Binds this shader

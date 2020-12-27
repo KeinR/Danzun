@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <sol/sol.hpp>
+
 #include "../render/Texture.h"
 
 namespace dan {
@@ -26,12 +28,16 @@ namespace dan {
         int rowSize;
         float texX;
         float texY;
+        bool failed;
 
     public:
 
         // Binary Font Format (.bff) font, Codehead's
         // Bitmap Font Generator's native output. 
-        BffFont(const std::string &path);
+        BffFont(sol::state_view lua, const std::string &path);
+
+        bool isFailed();
+
         int getWidth(char_t c) const;
         int getWidth(const std::string &str) const;
         int getLinesWidth(const std::string &str) const;

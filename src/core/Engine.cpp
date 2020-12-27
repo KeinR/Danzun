@@ -135,8 +135,8 @@ void dan::Engine::run() {
 
         sol::function_result mr = s["main"].call();
         if (!mr.valid()) {
-            sol::error err = mr;
-            std::cerr << "MAIN FUNCTION ERROR: " << err.what() << '\n';
+            sol::error serr = mr;
+            err("Engine::run", s) << "Main loop failed: \"" << serr.what();
         }
         game.render(rc);
 
@@ -171,8 +171,8 @@ void dan::Engine::cCall(const std::string &functionGlobalName) {
     if (func.get_type() == sol::type::function) {
         sol::function_result result = func.call();
         if (!result.valid()) {
-            sol::error err = result;
-            std::cerr << "FUNCTION ERROR: " << err.what() << std::endl;
+            sol::error serr = result;
+            err("Engine::cCall") << "Init function failed: \"" << serr.what();
         }
     }
 }
@@ -189,7 +189,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
 
     if (!result.valid()) {
         sol::error e = result;
-        err("Engine:open") << "Error while executing init script: " << filePath << ": " << e.what();
+        err("Engine:open") << "Error while executing init script \"" << filePath << "\": " << e.what();
     }
 
     // Register all the classes

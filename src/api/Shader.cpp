@@ -80,6 +80,10 @@ void dan::api::Shader::use() {
     shader.use();
 }
 
+bool dan::api::Shader::isFailed() {
+    return shader.isFailed();
+}
+
 // static members
 
 void dan::api::Shader::open(sol::state_view &lua) {
@@ -91,4 +95,5 @@ void dan::api::Shader::open(sol::state_view &lua) {
     type["setFloat"] = &Shader::setFloat;
     type["setMat4"] = &Shader::setMat4;
     type["use"] = &Shader::use;
+    type["failed"] = sol::property(&Shader::isFailed);
 }

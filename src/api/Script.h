@@ -10,6 +10,8 @@ namespace dan::api {
         sol::thread thread;
         sol::coroutine routine;
         float timeOfNextRun;
+        bool stopOnFail;
+        bool failed;
         bool done;
         std::vector<sol::object> args;
     public:
@@ -19,6 +21,12 @@ namespace dan::api {
         Script(sol::state_view lua, sol::function func, const std::vector<sol::object> &pargs);
         // Returns true if it's done
         bool run(sol::this_state l);
+
+        bool isStopOnFail();
+        bool isFailed();
+
+        void setStopOnFail(bool v);
+        void setFailed(bool v);
 
         static void open(sol::state_view lua);
     };

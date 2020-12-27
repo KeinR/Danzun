@@ -14,6 +14,7 @@ namespace dan::api {
 
         symbolTable_t symbols;
         expression_t expression;
+        bool failed;
 
     public:
         Pattern(sol::this_state l, const std::string &pattern, sol::variadic_args patternVars);
@@ -23,6 +24,8 @@ namespace dan::api {
         // foo[fef] = bar
         void newIndex(const std::string &name, float value);
         void newIndexBool(const std::string &name, bool value);
+
+        bool isFailed();
 
         float run();
 

@@ -2,6 +2,7 @@
 #define DANZUN_API_WINDOW_H_INCLUDED
 
 #include <unordered_map>
+#include <string>
 
 #include <sol/sol.hpp>
 
