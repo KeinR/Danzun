@@ -30,19 +30,7 @@ dan::Engine::Engine():
 {
     setMaxFPS(120);
     window.setEventCallback(*this);
-    s.open_libraries(
-        sol::lib::base,
-        sol::lib::package,
-        sol::lib::coroutine,
-        sol::lib::string,
-        sol::lib::os,
-        sol::lib::math,
-        sol::lib::table,
-        sol::lib::bit32,
-        sol::lib::io,
-        sol::lib::ffi,
-        sol::lib::jit
-    );
+    s.open_libraries();
 }
 
 bool dan::Engine::callbackCallable() {
@@ -192,7 +180,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
         err("Engine:open") << "Error while executing init script \"" << filePath << "\": " << e.what();
     }
 
-    // Register all the classes
+    // Register all the classes and functions
     api::manifest::openAll(s);
 
     s["engine"] = api::Engine(*this);

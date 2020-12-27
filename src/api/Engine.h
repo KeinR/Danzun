@@ -18,6 +18,10 @@ namespace dan::api {
         void setMaxFPS(float value);
         void toggleVSync(bool value);
 
+        void setThrowNever();
+        void setThrowSevere();
+        void setThrowAll();
+
         float getMaxFPS();
 
         static void open(sol::state_view &lua);

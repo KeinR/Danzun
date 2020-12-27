@@ -19,10 +19,18 @@ namespace dan {
         constexpr static flag_t WARNING = 1 << 1;
         // Do NOT throw the error on destruction
         constexpr static flag_t NOTHROW = 1 << 2;
+
+        enum class throwConf {
+            NEVER,
+            SEVERE,
+            ALL
+        };
+
     private:
         std::string location;
         std::string stackTrace;
         flag_t flags;
+        static throwConf throwConfig;
         bool getFlag(flag_t f);
         err(const std::string &location, sol::state_view *lua, flag_t flags = NONE);
     public:
@@ -30,9 +38,11 @@ namespace dan {
         err(const std::string &location, sol::state_view lua, flag_t flags = NONE);
         err(const std::string &location, flag_t flags = NONE);
         ~err();
+
         void raise();
         static const char *glErrStr(int err);
         static std::string trace(sol::state_view lua);
+        static void setThrowConfig(throwConf c);
     };    
 }
 

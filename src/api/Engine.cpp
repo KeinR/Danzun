@@ -3,6 +3,7 @@
 #include <sol/sol.hpp>
 
 #include "../core/Engine.h"
+#include "../core/error.h"
 
 dan::api::Engine::Engine(::dan::Engine &handle): handle(&handle) {
 }
@@ -25,6 +26,16 @@ void dan::api::Engine::toggleVSync(bool value) {
     ::dan::Window::setSwapInterval(value ? 1 : 0);
 }
 
+void dan::api::Engine::setThrowNever() {
+    ::dan::err::setThrowConfig(::dan::err::throwConf::NEVER);
+}
+void dan::api::Engine::setThrowSevere() {
+    ::dan::err::setThrowConfig(::dan::err::throwConf::SEVERE);
+}
+void dan::api::Engine::setThrowAll() {
+    ::dan::err::setThrowConfig(::dan::err::throwConf::ALL);
+}
+
 float dan::api::Engine::getMaxFPS() {
     return handle->getMaxFPS();
 }
@@ -35,6 +46,10 @@ void dan::api::Engine::open(sol::state_view &lua) {
 
     type["exit"] = &Engine::term;
     type["getHandle"] = &Engine::getHandle;
+    type["setThrowNever"] = &Engine::setThrowNever;
+    type["setThrowSevere"] = &Engine::setThrowSevere;
+    type["setThrowAll"] = &Engine::setThrowAll;
+
     type["vSync"] = sol::property(&Engine::toggleVSync);
     type["maxFPS"] = sol::property(&Engine::getMaxFPS, &Engine::setMaxFPS);
 

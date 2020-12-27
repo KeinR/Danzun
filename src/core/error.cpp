@@ -5,6 +5,8 @@
 
 #include "../lib/opengl.h"
 
+dan::err::throwConf dan::err::throwConfig = dan::err::throwConf::SEVERE;
+
 dan::err::err(const std::string &location, sol::state_view lua, flag_t flags):
     err(location, &lua, flags) {
 }
@@ -32,11 +34,22 @@ bool dan::err::getFlag(flag_t f) {
 void dan::err::raise() {
     std::string message = str() + stackTrace;
     if (getFlag(SEVERE)) {
-        throw std::runtime_error("SEVERE: " + message);
+        message = "\x1b[31mSEVERE\x1b[00m: " + message;
+        if (throwConfig == throwConf::ALL || throwConfig == throwConf::SEVERE) {
+            throw std::runtime_error(message);
+        } else {
+            std::cerr << message << '\n';
+        }
     } else if (getFlag(WARNING)) {
-        std::cerr << "\x1b[33mWARNING\x1b[00m: " << message << '\n';
+        message = "\x1b[33mWarning\x1b[00m: " + message;
+        std::cerr << message << '\n';
     } else {
-        std::cerr << "\x1b[31mERROR\x1b[00m: " << message << '\n';
+        message = "\x1b[31mError\x1b[00m: " + message;
+        if (throwConfig == throwConf::ALL) {
+            throw std::runtime_error(message);
+        } else {
+            std::cerr << message << '\n';
+        }
     }
 }
 
@@ -57,11 +70,11 @@ const char *dan::err::glErrStr(int err) {
 std::string dan::err::trace(sol::state_view lua) {
     static const char *const errMsg = "[stack trace unavailable]";
     
-    sol::table debug = lua["debug"];
+    auto debug = lua["debug"];
     if (debug.get_type() == sol::type::nil) return errMsg;
 
-    sol::function traceback = debug["traceback"];
-    if (traceback.get_type() == sol::type::nil) return errMsg;
+    auto traceback = debug["traceback"];
+    if (traceback.get_type() != sol::type::function) return errMsg;
 
     sol::function_result result = traceback.call();
     if (!result.valid()) {
@@ -70,4 +83,8 @@ std::string dan::err::trace(sol::state_view lua) {
     }
 
     return result.get<std::string>();
+}
+
+void dan::err::setThrowConfig(throwConf c) {
+    throwConfig = c;
 }
