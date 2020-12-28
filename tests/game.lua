@@ -71,14 +71,9 @@ function start()
 
     playerImg = Image.new("sprites/charge.png");
 
-    playerRenderFunc = function(s)
+    playerRenderFunc = function(e)
         shader:use()
-        local mat = Matrix.new()
-            mat.x = player.x
-            mat.y = player.y
-            mat.width = 40
-            mat.height = 40
-        mat:load()
+        Matrix.new(e):load()
         playerImg:bind()
         mesh:render()
     end
@@ -91,7 +86,7 @@ function start()
 
     local e = Entity.new(
         function(self, other)
-            print ("player hit!")
+            -- print ("player hit!")
         end,
         pyrConf,
         [[
@@ -140,15 +135,7 @@ function start()
         function (e)
             lazarShadar:use()
             lazarShadar:setFloat("color", 0.2, game:getTime() % 1, 0.2, 1)
-            local mat = Matrix.new()
-                mat.x = e.x
-                mat.y = e.y
-                mat.width = e.width
-                mat.height = e.height
-                mat.rotation = e.rotation
-                mat.pivotX = e.pivotX
-                mat.pivotY = e.pivotY
-            mat:load()
+            Matrix.new(e):load()
             mesh:render()
 
             -- print("px = " .. player.x)

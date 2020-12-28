@@ -3,7 +3,7 @@
 function spawn(x, y, vx, vy)
     local e = Entity.new(
         function(self, other)
-            print ("nice hit!")
+            print ("oof!")
         end,
         entConf,
         [[
@@ -29,7 +29,7 @@ function spawn(x, y, vx, vy)
             y = y / mag
             local b = Entity.new(
                 function(self, other)
-                    print ("nice hit!")
+                    -- print ("nice hit!")
                 end,
                 conf,
                 [[

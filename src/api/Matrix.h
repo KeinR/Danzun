@@ -14,6 +14,7 @@ namespace dan::api {
         float rotation;
     public:
         Matrix();
+        Matrix(sol::table t);
         void load(sol::this_state l);
 
         static void open(sol::state_view &lua);

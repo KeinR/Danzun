@@ -3,6 +3,10 @@ function pause(seconds)
     coroutine.yield(seconds)
 end
 
+function lEntityMat(entity)
+    Matrix.new(entity):load()
+end
+
 
 BasicSprite = {}
 
