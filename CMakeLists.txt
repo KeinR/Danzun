@@ -20,6 +20,7 @@ file(GLOB_RECURSE sources src/*.cpp src/*.c)
 set(libs
     deps/GLAD/glad.c
     deps/stb/stb_image.c
+    deps/stb/stb_vorbis.c
 )
 
 add_executable(Danzun ${sources} ${libs})
@@ -32,6 +33,9 @@ find_package(glm 0.9 REQUIRED)
 find_package(glfw3 3.2 REQUIRED)
 find_package(Lua53 REQUIRED)
 find_package(OpenAL 1.19 REQUIRED)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 
 target_include_directories(Danzun
     PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/include"
@@ -39,12 +43,15 @@ target_include_directories(Danzun
     PUBLIC "${GLFW_INCLUDE_DIRS}"
     PUBLIC "${GLM_INCLUDE_DIRS}"
     PUBLIC "${LUA53_INCLUDE_DIR}"
+    PUBLIC "${OPENAL_INCLUDE_DIR}"
 )
 
 target_link_libraries(Danzun
     glfw
+    ${OPENAL_LIBRARY}
     ${LUA53_LIBRARIES}
     stdc++fs
+    Threads::Threads
 )
 
 # Subdirectories

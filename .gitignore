@@ -42,3 +42,6 @@ GTAGS
 # Misc top-level test files
 /*.cpp
 /*.lua
+
+# Don't wanna' get copyright striked IYKWIM
+/tests/test.ogg
