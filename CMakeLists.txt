@@ -21,6 +21,7 @@ set(libs
     deps/GLAD/glad.c
     deps/stb/stb_image.c
     deps/stb/stb_vorbis.c
+    deps/dr/dr_wav.c
 )
 
 add_executable(Danzun ${sources} ${libs})

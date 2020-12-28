@@ -179,7 +179,7 @@ function start()
     print("Statis...")
     if not music.failed then
         print("Music loaded successfuly")
-        music:play()
+        -- music:play()
     else
         print("Failed to load music...")
     end
@@ -187,9 +187,11 @@ function start()
     bulletShotSound = Sound.loadFile("effect.wav")
     if not bulletShotSound.failed then
         print("Effect loaded successfuly")
+        bulletShotSound:play()
     else
         print("Failed to load effect...")
     end
+
 
 end
 

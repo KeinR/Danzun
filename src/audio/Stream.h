@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <stb/stb_vorbis.h>
+#include <dr/dr_wav.h>
 #include "../lib/audio.h"
 
 /*
@@ -56,15 +57,15 @@ namespace dan::audio {
 
     // Load a PCM WAV file
     class WavStream: public Stream {
-        std::ifstream stream;
-        streampos_t start;
-        streampos_t end;
+        drwav wav;
         soundInfo info;
         void open(const std::string &file);
     public:
         // WILL THROW ON FAIL
         WavStream(const std::string &file);
-        WavStream(WavStream&&) = default;
+        ~WavStream();
+        WavStream(WavStream&&) = delete;
+        WavStream(WavStream&) = delete;
 
         const soundInfo &getInfo() override;
         // WILL THROW ON FAIL

@@ -10,13 +10,13 @@ dan::api::SpeakerConf::SpeakerConf(const std::shared_ptr<Sound> &sound):
 }
 
 dan::api::SpeakerConf dan::api::SpeakerConf::makeStream(sol::this_state l, const std::string &path) {
+    return SpeakerConf(std::make_shared<Music>(l, path));
+}
+dan::api::SpeakerConf dan::api::SpeakerConf::makeEffect(sol::this_state l, const std::string &path) {
     std::shared_ptr<SoundEffect> s = std::make_shared<SoundEffect>(l, path);
     SpeakerConf speaker(s);
     s->initSpeaker(&speaker);
     return speaker;
-}
-dan::api::SpeakerConf dan::api::SpeakerConf::makeEffect(sol::this_state l, const std::string &path) {
-    return SpeakerConf(std::make_shared<Music>(l, path));
 }
 
 dan::audio::Speaker &dan::api::SpeakerConf::getSpeaker() {
