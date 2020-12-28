@@ -1,8 +1,6 @@
 - 3D API
-
 - Sound
 - UI design
 - Polygons...
-- Error policy
-
-Clean up errors
+- Geometry shaders
+- Construct matrix with object that has props

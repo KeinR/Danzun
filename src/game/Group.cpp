@@ -7,8 +7,9 @@ dan::Group::Group() {
 void dan::Group::pushCircle(const entity_t &owner) {
     circles.emplace_back(owner, Circle());
 }
-void dan::Group::pushPolygon(const entity_t &owner) {
+void dan::Group::pushPolygon(const entity_t &owner, const Polygon::points_t &points) {
     polygons.emplace_back(owner, Polygon());
+    polygons.back().second.setPoints(points);
 }
 bool dan::Group::erase(Entity *ptr) {
     for (circles_t::iterator it = circles.begin(); it < circles.end(); ++it) {
@@ -40,6 +41,11 @@ void dan::Group::update() {
         it->second.setX(it->first->getX());
         it->second.setY(it->first->getY());
         it->second.setRotation(it->first->getRotation());
+        it->second.setWidth(it->first->getWidth());
+        it->second.setHeight(it->first->getHeight());
+        it->second.setPivotX(it->first->getPivotX());
+        it->second.setPivotY(it->first->getPivotY());
+        it->second.load();
     }
 }
 

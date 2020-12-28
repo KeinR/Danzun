@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <glm/glm.hpp>
+
 namespace dan {
     class Context;
 }
@@ -16,6 +18,9 @@ namespace dan {
         // Translation
         float x;
         float y;
+        // Pivot relative to x/y (in NDC)
+        float pivotXOfs;
+        float pivotYOfs;
         // Scaling
         float width;
         float height;
@@ -25,7 +30,10 @@ namespace dan {
         float rotation;
 
         bool reflectAcrossYAxis;
-        Matrix(float x, float y, float width, float height, float rotation, bool reflectAcrossYAxis);
+
+        Matrix(float x, float y, float pivotXOfs, float pivotYOfs, float width, float height, float rotation, bool reflectAcrossYAxis);
+
+        glm::mat4 getModel(bool flipY);
 
         void load(Context &c, const std::string &location = "model");
     };

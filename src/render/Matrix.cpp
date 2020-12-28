@@ -2,10 +2,11 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+
+#include <iostream>
 
 #include "Shader.h"
 
@@ -16,32 +17,45 @@ inline static float ndcX(float x, int winWidth);
 inline static float ndcY(float y, int winHeight);
 inline static glm::mat4 reflectYAxis(const glm::mat4 &m);
 
-dan::Matrix::Matrix(float x, float y, float width, float height, float rotation, bool reflectAcrossYAxis):
-    x(x), y(y), width(width), height(height), rotation(rotation), reflectAcrossYAxis(reflectAcrossYAxis) {
+dan::Matrix::Matrix(float x, float y, float pivotXOfs, float pivotYOfs, float width, float height, float rotation, bool reflectAcrossYAxis):
+    x(x), y(y), pivotXOfs(pivotXOfs), pivotYOfs(pivotYOfs), width(width), height(height), rotation(rotation), reflectAcrossYAxis(reflectAcrossYAxis) {
+}
+
+glm::mat4 dan::Matrix::getModel(bool flipY) {
+    float px = pivotXOfs * 2;
+    float py = pivotYOfs * 2;
+    float fy = y;
+    float r = -rotation;
+    if (flipY) {
+        fy = -fy;
+        px = -px;
+        py = -py;
+        r = -r;
+    }
+
+    glm::mat4 rot(1.0f);
+    rot = glm::translate(rot, glm::vec3(-px , -py, 0));
+    rot = glm::rotate(rot, r, glm::vec3(0, 0, 1));
+    rot = glm::translate(rot, glm::vec3(px, py, 0));
+    glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(x, fy, 0));
+    if (reflectAcrossYAxis) {
+        trans = reflectYAxis(trans);
+    }
+    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(width, height, 0));
+
+    return trans * rot * scale;
 }
 
 void dan::Matrix::load(Context &c, const std::string &location) {
-    glm::mat4 model(1.0f);
 
-    // const float s = ndcX(x + width / 2, c.getVPWidth());
-    // const float t = ndcY(y + height / 2, c.getVPHeight());
-    const float s = ndcX(x, c.getVPWidth());
-    const float t = ndcY(y, c.getVPHeight());
+    glm::mat4 view(1.0f);
+    view = glm::translate(view, glm::vec3(-1, 1, 0));
+    view = glm::scale(view, glm::vec3(1.0f / c.getVPWidth(), 1.0f / c.getVPHeight(), 0));
 
-    model = glm::translate(model, glm::vec3(s, t, 0));
+    glm::mat4 model = getModel(true);
+    glm::mat4 matrix = view * model;
 
-    const float xScale = width / c.getVPWidth();
-    const float yScale = height / c.getVPHeight();
-
-    model = glm::scale(model, glm::vec3(xScale, yScale, 0));
-
-    model = glm::rotate(model, rotation, glm::vec3(0, 0, 1));
-
-    if (reflectAcrossYAxis) {
-        model = reflectYAxis(model);
-    }
-
-    c.getShader().setMatrix4fv(location, glm::value_ptr(model));
+    c.getShader().setMatrix4fv(location, glm::value_ptr(matrix));
 }
 
 float ndcX(float x, int winWidth) {

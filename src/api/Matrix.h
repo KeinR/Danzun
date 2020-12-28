@@ -7,6 +7,8 @@ namespace dan::api {
     class Matrix {
         float x;
         float y;
+        float pivotXOfs;
+        float pivotYOfs;
         float width;
         float height;
         float rotation;

@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <limits>
+#include <iostream>
 
 #include "Circle.h"
 
@@ -67,7 +68,7 @@ T dan::LineTpl<T>::getRangeMax() const {
 template<typename T>
 void dan::LineTpl<T>::setPoints(T x0, T y0, T x1, T y1) {
     T xDiff = x0 - x1;
-    if (xDiff == 0) {
+    if (std::abs(xDiff) < 0.01) {
         m = std::numeric_limits<T>::quiet_NaN();
         b = std::numeric_limits<T>::quiet_NaN();
         domainMin = x0;
@@ -104,7 +105,7 @@ bool dan::LineTpl<T>::inRange(T y) const {
 
 template<typename T>
 bool dan::LineTpl<T>::isVertical() const {
-    return m == std::numeric_limits<T>::quiet_NaN();
+    return std::isnan(m);
 }
 
 template<typename T>
@@ -123,11 +124,14 @@ bool dan::LineTpl<T>::intersects(const Circle &pc) const {
     // c = (b-t_y)^2 - r^2 + t_x^2
 
     if (isVertical()) {
-        float v = std::sqrt(std::pow(pc.getRadius(), 2) - std::pow(getDomainMin() - pc.getX(), 2));
-        float y0 = pc.getY() + v;
-        float y1 = pc.getY() - v;
-        if (inRange(y0) || inRange(y1)) {
-            return true;
+        float q = std::pow(pc.getRadius(), 2) - std::pow(getDomainMin() - pc.getX(), 2);
+        if (q >= 0) {
+            float v = std::sqrt(q);
+            float y0 = pc.getY() + v;
+            float y1 = pc.getY() - v;
+            if (inRange(y0) || inRange(y1)) {
+                return true;
+            }
         }
     } else {
         float a = std::pow(getM(), 2) + 1;

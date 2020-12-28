@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "../math/Polygon.h"
 #include "../game/Game.h"
 #include "../game/Entity.h"
 #include "PatternVars.h"
@@ -68,10 +69,22 @@ void dan::api::Entity::regCircle(sol::this_state l, const std::string &group) {
     Game::fromLua(l).getGroup(group).pushCircle(handle);
 }
 void dan::api::Entity::regPolygon(sol::this_state l, const std::string &group, sol::table points) {
-    DANZUN_ASSERT(false); // NOT IMPLEMENTED
 
-    // groups.insert(group);
-    // Game::fromLua(l).getGroup(group).pushPolygon(handle);
+    Polygon::points_t pts;
+    pts.reserve(pts.size() / 2);
+    for (std::size_t i = 1; i + 1 <= points.size(); i += 2) {
+        auto a = points[i];
+        auto b = points[i+1];
+        if (a.get_type() == sol::type::number && b.get_type() == sol::type::number) {
+            Polygon::Point p;
+            p.x = a.get<float>();
+            p.y = b.get<float>();
+            pts.push_back(p);
+        }
+    }
+
+    handle->getGroups().insert(group);
+    Game::fromLua(l).getGroup(group).pushPolygon(handle, pts);
 }
 void dan::api::Entity::unregHitboxes(sol::this_state l) {
     Game &g = Game::fromLua(l);

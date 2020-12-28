@@ -32,8 +32,10 @@ namespace dan {
 
         // x, y
         std::array<float, 2> pos;
+        std::array<float, 2> pivot; // For polygon
+
         float startingTime;
-        float rotation;
+        float rotation; // For polygon
         float width;
         float height;
         float autoGC;
@@ -78,11 +80,12 @@ namespace dan {
 
         symbolTable_t &getTable();
 
-        // TODO: Seperation of sprite and hitbox
-        int getX() const;
-        int getY() const;
-        int getWidth() const;
-        int getHeight() const;
+        float getX() const;
+        float getY() const;
+        float getPivotX() const;
+        float getPivotY() const;
+        float getWidth() const;
+        float getHeight() const;
         float getRotation() const;
 
         int getRenderPriority();

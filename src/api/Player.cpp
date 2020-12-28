@@ -31,11 +31,9 @@ float dan::api::Player::getY() {
 void dan::api::Player::open(sol::state_view lua) {
     sol::usertype<Player> type = lua.new_usertype<Player>("Player");
 
-    type["setX"] = &Player::setX;
-    type["setY"] = &Player::setY;
-    type["setWidth"] = &Player::setWidth;
-    type["setHeight"] = &Player::setHeight;
-    type["setSpeed"] = &Player::setSpeed;
-    type["getX"] = &Player::getX;
-    type["getY"] = &Player::getY;
+    type["width"] = sol::property(&Player::setWidth);
+    type["height"] = sol::property(&Player::setHeight);
+    type["speed"] = sol::property(&Player::setSpeed);
+    type["x"] = sol::property(&Player::getX, &Player::setX);
+    type["y"] = sol::property(&Player::getY, &Player::setY);
 }

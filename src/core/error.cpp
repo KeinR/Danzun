@@ -79,7 +79,7 @@ std::string dan::err::trace(sol::state_view lua) {
     sol::function_result result = traceback.call();
     if (!result.valid()) {
         sol::error msg = result;
-        return msg.what();
+        return std::string("[Failed to obtain trace]: ") + msg.what();
     }
 
     return result.get<std::string>();

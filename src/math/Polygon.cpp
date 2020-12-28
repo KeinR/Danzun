@@ -1,8 +1,12 @@
 #include "Polygon.h"
 
 #include <cmath>
+#include <iostream>
+
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Circle.h"
+#include "../render/Matrix.h"
 
 dan::Polygon::Point::Point(): Point(0, 0) {
 }
@@ -10,13 +14,14 @@ dan::Polygon::Point::Point(float x, float y): x(x), y(y) {
 }
 
 dan::Polygon::Polygon():
-    minX(0), minY(0),
-    maxX(0), maxY(0),
-    centerX(0), centerY(0),
+    scaleX(0),
+    scaleY(0),
+    pivotX(0), pivotY(0),
     x(0), y(0),
     rotation(0)
 {
 }
+
 dan::Polygon::points_t &dan::Polygon::getPoints() {
     return points;
 }
@@ -24,79 +29,18 @@ void dan::Polygon::setPoints(const points_t &p) {
     points = p;
 }
 
-void dan::Polygon::setCenterX(float x) {
-    centerX = x;
+void dan::Polygon::setWidth(float w) {
+    scaleX = w;
 }
-void dan::Polygon::setCenterY(float y) {
-    centerY = y;
+void dan::Polygon::setHeight(float h) {
+    scaleY = h;
 }
-void dan::Polygon::detectCenter() {
-    setCenterX((minX + maxX) / 2.0f);
-    setCenterY((minY + maxY) / 2.0f);
+void dan::Polygon::setPivotX(float x) {
+    pivotX = x;
 }
-
-float dan::Polygon::getMinX() const {
-    return minX;
+void dan::Polygon::setPivotY(float y) {
+    pivotY = y;
 }
-float dan::Polygon::getMinY() const {
-    return minY;
-}
-float dan::Polygon::getMaxX() const {
-    return maxX;
-}
-float dan::Polygon::getMaxY() const {
-    return maxY;
-}
-
-float dan::Polygon::transX(float c, float s, float x, float y) {
-    return centerX + (x - centerX) * c - (y - centerY) * s + this->x;
-}
-float dan::Polygon::transY(float c, float s, float x, float y) {
-    return centerY + (x - centerX) * s + (y - centerY) * c + this->y;
-}
-
-void dan::Polygon::load() {
-    // Requres there's at least one point
-    // for starting min/max
-    if (points.size() < 1) {
-        return;
-    }
-
-    typedef points_t::size_type size;
-    // Number of lines equal to that of the number of points.
-    lines.clear();
-    lines.reserve(points.size());
-
-    minX = points[0].x;
-    maxX = points[0].x;
-    minY = points[0].y;
-    maxY = points[0].y;
-
-    const float c = std::cos(rotation);
-    const float s = std::sin(rotation);
-    for (size i = 0; i < points.size(); i++) {
-        size next = (i + 1) % points.size();
-        float x0 = points[i].x;
-        float y0 = points[i].y;
-        float x1 = points[next].x;
-        float y1 = points[next].y;
-        lines.emplace_back(
-            transX(c, s, x0, y0), transY(c, s, x0, y0),
-            transX(c, s, x1, y1), transY(c, s, x1, y1)
-        );
-        if (x0 < minX) {
-            minX = x0;
-        } else if (x0 > maxX) {
-            maxX = x0;
-        }
-        if (y0 < minY) {
-            minY = y0;
-        } else if (y0 > maxY) {
-            maxY = y0;
-        }
-    }
-}
-
 void dan::Polygon::setX(float x) {
     this->x = x;
 }
@@ -105,6 +49,27 @@ void dan::Polygon::setY(float y) {
 }
 void dan::Polygon::setRotation(float radians) {
     this->rotation = radians;
+}
+
+void dan::Polygon::load() {
+    typedef points_t::size_type size;
+    // Number of lines equal to that of the number of points.
+    lines.clear();
+    lines.reserve(points.size());
+
+    glm::mat4 model = Matrix(x, y, pivotX, pivotY, scaleX, scaleY, rotation, false).getModel(false);
+
+    for (size i = 0; i < points.size(); i++) {
+        size next = (i + 1) % points.size();
+        glm::vec4 p1(points[i].x, points[i].y, 0, 1);
+        glm::vec4 p2(points[next].x, points[next].y, 0, 1);
+        p1 = model * p1;
+        p2 = model * p2;
+        lines.emplace_back(
+            p1.x, p1.y,
+            p2.x, p2.y
+        );
+    }
 }
 
 bool dan::Polygon::intersects(const Circle &c) const {

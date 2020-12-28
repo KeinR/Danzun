@@ -3,10 +3,10 @@
 #include "../core/Context.h"
 #include "../render/Matrix.h"
 
-dan::api::Matrix::Matrix(): x(0), y(0), width(10), height(10), rotation(0) {
+dan::api::Matrix::Matrix(): x(0), y(0), pivotXOfs(0), pivotYOfs(0), width(10), height(10), rotation(0) {
 }
 void dan::api::Matrix::load(sol::this_state l) {
-    ::dan::Matrix(x, y, width, height, rotation, false).load(Context::fromLua(l));
+    ::dan::Matrix(x, y, pivotXOfs, pivotYOfs, width, height, rotation, false).load(Context::fromLua(l));
 }
 
 void dan::api::Matrix::open(sol::state_view &lua) {
@@ -16,6 +16,8 @@ void dan::api::Matrix::open(sol::state_view &lua) {
 
     type["x"] = &Matrix::x;
     type["y"] = &Matrix::y;
+    type["pivotX"] = &Matrix::pivotXOfs;
+    type["pivotY"] = &Matrix::pivotYOfs;
     type["width"] = &Matrix::width;
     type["height"] = &Matrix::height;
     type["rotation"] = &Matrix::rotation;

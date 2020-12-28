@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "Hitbox.h"
 #include "Line.h"
 
 namespace dan {
@@ -11,7 +10,7 @@ namespace dan {
 }
 
 namespace dan {
-    class Polygon: public Hitbox {
+    class Polygon {
     public:
         struct Point {
             float x;
@@ -26,40 +25,38 @@ namespace dan {
         points_t points;
         // Derived from points
         lines_t lines;
-        float minX;
-        float minY;
-        float maxX;
-        float maxY;
-        // Center of rotation relative to untranslated points.
-        float centerX;
-        float centerY;
+        // Point scaling
+        float scaleX;
+        float scaleY;
+        // Pivot of rotation relative to untranslated points.
+        float pivotX;
+        float pivotY;
+        // x/y translation
         float x;
         float y;
         // In radians
         float rotation;
-        float transX(float c, float s, float x, float y);
-        float transY(float c, float s, float x, float y);
     public:
         Polygon();
+
         points_t &getPoints();
+        // Points must be in NDC, that is -1 <= x <= 1 && -1 <= y <= 1
         void setPoints(const points_t &p);
 
-        void setCenterX(float x);
-        void setCenterY(float y);
-        // Automatically detects center x/y from points
-        void detectCenter();
+        void setWidth(float w);
+        void setHeight(float h);
+        // Pivot values must be in NDC, that is -1 <= x <= 1 && -1 <= y <= 1.
+        // They will have their respective scale applied later
+        void setPivotX(float x);
+        void setPivotY(float y);
+        void setX(float x);
+        void setY(float y);
+        void setRotation(float radians);
 
-        float getMinX() const override;
-        float getMinY() const override;
-        float getMaxX() const override;
-        float getMaxY() const override;
+        void load();
 
-        void load() override;
-        void setX(float x) override;
-        void setY(float y) override;
-        void setRotation(float radians) override;
         bool hasPoint(const Point &p) const;
-        bool intersects(const Circle &c) const override;
+        bool intersects(const Circle &c) const;
         bool intersects(const Polygon &p) const;
     };
 }

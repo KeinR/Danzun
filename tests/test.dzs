@@ -22,8 +22,8 @@ function spawn(x, y, vx, vy)
 
     e:setScript(Script.new(function(e)
         while true do
-            local x = player:getX() - e.x
-            local y = player:getY() - e.y
+            local x = player.x - e.x
+            local y = player.y - e.y
             local mag = math.sqrt(x^2 + y^2)
             x = x / mag
             y = y / mag

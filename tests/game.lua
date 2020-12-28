@@ -24,7 +24,7 @@ end
 
 function start()
 
-    player:setSpeed(150)
+    player.speed = 150
 
     mesh = Mesh.new()
     mesh:setVertices{
@@ -71,7 +71,19 @@ function start()
 
     playerImg = Image.new("sprites/charge.png");
 
-    pyrConf = BasicSprite.new(playerImg, mesh, shader);
+    playerRenderFunc = function(s)
+        shader:use()
+        local mat = Matrix.new()
+            mat.x = player.x
+            mat.y = player.y
+            mat.width = 40
+            mat.height = 40
+        mat:load()
+        playerImg:bind()
+        mesh:render()
+    end
+
+    pyrConf = Element.new(playerRenderFunc, nil)
 
 
     font = BffFont.new("consolas18.bff")
@@ -113,14 +125,69 @@ function start()
 
     effect:spawn(effectPattern)
 
-    player:setX(100)
-    player:setY(100)
+    player.x = 100
+    player.y = 100
 
     game.gcInterval = 1
     game.running = true
 
     engine.vSync = false
     engine.maxFPS = 60
+
+
+    lazarShadar = Shader.new("shaders/lazer.vert", "shaders/lazer.frag");
+    lazarBeamElement = Element.new(
+        function (e)
+            lazarShadar:use()
+            lazarShadar:setFloat("color", 0.2, game:getTime() % 1, 0.2, 1)
+            local mat = Matrix.new()
+                mat.x = e.x
+                mat.y = e.y
+                mat.width = e.width
+                mat.height = e.height
+                mat.rotation = e.rotation
+                mat.pivotX = e.pivotX
+                mat.pivotY = e.pivotY
+            mat:load()
+            mesh:render()
+
+            -- print("px = " .. player.x)
+            -- print("py = " .. player.y)
+        end,
+        nil
+    )
+    zapCounter = 0
+    lazarBeam = Entity.new(
+        function(self, other)
+            print ("ZAP!")
+        end,
+        lazarBeamElement,
+        [[
+            rotation += dt;
+            if (t - st > 0.5) {
+                display := not(display);
+                tangible := not(tangible);
+                st := t;
+            }
+        ]]
+    )
+
+    lazarBeam.x = 200
+    lazarBeam.y = 400
+    lazarBeam.width = 30
+    lazarBeam.height = 300
+    lazarBeam.rotation = 1
+    lazarBeam.pivotX = 0
+    lazarBeam.pivotY = 150
+    lazarBeam:regPolygon("enemyBullets", {
+        -1, -1,
+        -1, 1,
+        1, 1,
+        1, -1
+    })
+
+
+
 
 end
 
@@ -223,7 +290,7 @@ function magicCircleEffect(m, lst)
 end
 
 
-function main() -- main(e)
+function main()
 
     script:run()
 

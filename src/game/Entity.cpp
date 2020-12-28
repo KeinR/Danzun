@@ -12,6 +12,7 @@ dan::Entity::Entity(
     const std::string &equation, const std::vector<symbolTable_t> &as
 ):
     pos{0, 0},
+    pivot{0, 0},
     startingTime(g.getClock().getTime()),
     rotation(0),
     width(30),
@@ -40,16 +41,22 @@ dan::Entity::symbolTable_t &dan::Entity::getTable() {
     return symbols;
 }
 
-int dan::Entity::getX() const {
+float dan::Entity::getX() const {
     return pos[0];
 }
-int dan::Entity::getY() const {
+float dan::Entity::getY() const {
     return pos[1];
 }
-int dan::Entity::getWidth() const {
+float dan::Entity::getPivotX() const {
+    return pivot[0];
+}
+float dan::Entity::getPivotY() const {
+    return pivot[1];
+}
+float dan::Entity::getWidth() const {
     return width;
 }
-int dan::Entity::getHeight() const {
+float dan::Entity::getHeight() const {
     return height;
 }
 float dan::Entity::getRotation() const {
@@ -76,14 +83,17 @@ void dan::Entity::initEquation(Game &g, const std::vector<symbolTable_t> &as, co
     symbols.add_vector("p", pos.data(), pos.size());
     symbols.add_variable("x", pos[0]);
     symbols.add_variable("y", pos[1]);
+    symbols.add_vector("pivot", pivot.data(), pivot.size());
+    symbols.add_variable("pivotX", pivot[0]);
+    symbols.add_variable("pivotY", pivot[1]);
     symbols.add_variable("ti", startingTime);
-    symbols.add_variable("rot", rotation);
+    symbols.add_variable("rotation", rotation);
     symbols.add_variable("width", width);
     symbols.add_variable("height", height);
     symbols.add_variable("autoGC", autoGC);
     symbols.add_variable("gc", gc);
-    symbols.add_variable("disp", display);
-    symbols.add_variable("tang", tangible);
+    symbols.add_variable("display", display);
+    symbols.add_variable("tangible", tangible);
 
     symbols.add_constants();
 

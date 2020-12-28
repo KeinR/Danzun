@@ -29,7 +29,7 @@ namespace dan {
     public:
         Group();
         void pushCircle(const entity_t &owner);
-        void pushPolygon(const entity_t &owner);
+        void pushPolygon(const entity_t &owner, const Polygon::points_t &points);
         bool erase(Entity *ptr);
         void clear();
         void update();
