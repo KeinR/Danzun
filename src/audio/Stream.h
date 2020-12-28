@@ -64,6 +64,8 @@ namespace dan::audio {
     public:
         // WILL THROW ON FAIL
         WavStream(const std::string &file);
+        WavStream(WavStream&&) = default;
+
         const soundInfo &getInfo() override;
         // WILL THROW ON FAIL
         bool read(char *buffer, streampos_t &length) override;
@@ -80,6 +82,9 @@ namespace dan::audio {
     public:
         // WILL THROW ON FAIL
         VorbisStream(const std::string &file);
+        ~VorbisStream();
+        VorbisStream(VorbisStream &&other);
+
         const soundInfo &getInfo() override;
         bool read(char *buffer, streampos_t &length) override;
         void seek(float seconds) override;

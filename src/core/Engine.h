@@ -9,6 +9,8 @@
 #include "../win/Window.h"
 #include "../win/WindowEvent.h"
 #include "../game/Game.h"
+#include "../audio/Device.h"
+#include "../audio/Context.h"
 
 namespace dan {
     class Group;
@@ -23,6 +25,9 @@ namespace dan {
 
         WindowEvent *windowEventCallback;
         EventCallback *eventCallback;
+
+        audio::Device audioDevice;
+        audio::Context audioContext;
 
         sol::state s;
 

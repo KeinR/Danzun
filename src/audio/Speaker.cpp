@@ -78,8 +78,13 @@ void dan::audio::Speaker::setTime(float seconds) {
     // Notifies any streams that they should change their playback position
     seekChanged.store(true);
 }
-void dan::audio::Speaker::setBuffer(const Buffer &buffer) {
-    alSourcei(handle, AL_BUFFER, buffer.get());
+void dan::audio::Speaker::setBuffer(const buffer_t &buffer) {
+    this->buffer = buffer;
+    alSourcei(handle, AL_BUFFER, buffer->get());
+}
+void dan::audio::Speaker::clearBuffer() {
+    alSourcei(handle, AL_BUFFER, 0);
+    buffer.reset();
 }
 
 bool dan::audio::Speaker::isStreaming() {
@@ -92,23 +97,23 @@ bool dan::audio::Speaker::isPlaying() {
     return state == AL_PLAYING;
 }
 
-void dan::audio::Speaker::playStream(Stream &stream) {
+void dan::audio::Speaker::playStream(const stream_t &stream) {
     stop();
     // Attempt to lock the given stream
-    if (stream.lock()) {
+    if (stream->lock()) {
         throw std::runtime_error("Cannot play stream as it is in use");
     }
-    streamThread = std::thread(&Speaker::doPlayStreamBlocked, this, &stream);
+    streamThread = std::thread(&Speaker::doPlayStreamBlocked, this, stream);
 }
-void dan::audio::Speaker::playStreamBlocked(Stream &stream) {
+void dan::audio::Speaker::playStreamBlocked(const stream_t &stream) {
     stop();
-    if (stream.lock()) {
+    if (stream->lock()) {
         throw std::runtime_error("Cannot play stream as it is in use");
     }
-    doPlayStreamBlocked(&stream);
+    doPlayStreamBlocked(stream);
 }
 
-void dan::audio::Speaker::doPlayStreamBlocked(Stream *stream) {
+void dan::audio::Speaker::doPlayStreamBlocked(stream_t stream) {
     streaming = true;
     shouldStream = true;
     const soundInfo &info = stream->getInfo();

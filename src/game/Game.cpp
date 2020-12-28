@@ -61,6 +61,10 @@ dan::Entity::symbolTable_t &dan::Game::getGlobalSymbols() {
     return globalSymbols;
 }
 
+void dan::Game::addSpeaker(const speaker_t &speaker) {
+    speakers.insert(speaker);
+}
+
 dan::Group &dan::Game::getGroup(const std::string &name) {
     return groups[name];
 }
@@ -196,6 +200,17 @@ void dan::Game::logic(float deltaTime) {
 }
 
 void dan::Game::gc() {
+
+    // Clean up speaker references
+    for (speakers_t::iterator it = speakers.begin(); it != speakers.end();) {
+        if (!(*it)->isPlaying()) {
+            it = speakers.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    // Clean up entity references
     for (entities_t::iterator it = entities.begin(); it != entities.end();) {
         entity_t &e = *it;
         if (e->isAutoGC()) {

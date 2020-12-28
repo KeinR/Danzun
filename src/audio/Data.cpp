@@ -9,7 +9,9 @@
 static dan::audio::Data doLoadVorbis(stb_vorbis *handle);
 static void strEq(const unsigned char *source, int &i, int length, const char *cstr, const char *err);
 
-dan::audio::Data::Data(std::shared_ptr<const void> data, ALsizei dataBytes, ALsizei frequency, ALenum format):
+dan::audio::Data::Data(): dataBytes(0), frequency(0), format(0) {
+}
+dan::audio::Data::Data(const std::shared_ptr<data_t> &data, ALsizei dataBytes, ALsizei frequency, ALenum format):
     data(data), dataBytes(dataBytes), frequency(frequency), format(format) {
 }
 

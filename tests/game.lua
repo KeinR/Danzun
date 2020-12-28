@@ -175,6 +175,21 @@ function start()
 
 
 
+    music = Sound.openStream("test.ogg")
+    print("Statis...")
+    if not music.failed then
+        print("Music loaded successfuly")
+        music:play()
+    else
+        print("Failed to load music...")
+    end
+
+    bulletShotSound = Sound.loadFile("effect.wav")
+    if not bulletShotSound.failed then
+        print("Effect loaded successfuly")
+    else
+        print("Failed to load effect...")
+    end
 
 end
 

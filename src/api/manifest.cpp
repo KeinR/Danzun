@@ -16,6 +16,7 @@
 #include "BffFont.h"
 #include "Element.h"
 #include "util.h"
+#include "SpeakerConf.h"
 
 void dan::api::manifest::openAll(sol::state_view lua) {
     ::dan::api::Engine::open(lua);
@@ -34,4 +35,5 @@ void dan::api::manifest::openAll(sol::state_view lua) {
     ::dan::api::BffFont::open(lua);
     ::dan::api::Element::open(lua);
     ::dan::api::util::open(lua);
+    ::dan::api::SpeakerConf::open(lua);
 }

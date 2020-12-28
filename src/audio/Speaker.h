@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <atomic>
+#include <memory>
 
 #include "../lib/audio.h"
 
@@ -18,6 +19,10 @@
 
 namespace dan::audio {
     class Speaker {
+    public:
+        typedef std::shared_ptr<Stream> stream_t;
+        typedef std::shared_ptr<Buffer> buffer_t;
+    private:
         // OpenAL handle to source object
         ALuint handle;
         // Is the stream running?
@@ -34,10 +39,13 @@ namespace dan::audio {
         // The current seek offest, in seconds
         std::atomic<float> seek;
         int bufferMillis;
+        // Used to make sure that the buffer isn't free'd while it's being used.
+        // Can be nullptr
+        buffer_t buffer;
         // Stop the buffer from playing
         void stopPlaying();
         // Stream the audio stream on this thread
-        void doPlayStreamBlocked(Stream *stream);
+        void doPlayStreamBlocked(stream_t stream); // MAKE SURE IT'S COPIED TO PRESERVE DATA (so no const ref)
         // Close the handle and clean up resources
         void close();
         // Move the resources from `other` to self
@@ -69,7 +77,7 @@ namespace dan::audio {
         // Set sound buffer for playback
         // Do note that the Buffer is monopolized when playing (I'm pretty sure)
         // Calls stop()
-        void setBuffer(const Buffer &buffer);
+        void setBuffer(const buffer_t &buffer);
         // Calls stop() and sets buffer to NULL, allowing to be used for something else.
         void clearBuffer();
 
@@ -81,9 +89,9 @@ namespace dan::audio {
         // Streams audio from a stream.
         // Very friendly to memory
         // Do note that the Stream is monopolized
-        void playStream(Stream &stream);
+        void playStream(const stream_t &stream);
         // Play stream, but blocked on the same thread
-        void playStreamBlocked(Stream &stream);
+        void playStreamBlocked(const stream_t &stream);
         // Block this thread until done
         void playBlocked();
         // Play async

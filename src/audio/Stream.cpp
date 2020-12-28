@@ -174,6 +174,19 @@ dan::audio::VorbisStream::VorbisStream(const std::string &file): Stream() {
     // Each "unit" of sound, the sample size * channels
     info.blockAlign = vorbisBitsPerSample * vInfo.channels / 8;
 }
+
+dan::audio::VorbisStream::~VorbisStream() {
+    if (decoder != nullptr) {
+        stb_vorbis_close(decoder);
+    }
+}
+dan::audio::VorbisStream::VorbisStream(VorbisStream &&other) {
+    decoder = other.decoder;
+    other.decoder = nullptr;
+    vInfo = other.vInfo;
+    info = other.info;
+}
+
 const dan::audio::soundInfo &dan::audio::VorbisStream::getInfo() {
     return info;
 }

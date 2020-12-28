@@ -26,11 +26,14 @@ dan::Engine::Engine():
     rc(this),
     windowEventCallback(nullptr),
     eventCallback(nullptr),
+    audioDevice(NULL),
+    audioContext(audioDevice),
     game(*this)
 {
     setMaxFPS(120);
     window.setEventCallback(*this);
     s.open_libraries();
+    audioContext.bind();
 }
 
 bool dan::Engine::callbackCallable() {

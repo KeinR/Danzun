@@ -29,7 +29,8 @@ namespace dan::audio {
         ALsizei frequency;
         // The OpenAL format... There are 4
         ALenum format;
-        Data(std::shared_ptr<data_t> data, ALsizei dataBytes, ALsizei frequency, ALenum format);
+        Data();
+        Data(const std::shared_ptr<data_t> &data, ALsizei dataBytes, ALsizei frequency, ALenum format);
     };
 
     // Gets an OpenAL format based on the number of channels and the sample size

@@ -16,6 +16,7 @@
 #include "Entity.h"
 #include "../time/Clock.h"
 #include "Player.h"
+#include "../audio/Speaker.h"
 
 namespace dan {
     class Context;
@@ -31,6 +32,8 @@ namespace dan {
         typedef std::shared_ptr<Renderable> renderable_t;
         typedef std::unordered_set<Renderable*> remRenderQueue_t;
         typedef std::multimap<int, renderable_t, std::greater<int>> renderQueue_t;
+        typedef std::shared_ptr<audio::Speaker> speaker_t;
+        typedef std::unordered_set<speaker_t> speakers_t;
     private:
         // Not used internally - exlcusively for use by
         // client applications
@@ -59,6 +62,8 @@ namespace dan {
 
         Entity::symbolTable_t globalSymbols;
 
+        speakers_t speakers;
+
         // Clean up entities
         void gc();
         entities_t::iterator eraseEntity(const entities_t::iterator &it);
@@ -70,6 +75,9 @@ namespace dan {
         Clock &getClock();
         Player &getPlayer();
         Entity::symbolTable_t &getGlobalSymbols();
+
+        // Will remain as long as it is playing
+        void addSpeaker(const speaker_t &speaker);
 
         Group &getGroup(const std::string &name);
         void clearGroups();
