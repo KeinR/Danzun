@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13)
-project(Danzun VERSION 0.2 LANGUAGES CXX C)
+project(Danzun VERSION 0.3 LANGUAGES CXX C)
 
 option(BUILD_DOCS "Whether the documentation target should be generated" OFF)
 option(BUILD_PRIVATE_DOCS "If MAKE_DOCS is turned on, will build docs for the codebase as opposed to the Lua API" OFF)
