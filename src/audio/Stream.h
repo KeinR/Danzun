@@ -68,7 +68,7 @@ namespace dan::audio {
         WavStream(WavStream&) = delete;
 
         const soundInfo &getInfo() override;
-        // WILL THROW ON FAIL
+        // Return true if done
         bool read(char *buffer, streampos_t &length) override;
         void seek(float seconds) override;
     };

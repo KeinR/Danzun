@@ -8,7 +8,7 @@ require("nice")
 function preInit()
     window:setTitle("Danzun test")
     window:setSize(500, 700)
-    game:setSize(500, 700)
+    game:setSize(500 * 2, 700 * 2)
     -- loadingScreen = Image.new("load.jpg")
 end
 
@@ -179,7 +179,7 @@ function start()
     print("Statis...")
     if not music.failed then
         print("Music loaded successfuly")
-        -- music:play()
+        music:play()
     else
         print("Failed to load music...")
     end

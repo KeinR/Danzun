@@ -70,9 +70,11 @@ const dan::audio::soundInfo &dan::audio::WavStream::getInfo() {
 }
 
 bool dan::audio::WavStream::read(char *buffer, streampos_t &length) {
-    length -= length % 2;
-    drwav_uint64 len = length * wav.fmt.channels;
-    return drwav_read_pcm_frames_s16(&wav, length * wav.fmt.channels, reinterpret_cast<short*>(buffer)) < len;
+    length -= length % wav.fmt.blockAlign;
+    drwav_uint64 len = length / wav.fmt.channels / sizeof(short);
+    drwav_uint64 lenResult = drwav_read_pcm_frames_s16(&wav, len, reinterpret_cast<short*>(buffer));
+    length = len * wav.fmt.channels * sizeof(short);
+    return lenResult < len;
 }
 void dan::audio::WavStream::seek(float seconds) {
     // Should work but idunno man

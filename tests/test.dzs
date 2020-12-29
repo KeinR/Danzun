@@ -22,6 +22,7 @@ function spawn(x, y, vx, vy)
 
     e:setScript(Script.new(function(e)
         while true do
+            bulletShotSound:play()
             local x = player.x - e.x
             local y = player.y - e.y
             local mag = math.sqrt(x^2 + y^2)
@@ -53,6 +54,7 @@ function spawn(x, y, vx, vy)
 end
 
 spawn(40, 0, -0.5, 1)
+pause(0.3)
 spawn(80, 0, 0.5, 1)
 
 pause(50)

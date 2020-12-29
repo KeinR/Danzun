@@ -222,6 +222,8 @@ void dan::audio::Speaker::playBlocked() {
 }
 
 void dan::audio::Speaker::play() {
+    // "When called on a source which is already playing, the source will restart at the beginning"
+    // OpenAL programmer's guide, pg 51
     alSourcePlay(handle);
 }
 

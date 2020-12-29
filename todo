@@ -1,5 +1,6 @@
-- 3D API
-- Sound
-- UI design
-- Geometry shaders
 - Async loading
+    - Thread safety
+- UI design
+- 3D API
+- Geometry shaders
+- Text boxes (perhaps? Or is that too much? I suppose it would depend a lot on the implementation...)
