@@ -50,7 +50,7 @@ void dan::Matrix::load(Context &c, const std::string &location) {
 
     glm::mat4 view(1.0f);
     view = glm::translate(view, glm::vec3(-1, 1, 0));
-    view = glm::scale(view, glm::vec3(1.0f / c.getVPWidth(), 1.0f / c.getVPHeight(), 0));
+    view = glm::scale(view, glm::vec3(2.0f / c.getVPWidth(), 2.0f / c.getVPHeight(), 0));
 
     glm::mat4 model = getModel(true);
     glm::mat4 matrix = view * model;

@@ -8,12 +8,12 @@ require("nice")
 function preInit()
     window:setTitle("Danzun test")
     window:setSize(500, 700)
-    game:setSize(500 * 2, 700 * 2)
+    game:setSize(500, 700)
     -- loadingScreen = Image.new("load.jpg")
 end
 
 -- This is looped over as init() blocks
-function loadMain()
+function splashScreen()
     
 end
 
@@ -22,6 +22,7 @@ function init()
 
 end
 
+-- Called synchronously after init finishes
 function start()
 
     player.speed = 150
@@ -293,7 +294,7 @@ function magicCircleEffect(m, lst)
 
 end
 
-
+-- Called after every frame
 function main()
 
     script:run()
