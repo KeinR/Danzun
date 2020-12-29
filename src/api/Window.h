@@ -17,13 +17,14 @@ namespace dan::api {
         typedef std::unordered_map<std::string, dan::keyt> keyMappings_t;
         ::dan::Window *handle;
         keyMappings_t keyMappings;
+        bool checkMainThread(sol::this_state l, const char *trace);
     public:
         Window(::dan::Window &handle);
 
-        void setTitle(const std::string &text);
-        void setSize(int width, int height);
-        void setVisible(bool toggle);
-        bool keyDown(const std::string &name);
+        void setTitle(sol::this_state l, const std::string &text);
+        void setSize(sol::this_state l, int width, int height);
+        void setVisible(sol::this_state l, bool toggle);
+        bool keyDown(sol::this_state l, const std::string &name);
 
         static void open(sol::state_view lua);
     };

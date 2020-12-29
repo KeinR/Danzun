@@ -1,5 +1,6 @@
 - Async loading
     - Thread safety
+- Check everywhere for OpenGL errors
 - UI design
 - 3D API
 - Geometry shaders

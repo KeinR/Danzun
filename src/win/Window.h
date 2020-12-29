@@ -86,6 +86,7 @@ namespace dan {
         static void pollEvents();
         static void waitEvents();
         static void setSwapInterval(int val);
+        static void detachContext();
     };
 }
 

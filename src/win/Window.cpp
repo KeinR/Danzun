@@ -231,6 +231,10 @@ void dan::Window::setSwapInterval(int val) {
     glfwSwapInterval(val);
 }
 
+void dan::Window::detachContext() {
+    glfwMakeContextCurrent(NULL);
+}
+
 // Internal members
 
 void errorCallback(int error, const char* description) {

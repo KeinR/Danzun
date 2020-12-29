@@ -1,8 +1,11 @@
 #include "Mesh.h"
 
-#include "../lib/opengl.h"
+#include <atomic>
 
-dan::Mesh::Mesh() {
+#include "../lib/opengl.h"
+#include "../core/Context.h"
+
+dan::Mesh::Mesh(Context &c): (&c) {
     init();
 }
 
@@ -31,6 +34,7 @@ void dan::Mesh::steal(Mesh &other) {
 }
 
 void dan::Mesh::init() {
+    std::lock_guard<Context> g(*c);
     glGenVertexArrays(1, &array);
     glGenBuffers(1, &vertices);
     glGenBuffers(1, &indices);
@@ -39,6 +43,7 @@ void dan::Mesh::init() {
 
 void dan::Mesh::deInit() {
     if (array != 0) {
+        std::lock_guard<Context> g(*c);
         glDeleteVertexArrays(1, &array);
         glDeleteBuffers(1, &vertices);
         glDeleteBuffers(1, &indices);
@@ -47,29 +52,34 @@ void dan::Mesh::deInit() {
 }
 
 void dan::Mesh::bind() const {
+    std::lock_guard<Context> g(*c);
     glBindVertexArray(array);
     glBindBuffer(GL_ARRAY_BUFFER, vertices);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
 }
 
 void dan::Mesh::unbind() {
+    std::lock_guard<Context> g(*c);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void dan::Mesh::setVertices(int count, const float *data) {
+    std::lock_guard<Context> g(*c);
     glBindBuffer(GL_ARRAY_BUFFER, vertices);
     glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 void dan::Mesh::setIndices(int count, const unsigned int *data) {
+    std::lock_guard<Context> g(*c);
     countIndices = count;
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indices);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 void dan::Mesh::setParam(unsigned int index, int size, int stride, int offset) {
+    std::lock_guard<Context> g(*c);
     bind();
     // Load the settings
     glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(offset * sizeof(float)));

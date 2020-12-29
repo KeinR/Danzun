@@ -21,7 +21,7 @@ static int readInt(std::ifstream &file) {
             (static_cast<unsigned int>(file.get()) << 24);
 }
 
-dan::BffFont::BffFont(sol::state_view lua, const std::string &path) {
+dan::BffFont::BffFont(Context &c, sol::state_view lua, const std::string &path): atlas(c) {
 
     failed = true;
 
@@ -211,8 +211,8 @@ void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsig
     }
 }
 
-dan::Mesh dan::BffFont::genMesh(const std::string &str) const {
-    Mesh mesh;
+dan::Mesh dan::BffFont::genMesh(Context &c, const std::string &str) const {
+    Mesh mesh(c);
 
     if (str.size() == 0) {
         return mesh;

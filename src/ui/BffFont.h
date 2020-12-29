@@ -11,6 +11,7 @@
 
 namespace dan {
     class Mesh;
+    class Context;
 }
 
 namespace dan {
@@ -34,7 +35,7 @@ namespace dan {
 
         // Binary Font Format (.bff) font, Codehead's
         // Bitmap Font Generator's native output. 
-        BffFont(sol::state_view lua, const std::string &path);
+        BffFont(Context &c, sol::state_view lua, const std::string &path);
 
         bool isFailed();
 
@@ -52,7 +53,7 @@ namespace dan {
         ) const;
 
         // Will make newline when encountering \n char.
-        Mesh genMesh(const std::string &str) const;
+        Mesh genMesh(Context &c, const std::string &str) const;
     };
 }
 

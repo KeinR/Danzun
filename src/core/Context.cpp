@@ -15,18 +15,21 @@ dan::Context::Context(Engine *e):
 }
 
 void dan::Context::setShader(Shader &s) {
+    std::lock_guard<Context> g(*this);
     if (currentShader != &s) {
         currentShader = &s;
-        currentShader->doUse();
+        s.doUse();
     }
 }
 
 void dan::Context::clearShader() {
+    std::lock_guard<Context> g(*this);
     currentShader = nullptr;
     Shader::disuse();
 }
 
 void dan::Context::setViewport(int w, int h) {
+    std::lock_guard<Context> g(*this);
     vWidth = w;
     vHeight = h;
     glViewport(0, 0, vWidth, vHeight);
@@ -39,9 +42,16 @@ int dan::Context::getVPHeight() const {
     return vHeight;
 }
 
+void dan::Context::lock() {
+    engine->lockContext();
+}
+void dan::Context::unlock() {
+    engine->unlockContext();
+}
+
 dan::Shader &dan::Context::getShader() const {
     DANZUN_ASSERT(currentShader != nullptr);
-    return *currentShader;
+    return *currentShader.load();
 }
 
 dan::Engine &dan::Context::getEngine() const {

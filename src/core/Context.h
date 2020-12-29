@@ -1,6 +1,8 @@
 #ifndef DANZUN_CONTEXT_H_INCLUDED
 #define DANZUN_CONTEXT_H_INCLUDED
 
+#include <atomic>
+
 #include <sol/sol.hpp>
 
 namespace dan {
@@ -13,7 +15,7 @@ namespace dan {
         // Is only for use by client code - The context has
         // no use for this
         Engine *engine;
-        Shader *currentShader;
+        std::atomic<Shader*> currentShader;
         int vWidth;
         int vHeight;
 
@@ -30,6 +32,9 @@ namespace dan {
         int getVPHeight() const;
         Shader &getShader() const;
         Engine &getEngine() const;
+
+        void lock();
+        void unlock();
 
         static Context &fromLua(sol::state_view lua);
     };

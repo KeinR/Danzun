@@ -1,7 +1,11 @@
 #ifndef DANZUN_ENGINE_H_INCLUDED
 #define DANZUN_ENGINE_H_INCLUDED
 
+#include <string>
+#include <functional>
 #include <filesystem>
+#include <mutex>
+#include <atomic>
 
 #include <sol/sol.hpp>
 
@@ -19,12 +23,10 @@ namespace dan {
 
 namespace dan {
     class Engine: private WindowEvent {
+
         Window window;
 
         Context rc;
-
-        WindowEvent *windowEventCallback;
-        EventCallback *eventCallback;
 
         audio::Device audioDevice;
         audio::Context audioContext;
@@ -36,22 +38,27 @@ namespace dan {
         float maxFPS;
         float frameInterval;
 
+        bool threading;
+        std::recursive_mutex ctxLock;
+        std::atomic<int> lockCount;
+
         // Cautious call - don't call if nil
         void cCall(const std::string &functionGlobalName);
         bool callbackCallable();
+        void setupState();
+        void run(const std::string &functionName, const std::string &loopDebugName, const std::function<bool()> &predicate);
     public:
         Engine();
+
+        // For other threads accessing OpenGL functions
+        void lockContext();
+        void unlockContext();
 
         void keyPressed(const event::KeyPress &e) override;
         void mouseMoved(const event::MouseMove &e) override;
         void mouseClicked(const event::MouseClick &e) override;
         void mouseScrolled(const event::MouseScroll &e) override;
         void charInput(const event::CharInput &e) override;
-
-        // Set `nullptr` for NONE (default)
-        void setWindowEventCallback(WindowEvent *e);
-        // Set `nullptr` for NONE (default)
-        void setEventCallback(EventCallback *e);
 
         Window &getWindow();
         Game &getGame();
@@ -63,7 +70,6 @@ namespace dan {
         float getMaxFPS();
 
         void open(const std::filesystem::path &filePath);
-        void run();
 
         void start(const std::filesystem::path &filePath);
 

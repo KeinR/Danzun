@@ -2,24 +2,20 @@
 
 #include "../lib/opengl.h"
 #include "../lib/glfw.h"
-#include "error.h"
-
 #include "../api/Engine.h"
 #include "../api/Game.h"
 #include "../api/Player.h"
 #include "../api/Window.h"
-
 #include "../api/manifest.h"
-
-#include "EventCallback.h"
+#include "error.h"
 
 #include <iostream>
-
-// FPS counter
-#include <chrono>
 #include <thread>
 
 #include <cmake/config.h>
+
+// FPS counter
+#include <chrono>
 
 dan::Engine::Engine():
     window("Danzun", 500, 500, 0),
@@ -28,7 +24,9 @@ dan::Engine::Engine():
     eventCallback(nullptr),
     audioDevice(NULL),
     audioContext(audioDevice),
-    game(*this)
+    game(*this),
+    threading(false),
+    lockCount(0)
 {
     setMaxFPS(120);
     window.setEventCallback(*this);
@@ -36,42 +34,37 @@ dan::Engine::Engine():
     audioContext.bind();
 }
 
-bool dan::Engine::callbackCallable() {
-    return windowEventCallback != nullptr;
+void dan::Engine::lockContext() {
+    // There will only ever be two threads.
+    // No, coroutines aren't threads (they're named something different after all...).
+    // The multithreading portion will only happen briefly during loading events.
+    if (threading) {
+        ctxLock.lock();
+        if (lockCount == 0) {
+            window.makeCurrent();
+        }
+        ++lockCount;
+    }
+}
+void dan::Engine::unlockContext() {
+    if (threading) {
+        --lockCount;
+        if (lockCount == 0) {
+            Window::detachContext();
+        }
+        ctxLock.unlock();
+    }
 }
 
 void dan::Engine::keyPressed(const event::KeyPress &e) {
-    if (callbackCallable()) {
-        windowEventCallback->keyPressed(e);
-    }
 }
 void dan::Engine::mouseMoved(const event::MouseMove &e) {
-    if (callbackCallable()) {
-        windowEventCallback->mouseMoved(e);
-    }
 }
 void dan::Engine::mouseClicked(const event::MouseClick &e) {
-    if (callbackCallable()) {
-        windowEventCallback->mouseClicked(e);
-    }
 }
 void dan::Engine::mouseScrolled(const event::MouseScroll &e) {
-    if (callbackCallable()) {
-        windowEventCallback->mouseScrolled(e);
-    }
 }
 void dan::Engine::charInput(const event::CharInput &e) {
-    if (callbackCallable()) {
-        windowEventCallback->charInput(e);
-    }
-}
-
-void dan::Engine::setWindowEventCallback(WindowEvent *e) {
-    windowEventCallback = e;
-}
-
-void dan::Engine::setEventCallback(EventCallback *e) {
-    eventCallback = e;
 }
 
 dan::Window &dan::Engine::getWindow() {
@@ -96,7 +89,7 @@ float dan::Engine::getMaxFPS() {
     return maxFPS;
 }
 
-void dan::Engine::run() {
+void dan::Engine::setupState() {
     window.makeCurrent();
 
     glActiveTexture(GL_TEXTURE0);
@@ -104,6 +97,10 @@ void dan::Engine::run() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
+}
+
+
+void dan::Engine::run(const std::string &functionName, const std::string &loopDebugName, const std::function<bool()> &predicate) {
 
     float start = glfwGetTime();
     float deltaTime = 0;
@@ -117,17 +114,19 @@ void dan::Engine::run() {
     Window::setSwapInterval(0);
 #endif
 
-    while (!window.shouldClose()) {
+    lockContext();
+
+    while (!window.shouldClose() && predicate()) {
         rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
 
         s.collect_garbage();
 
-        sol::function_result mr = s["main"].call();
+        sol::function_result mr = s[functionName].call();
         if (!mr.valid()) {
             sol::error serr = mr;
-            err("Engine::run", s) << "Main loop failed: \"" << serr.what();
+            err("Engine::run", s) << loopDebugName << " loop failed: \"" << serr.what();
         }
         game.render(rc);
 
@@ -151,9 +150,12 @@ void dan::Engine::run() {
 
         start = time;
         game.logic(deltaTime);
-        if (eventCallback != nullptr) {
-            eventCallback->onFrame(*this, deltaTime);
-        }
+
+        unlockContext();
+        // Give a possible other thread a chance to lock and do something.
+        // Also, even if the other thread got the context bound and drew something,
+        // it would not show up, as right after this the screen is cleared >:D.
+        lockContext();
     }
 }
 
@@ -195,6 +197,13 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
 
     window.setVisible(true);
 
+    std::atomic<bool> initDoneFlag;
+
+    std::thread loadingThread();
+
+    run("splash", "Splash", [&initDoneFlag]()->bool{ return !initDoneFlag.load(); });
+    s["splashScreen"]
+
     cCall("init");
 
     cCall("start");
@@ -202,7 +211,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
 
 void dan::Engine::start(const std::filesystem::path &filePath) {
     open(filePath);
-    run();
+    run("main", "Main", []()->bool{ return true; });
 }
 
 // Static members

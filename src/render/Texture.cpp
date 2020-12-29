@@ -1,8 +1,10 @@
 #include "Texture.h"
 
 #include <cstddef>
+#include <mutex>
 
 #include "../lib/opengl.h"
+#include "../core/Context.h"
 
 // In-use enum values for Texture.
 // def'd to be extra safe.
@@ -17,7 +19,7 @@ constexpr dan::Texture::tparam dan::Texture::defaultParams{
     GL_LINEAR
 };
 
-dan::Texture::Texture() {
+dan::Texture::Texture(Context &c): c(&c) {
     init(defaultParams);
 }
 
@@ -30,11 +32,13 @@ dan::Texture::~Texture() {
 }
 
 void dan::Texture::init(const tparam &params) {
+    std::lock_guard<Context> g(*c);
     glGenTextures(1, &buffer);
     setParams(params);
 }
 
 void dan::Texture::deInit() {
+    std::lock_guard<Context> g(*c);
     glDeleteTextures(1, &buffer);
 }
 
@@ -52,6 +56,7 @@ dan::Texture &dan::Texture::operator=(Texture &&other) {
 }
 
 void dan::Texture::setData(int fmt, unsigned int width, unsigned int height, const data_t *data) {
+    std::lock_guard<Context> g(*c);
     bind();
     glTexImage2D(TEXTURE_TYPE, 0, fmt, width, height, 0, fmt, TEXTURE_PIXEL_TYPE, data);
     unbind();
@@ -62,28 +67,26 @@ unsigned int dan::Texture::getHandle() {
 }
 
 void dan::Texture::bind() {
+    std::lock_guard<Context> g(*c);
     glBindTexture(TEXTURE_TYPE, buffer);
 }
 void dan::Texture::unbind() {
+    std::lock_guard<Context> g(*c);
     glBindTexture(TEXTURE_TYPE, 0);
 }
 
 void dan::Texture::clear() {
+    std::lock_guard<Context> g(*c);
     bind();
     glTexImage2D(TEXTURE_TYPE, 0, GL_RED, 0, 0, 0, GL_RED, TEXTURE_PIXEL_TYPE, NULL);
     unbind();
 }
 
-void dan::Texture::genMipmap() {
-    bind();
-    glGenerateMipmap(TEXTURE_TYPE);
-    unbind();
-}
-
 void dan::Texture::setDefaultParams() {
-    setParams(defaultParams);
+    setParams(c, defaultParams);
 }
 void dan::Texture::setParams(const tparam &params) {
+    std::lock_guard<Context> g(*c);
     bind();
 
     // x/y wrap parameter

@@ -13,7 +13,7 @@ function preInit()
 end
 
 -- This is looped over as init() blocks
-function splashScreen()
+function splash()
     
 end
 
@@ -50,10 +50,6 @@ function start()
     textShader = Shader.new("shaders/text.vert", "shaders/text.frag");
     textShader:setInt("atlas", 0)
     textShader:setFloat("color", 0, 0, 0, 1)
-
-    mat = Matrix.new()
-    mat.width = 30
-    mat.height = 30
 
     img = Image.new("sprites/bullet.png");
 
@@ -96,8 +92,8 @@ function start()
         ]]
     );
     e:regCircle("player")
-    e.width = 40
-    e.height = 40
+    e.width = 20
+    e.height = 20
 
 
 
@@ -115,8 +111,8 @@ function start()
             done := true;
         }
     ]])
-    effectPattern.width = 150
-    effectPattern.height = 150
+    effectPattern.width = 75
+    effectPattern.height = 75
     effectPattern.rotation = 0
 
     effect:spawn(effectPattern)
@@ -160,13 +156,13 @@ function start()
         ]]
     )
 
-    lazarBeam.x = 200
-    lazarBeam.y = 400
-    lazarBeam.width = 30
-    lazarBeam.height = 300
+    lazarBeam.x = 100
+    lazarBeam.y = 200
+    lazarBeam.width = 15
+    lazarBeam.height = 150
     lazarBeam.rotation = 1
     lazarBeam.pivotX = 0
-    lazarBeam.pivotY = 150
+    lazarBeam.pivotY = 75
     lazarBeam:regPolygon("enemyBullets", {
         -1, -1,
         -1, 1,
@@ -192,6 +188,9 @@ function start()
     else
         print("Failed to load effect...")
     end
+
+
+    routine = coroutine.new()
 
 
 end

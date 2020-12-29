@@ -1,7 +1,10 @@
 #include "Window.h"
 
+#include <mutex>
+
 #include "../core/error.h"
 #include "../core/util.h"
+#include "../core/pmeta.h"
 #include "../win/Window.h"
 
 dan::api::Window::Window(::dan::Window &handle): handle(&handle) {
@@ -14,23 +17,41 @@ dan::api::Window::Window(::dan::Window &handle): handle(&handle) {
     keyMappings["x"] = dan::keyt::X;
 }
 
-void dan::api::Window::setTitle(const std::string &text) {
-    handle->setTitle(text);
-}
-void dan::api::Window::setSize(int width, int height) {
-    handle->setSize(width, height);
-}
-void dan::api::Window::setVisible(bool toggle) {
-    handle->setVisible(toggle);
-}
-bool dan::api::Window::keyDown(const std::string &name) {
-    keyMappings_t::iterator it = keyMappings.find(ut::lowercase(name));
-    if (it != keyMappings.end()) {
-        return handle->keyPressed(it->second);
-    } else {
-        err("api::Window::keyDown") << "No key mapping for \"" << name << "\"";
+bool dan::api::Window::checkMainThread(sol::this_state l, const char *trace) {
+    if (!pmeta::onMainThread()) {
+        err(trace, l) << "Can only modify window from main thread";
         return false;
+    } else {
+        return true;
     }
+}
+
+void dan::api::Window::setTitle(sol::this_state l, const std::string &text) {
+    if (checkMainThread(l, "api::Window::setTitle")) {
+        handle->setTitle(text);
+    }
+}
+void dan::api::Window::setSize(sol::this_state l, int width, int height) {
+    if (checkMainThread(l, "api::Window::setSize")) {
+        handle->setSize(width, height);
+    }
+}
+void dan::api::Window::setVisible(sol::this_state l, bool toggle) {
+    if (checkMainThread(l, "api::Window::setVisible")) {
+        handle->setVisible(toggle);
+    }
+}
+bool dan::api::Window::keyDown(sol::this_state l, const std::string &name) {
+    static const char *const funcSig = "api::Window::keyDown";
+    if (checkMainThread(l, funcSig)) {
+        keyMappings_t::iterator it = keyMappings.find(ut::lowercase(name));
+        if (it != keyMappings.end()) {
+            return handle->keyPressed(it->second);
+        } else {
+            err(funcSig, l) << "No key mapping for \"" << name << "\"";
+        }
+    }
+    return false;
 }
 
 // Static members

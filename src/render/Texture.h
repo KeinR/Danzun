@@ -2,7 +2,6 @@
 #define DANZUN_TEXTURE_H_INCLUDED
 
 namespace dan {
-    class Image;
     class Context;
 }
 
@@ -45,6 +44,8 @@ namespace dan {
         /// Handle to the managed OpenGL buffer
         unsigned int buffer;
 
+        Context *c;
+
         /**
         * Initializes the Texture.
         * Creates the actual @ref buffer
@@ -76,7 +77,7 @@ namespace dan {
         * Creates a texture object and applies the default parameters.
         * @see setDefaultParams()
         */
-        Texture();
+        Texture(Context &c);
         /**
         * Creates a texture object and applies given parameters.
         * @param [in] params Texture parameters
@@ -124,11 +125,6 @@ namespace dan {
         // Reduces data to zero.
         // Equivilent to setData(Texture::[RGBA], 0, 0, NULL)
         void clear();
-
-        /**
-        * Generates a mipmap for the texture.
-        */
-        void genMipmap();
 
         /**
         * Resets the filtering and wrapping parameters to their defaults

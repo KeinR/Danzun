@@ -2,6 +2,10 @@
 #define DANZUN_MESH_H_INCLUDED
 
 namespace dan {
+    class Context;
+}
+
+namespace dan {
     class Mesh {
         // The vertex array object
         unsigned int array;
@@ -12,13 +16,15 @@ namespace dan {
 
         int countIndices;
 
+        Context *c;
+
         void steal(Mesh &other);
         // Generate buffers & vertex array
         void init();
         // Delete buffers & vertex array
         void deInit();
     public:
-        Mesh();
+        Mesh(Context &c);
         ~Mesh();
         Mesh(Mesh &&other);
         Mesh &operator=(Mesh &&other);
