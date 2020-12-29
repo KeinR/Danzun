@@ -3,26 +3,15 @@
 require("nice")
 
 
--- First thing that runs, before window
--- opens
-function preInit()
+-- First thing that runs, before window opens
+function init()
     window:setTitle("Danzun test")
     window:setSize(500, 700)
     game:setSize(500, 700)
     -- loadingScreen = Image.new("load.jpg")
 end
 
--- This is looped over as init() blocks
-function splashScreen()
-    
-end
-
--- Stuff to do asynchronously while loadMain is running
-function init()
-
-end
-
--- Called synchronously after init finishes
+-- Called after window opens and before main loop
 function start()
 
     player.speed = 150

@@ -1,6 +1,10 @@
-- Async loading
-    - Thread safety
 - UI design
 - 3D API
+- Instanced rendering
 - Geometry shaders
+- Set more properties via properties (linke window title) rather than through functions
+- score serializer, choose between binary and something ubiquitous like ini
+- replay save format that records the positions of the player 
 - Text boxes (perhaps? Or is that too much? I suppose it would depend a lot on the implementation...)
+- Async loading
+    - Thread safety
