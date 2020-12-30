@@ -1,0 +1,45 @@
+/*!
+\mainpage
+
+\tableofcontents
+
+\section intro Intro
+
+Danzun is a game engine for creating 2D "bullet hell shoot em' up" games, with inspiration taken from The Touhou Project.
+
+\section features Features
+
+As of writing, the engine is still not out yet, despite how long it's been in development (v0.3 beta ATM), due to
+school and college apps et al.
+
+It is, however, finally at a state where I am willing to start writing documentation for it. So that that as you will...
+
+Features:
+    - Program through lua - no need to commit to ugly linking, or dealing with the evils that lie in C++.
+    - "fire-and-forget" - to keep with the whole Lua theme, you do not need to keep references to things like music or
+    entites after you create them. If they're part of the render loop or playing sound, Danzun will keep references to them
+    and release them when the appropriate conditions have been met (see individual classes).
+    - Low level access for effect generation
+    - Batch effect processing (you'll see what I mean)
+    - Built in hitbox calculations: the ever popular circle and the more flexible, however less efficient, polygon.
+    - Entity grouping - add entites to any group you want, then test collisions between two groups.
+    - Support for audio streaming (for music) and loading (for sound effects)
+        - Support for OGG and WAV, via stb_vorbis and dr_wav.
+        - Audio playback through OpenAL
+    - Uses OpenGL directly instead of some abstraction like SFML (for efficiency)
+    - Entity position is controlled through mathematical (string) expressions via ExprTK. Why?
+        - Can also create your own to control other variables
+    - Throddle FPS, and toggle VSync
+    - Automatic deletion of entites (autoGC) that exit the viewable game area (yes, there is a toggle for this)
+    - Polygons have support for rotation & custom pivots
+    - Simple execution: A mere `danzun ./game/main.lua` will suffice.
+    - The working directory is set to the directory that your main file resides in - no more prefixing paths!
+    - Three main functions: before window shown, after, and the main loop.
+    - Collision callbacks
+    - Custom shader support (although this kinda' goes as a given...)
+    - Event scripting using coroutines to pause and resume
+    - Native support for [Codehead's Binary Font Format (BFF)](http://www.codehead.co.uk/cbfg/). Why?
+    - Native support for [Aseprite JSON metadata](http://www.codehead.co.uk/cbfg/). \ref Why?
+
+*/
+

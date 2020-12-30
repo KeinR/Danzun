@@ -2,6 +2,8 @@
 - 3D API
 - Instanced rendering
 - Geometry shaders
+- Window icon
+- Set Lua GC interval
 - Set more properties via properties (linke window title) rather than through functions
 - score serializer, choose between binary and something ubiquitous like ini
 - replay save format that records the positions of the player 

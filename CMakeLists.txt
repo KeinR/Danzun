@@ -58,7 +58,11 @@ target_link_libraries(Danzun
 # Subdirectories
 
 if (BUILD_DOCS)
-    add_subdirectory(docs)
+    set(DOXYGEN_SKIP_DOT ON)
+    find_package(Doxygen)
+    if (DOXYGEN_FOUND)
+        add_subdirectory(docs)
+    endif()
 endif()
 
 # Configuration

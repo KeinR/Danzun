@@ -4,11 +4,13 @@
 
 #include "../core/error.h"
 
-dan::api::Image::Image(sol::this_state l, const std::string &path) {
+dan::api::Image::Image(sol::this_state l, const std::string &path): Image(l, path, false) {
+}
+dan::api::Image::Image(sol::this_state l, const std::string &path, bool loadFlipped) {
 
     failed = true;
 
-    stbi_set_flip_vertically_on_load(true);
+    stbi_set_flip_vertically_on_load(loadFlipped);
     int channels;
     unsigned char *data = stbi_load(path.c_str(), &width, &height, &channels, 0);
     if (data == NULL) {
@@ -45,7 +47,8 @@ bool dan::api::Image::isFailed() {
 
 void dan::api::Image::open(sol::state_view lua) {
     sol::usertype<Image> type = lua.new_usertype<Image>("Image",
-        sol::constructors<Image(sol::this_state,const std::string&)>()
+        sol::constructors<Image(sol::this_state,const std::string&,bool),
+                            Image(sol::this_state,const std::string&)>()
     );
 
     type["bind"] = &Image::bind;

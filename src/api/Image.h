@@ -15,6 +15,7 @@ namespace dan::api {
         bool failed;
     public:
         Image(sol::this_state l, const std::string &path);
+        Image(sol::this_state l, const std::string &path, bool loadFlipped);
 
         void bind();
 

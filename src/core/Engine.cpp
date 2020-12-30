@@ -191,11 +191,9 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     s["player"] = api::Player(game.getPlayer());
     s["window"] = api::Window(window);
 
-    cCall("preInit");
+    cCall("init");
 
     window.setVisible(true);
-
-    cCall("init");
 
     cCall("start");
 }

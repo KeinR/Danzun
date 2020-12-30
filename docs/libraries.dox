@@ -1,0 +1,248 @@
+/*!
+
+\page libraries Libraries & Why
+
+\tableofcontents
+
+\section runtime_libs Runtime Libraries
+
+Libraries required to run the executable. 
+
+\note These are installed for you if you install the package
+
+- \ref _glfw 
+- \ref _openal 
+- \ref _lua
+- \ref _opengl 
+
+\code{sh}
+apt install libglfw3 lua5.3 libopenal1 
+\endcode
+
+\section build_libs Building Libraries
+
+Libraries not included with the source code that must be installed in order to build the executable.
+
+- \ref _glm
+- \ref _glfw 
+- \ref _openal
+- \ref _lua 
+- \ref _cmake
+- \ref _doxygen (for documentation) 
+- \ref _opengl
+
+\section lib_desk Libraries
+
+Key:<br>
+[run]: Libraries required at runtime.<br>
+[dev]: Libraries required to build.<br> 
+[optional]: Libraries that are packaged with the source and therefore are not required at build or runtime. However, if you are contributing to the codebase, it might be useful to have them installed.
+
+\subsection _glfw GLFW
+
+[website](https://www.glfw.org/)<br>
+[github](https://github.com/glfw/glfw)<br>
+[dev]<br>
+apt: \p libglfw3-dev <br>
+[run]<br>
+apt: \p libglfw3 <br>
+
+Use: Window control
+
+
+I chose GLFW because I have experience using it, and it seems like the one of the best choices
+for low-level cross-platform window management.
+
+\subsection _glad GLAD
+
+[website](https://glad.dav1d.de/)<br>
+[github](https://github.com/Dav1dde/glad)<br>
+[optional]<br>
+apt: \p python-glad <br>
+
+Use: OpenGL loader
+
+The generation tools are pretty nice, as they give you lots of control over the resulting loader. There is a web interface,
+and a command line tool that allows for automation.
+
+\subsection _glm GLM
+
+[website](https://glm.g-truc.net/)<br>
+[github](https://github.com/g-truc/glm)<br>
+[dev]<br>
+apt: \p libglm-dev <br>
+
+Use: Vector & matrix math
+
+It is the de facto mathematical library for OpenGL-related math. It is header only, interfaces well with OpenGL,
+and supports a wide variety of features.
+
+\subsection _lua Lua 5.3
+
+[website](https://www.lua.org/)<br>
+[github](https://github.com/lua/lua) (mirror)<br>
+[dev]<br>
+apt: \p liblua5.3-dev <br>
+[run]<br>
+apt: \p lua5.3 <br>
+
+Use: Interfacing scripting language
+
+Lua was designed from the start to be an embedded language, and for an interpreted language, performs really well on benchmarks.
+While the C API is mind-breaking to deal with, the abstraction library \ref _sol Sol made creating the lua-C++ interface many times easier.
+It is also just easier to write code in lua, allowing for a more pleasent experience, if you will.
+
+\subsection _lua_53 Why 5.3 and not 5.4?
+
+I want to make sure that most systems can compile Danzun, and Debain stable seemed like a good benchmark for that.
+Additionally, some lua libraries break at later versions, so I reasoned it safe to stick with an earlier version.
+
+\subsection _exprtk ExprTK
+
+[website](https://www.lua.org/)<br>
+[github](https://www.partow.net/programming/exprtk/index.html)<br>
+[optional]<br>
+[not available through apt]<br>
+
+Use: Expression parsing
+
+While thinking about how entites operate, I came upon the realization that they will always follow strictly mathematical paths.<br>
+It's not like you're going to be doing I/O or creating entities as you go on your path... Well, you might be making entites, but that's handled by attaching
+scripts to entites... My point is, you can just make it a math problem.<br>
+Think of the touhou games, and the patterns that you encounter. All or at least most of them, to me, appear as if they can be represented mathematically
+(however that's not to say that I come close to the genius of ZUN-sama).<br>
+In an effort to make things easier, I opted to integrate an expression parser with a significant function library, conditionals, and good speed.
+The expression would take variables as inputs, and modify the ones that it wants.<br>
+ExprTK is really popular, is one if the [fastest libraries of its kind](https://github.com/ArashPartow/math-parser-benchmark-project), and has an impressive library.
+The only downside is the compile times and resulting executable size... I've only experienced thrashing like four or five times... Ish...
+
+\subsection _argh Argh!
+
+[github](https://github.com/adishavit/argh)<br>
+[optional]<br>
+[not available from apt]<br>
+
+Use: Command line argument parsing
+
+As the library claims, its simple and lightweight. There really isn't a need for anything more heavy-duty.
+
+\subsection _dr_wav dr_wav
+
+[website](http://mackron.github.io/dr_libs/)<br>
+[github](https://github.com/mackron/dr_libs)<br>
+[optional]<br>
+[not available from apt]<br>
+
+Use: WAV audio file parsing
+
+WAV files are among the most basic type of audio, and are largely used for sound effects.
+I originally had a WAV parser written up, however unfortunately not all WAVs contain raw PCM data.
+dr_wav was a lot like \ref _stb_vorbis stb_vorbis, which I had used before, so it was easy to get it set up.
+
+\subsection _stb_vorbis stb_vorbis
+
+[website](http://nothings.org/)<br>
+[github](https://github.com/nothings/stb)<br>
+[optional]<br>
+apt: \p libstb-dev <br>
+
+Use: OGG Vorbis audio file parsing
+
+Whlie WAV files are cool and all, there needs to be support for lossy audio formats as music can be pretty bulky.
+Enter: OGG Vorbis.
+I came across stb_vorbis as I used \ref _stb_image stb_image, and I like Sean Barett's work. 
+
+\subsection _stb_image stb_image
+
+[website](http://nithings.org/))<br>
+[github](https://github.com/nothings/stb)<br>
+[optional]<br>
+apt: \p libstb-dev <br>
+
+Use: Image file parsing
+
+The library is very simple and has support for many file formats. One call to load, one call to free. No other bloat. It being header only helps with portability.
+
+\subsection _json JSON
+
+[website](https://json.nlohmann.me/)<br>
+[github](https://github.com/nlohmann/json)<br>
+[optional]<br>
+apt: `nlohmann-json3-dev' <br>
+
+Use: JSON file parsing
+
+It's a popular choice, and the whole angle of it being a sort of proposal for a JSON library in C++ was appealing.
+The library interface is rather clean, or perhaps I'n biased because I'm used to the madness of the C++ standard library.
+
+\subsection _sol Sol
+
+[website](https://sol2.readthedocs.io/en/latest/<br>
+[github](https://github.com/ThePhD/sol2/)<br>
+[optional]<br>
+[not available from apt]<br>
+
+Use: Lua context management
+
+Sol makes an intense abstraction that makes everything to do with interfacing with the lua API many times easier. Registering a class is just a few function calls, and function calls are safe and streamlined.
+Whle one may worry about the performance implications of using such a library, Sol is header-only, and [shockingly fast](https://sol2.readthedocs.io/en/latest/benchmarks.html).
+With all this, it would seem foolish for me to forgoe the boost in productivity. The best part? You don't have to do everything through Sol; it was designed to interface with other Lua wrappers or just plain
+C, so you can go in and spend the time to optimize performance-critical areas and not have to do the same for everything else. 
+
+\subsection _openal OpenAL
+
+[website](https://www.openal-soft.org/)<br>
+[github](https://github.com/kcat/openal-soft)<br>
+[dev]<br>
+apt: \p libopenal-dev <br>
+[run]<br>
+apt: \p libopenal1 <br>
+
+Use: Sound playback 
+
+It as an API that is very simular to OpenGL, making it appealing.
+Other APIs that I found, like PortAudio or SFML, appeared bloated and too heavyweight for what I needed.<br>
+This could just be me, but the PortAudio apt development package (\p portaudio19-dev ) required 444 MB of dependencies - No thanks!<br>
+Of course, it doesn't come with any decoder, and I had to implement my own streaming facilities - but I feel like it was worth it.
+
+\subsection _opengl OpenGL 3.3
+
+[website](https://www.opengl.org/)<br>
+[dev] [run]<br>
+(installation varies. You likely already have it though...)<br>
+
+Use: Graphics rendering
+
+OpenGL is lightweight, as low level as you can "reasonably" go when doing graphics rendering. This is important for performance, and to be honest there isn't much need for the abilities of SFML et al.
+It is also easy to make certain effects in OpenGL, and instanced rendering makes rendering particles extreamly efficient.
+It is also kinda' ubiquitous, making it very portable.<br>
+Important to note that Danzun uses OpenGL 3.3, as it is more common than 4.x and more modern than 2.x. If you're used to a different version, make sure to do your reaserch.
+
+\subsection _cmake CMake
+
+[website](https://cmake.org/)<br>
+[github](https://github.com/Kitware/CMake) (mirror)<br>
+[dev]<br>
+apt: \p cmake <br>
+
+Use: Build system
+
+CMake is kinda' the de facto build system for C/C++ et al. That's not the only reason: it's cross platform, and (tries to be) compiler-agnostic.<br>
+Did I try to use pure Makefiles before this? [Yes](https://github.com/KeinR/Nafy/blob/b576a08b028cff00a7cb02331699dc8b2fecf3bf/Makefile#L1).<br>
+Did it fail miserbly? [Also yes](https://github.com/KeinR/Brickfire/blob/fb960058923e01a90c599c7e00ef5dda89fb2866/objects.mk#L1). 
+
+\subsection _doxygen Doxygen
+
+[website](https://www.doxygen.nl/index.html)<br>
+[github](https://github.com/doxygen/doxygen)<br>
+[dev, optional]<br>
+apt: \p doxygen <br>
+
+Use: Documentation generation
+
+Doxygen seemed to me to be the popular choice for documenting C/C++ source, so I went with it.
+Using it for the API docs as well because... Well, I'm already using it.<br>
+It also has a ton of features - have you seen the Doxyfile?
+
+*/
+
