@@ -1,0 +1,22 @@
+/*!
+\page apiref API Reference
+
+Reference for interfacing with the exposed C++ classes from Lua.
+
+\subpage api_bfffont
+\subpage api_engine
+\subpage api_mesh 
+\subpage api_patternvars
+\subpage api_shader
+\subpage api_sound
+\subpage api_effect
+\subpage api_entity
+\subpage api_player
+\subpage api_window
+\subpage api_element
+\subpage api_game
+\subpage api_matrix
+\subpage api_pattern
+\subpage api_script
+
+*/

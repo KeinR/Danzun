@@ -31,6 +31,10 @@ Libraries not included with the source code that must be installed in order to b
 - \ref _doxygen (for documentation) 
 - \ref _opengl
 
+\code
+apt install libglfw3-dev libglm-dev liblua5.3-dev libopenal-dev cmake doxygen 
+\endcode
+
 \section lib_desk Libraries
 
 Key:<br>

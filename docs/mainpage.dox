@@ -27,7 +27,7 @@ Features:
         - Support for OGG and WAV, via stb_vorbis and dr_wav.
         - Audio playback through OpenAL
     - Uses OpenGL directly instead of some abstraction like SFML (for efficiency)
-    - Entity position is controlled through mathematical (string) expressions via ExprTK. Why?
+    - Entity position is controlled through mathematical (string) expressions via ExprTK. \ref _exprtk "Why?"
         - Can also create your own to control other variables
     - Throddle FPS, and toggle VSync
     - Automatic deletion of entites (autoGC) that exit the viewable game area (yes, there is a toggle for this)
@@ -39,7 +39,11 @@ Features:
     - Custom shader support (although this kinda' goes as a given...)
     - Event scripting using coroutines to pause and resume
     - Native support for [Codehead's Binary Font Format (BFF)](http://www.codehead.co.uk/cbfg/). Why?
-    - Native support for [Aseprite JSON metadata](http://www.codehead.co.uk/cbfg/). \ref Why?
+    - Native support for [Aseprite JSON metadata](http://www.codehead.co.uk/cbfg/).
+
+\section _main_getting_started Getting Started
+
+See the quick tutorial
 
 */
 

@@ -1,0 +1,72 @@
+/*!
+\page api_engine Engine
+\ingroup api_core
+
+The engine representes the core driver of the game engine.
+Its methods generally revolve around configuration and termination.
+
+\tableofcontents
+
+\section engine_members Members
+
+\subsection engine_methods Methods
+
+\subsubsection engine_exit exit
+
+\code
+void exit(int code)
+\endcode
+
+Terminates the (entire) program.
+Effectively calls C's exit(). 
+Will never return.
+
+\param code The process's exit code 
+
+\return Will never return 
+
+\warning It is generally considered bad practice to terminate this way in C/C++, and thus should go the same for any other language that uses the same features.
+
+\subsubsection engine_setThrowNever setThrowNever
+
+\code
+void setThrowNever()
+\endcode
+
+Configures the throw policy to never throw - all errors will be logged to stderr and otherwise ignored, aside from setting a failbit that can be later queried.
+
+\subsubsection engine_setThrowSevere setThrowSevere
+
+\code
+void setThrowSevere()
+\endcode
+
+Configures the throw policy to throw only if the error is deemed "severe" - That is, the program cannot recover and it is dangerous to go on.
+
+\note This is the default setting
+
+\subsubsection engine_setThrowAll setThrowAll
+
+\code
+void setThrowAll()
+\endcode
+
+Configures the throw policy to throw on every error - better get your pcalls ready, this one's a doozy. 
+
+\subsection engine_properties Properties
+
+\subsubsection engine_vsync vSync
+
+\code bool vSync [write-only] \endcode
+
+True to use vertical sync for rendering.
+
+\subsubsection engine_maxfps maxFPS
+
+\code float maxFPS \endcode
+
+Hard limit for the number of frames per second. Works independently of \ref engine_vsync
+
+
+*/
+

@@ -1,0 +1,67 @@
+/*!
+\page api_window Window
+\ingroup api_core
+
+The Window class is a singleton that represents the actual program window.<br>
+There is only ever one window.
+
+\tableofcontents
+
+\section window_members Members
+
+\subsection window_methods Methods
+
+\subsubsection window_settitle setTitle
+
+\code void setTitle(string name) \endcode
+
+Sets the window title.<br>
+The default title is subject to change, and therefore can be considered undefined.
+
+\param name The new title
+
+\subsubsection window_setsize setSize
+
+\code void setSize(int width, int height) \endcode
+
+Sets the size of the window, in screen coordinates.
+
+\param width The width
+\param height The height
+
+\subsubsection window_setvisible setVisible
+
+\code void setVisible(bool visible) \endcode
+
+Sets the visibility of the window.
+
+\param visible True to show the window, false to hide
+
+\note The window is automatically shown after initialization, so there is no need for the client to call it!
+
+\subsubsection window_keydown keyDown
+
+\code bool keyDown(string name) \endcode
+
+Checks if a key is being pressed.<br>
+
+\param name The name of the key
+
+\error Key does not exist in the map
+
+While not complete, the mappings will correspond to their printable value - x - > x, z -> z.
+
+Currently mapped printable characters are: x and z.
+
+For unprintable characters:
+
+Name | actual
+--- | ---
+esc | escape
+up | up
+down | down
+left | left
+right| right
+
+*/
+
