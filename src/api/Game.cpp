@@ -66,7 +66,7 @@ float dan::api::Game::getSpeed() {
 
 
 void dan::api::Game::resetGroups() {
-    handle->resetGroups();
+    handle->clearGroups();
 }
 float dan::api::Game::getTime() {
     return handle->getClock().getTime();

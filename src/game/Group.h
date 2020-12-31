@@ -26,6 +26,8 @@ namespace dan {
     private:
         circles_t circles;
         polygons_t polygons;
+		bool valid;
+		void doUpdate();
     public:
         Group();
         void pushCircle(const entity_t &owner);
@@ -33,6 +35,7 @@ namespace dan {
         bool erase(Entity *ptr);
         void clear();
         void update();
+		void invalidate();
         void test(Group &other, output_t &output);
     };
 }

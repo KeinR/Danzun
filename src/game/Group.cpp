@@ -30,7 +30,16 @@ void dan::Group::clear() {
     circles.clear();
     polygons.clear();
 }
+void dan::Group::invalidate() {
+	valid = false;
+}
 void dan::Group::update() {
+	if (!valid) {
+		doUpdate();
+		valid = true;
+	}
+}
+void dan::Group::doUpdate() {
 
     for (circles_t::iterator it = circles.begin(); it < circles.end(); ++it) {
         it->second.setX(it->first->getX());
@@ -50,6 +59,7 @@ void dan::Group::update() {
 }
 
 void dan::Group::test(Group &other, output_t &output) {
+	update();
 
     for (circle_t &c : other.circles) {
         if (c.first->isTangible()) {

@@ -195,7 +195,7 @@ void dan::Game::logic(float deltaTime) {
     }
 
     for (auto &p : groups) {
-        p.second.update();
+        p.second.invalidate();
     }
 }
 
