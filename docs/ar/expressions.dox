@@ -1,0 +1,98 @@
+/*!
+\page expressions Expressions
+
+Expressions are used to mathematically represent the behavior of an entity (or just variables).<br>
+They are preferred over simple lua callbacks for efficiency and ease of use (althrough some may disagree with that last one...).
+
+The library used for expressions is \ref _exprtk "ExprTK". While I will give a little bit of a tutorial, if you really want to be familiar with how it works, you should read its documentaion - it is pretty intuitive however, so there's not much work required.
+
+Note that since the ExprTK documentation is already so thorough, this will be a very brief and incomplete introduction. You can and should read the documentation yourself [here](https://github.com/ArashPartow/exprtk/blob/master/readme.txt).
+
+\section exrp_generalsyntax General Syntax Notes
+
+Every expression must have a semicolon (;) at the end, or else it will be multiplied against the next line.<br>
+So this:
+\code
+f := 423
+b := f * 3
+\endcode
+Will be converted to:
+\code
+f := 423 * b := f * 3
+\endcode
+It's probobly for the same reason that the expression \code f := 4b \endcode is valid; it tries hard to emulate math syntax.
+
+\section expr_symbols Symbols
+
+\subsection expr_symbols_types Types
+
+Symbols (or as we programmers call them, "variables"), are split into three types in expressions:
+
+Name | Description | Example
+--- | --- | --- 
+scalar | A basic number variable | 5, 4.3, -20
+vector | A sequence of scalars | { 4, 9.32, 55 }, {3, 43.234, 0}
+string | A sequence of characters | "the quick", "brown", "fox"
+
+Of these, only scalars and vectors are really used. Strings have limited uses in Danzun, one of those being debugging through calls to \ref globalsymbols "print()".
+
+\subsection expr_symbols_syntax Syntax
+
+Scalar declarations are relatively idiomatic.<br>
+To declare:
+\code
+// var <name> := <value>;
+var foo := 423;
+var bar := 3.14159;
+var zoo; // Defaults to zero
+\endcode
+
+Vectors are a little more interesting, as they require you to declare the length:
+\code
+// var <name>[<length>] := { a, b, c... };
+// var <name>[<length>] := [<value for all>];
+var foo[2] = {4, 0};
+var bar[4]; // Defaults all to zero
+var zoo[3] = [44.2]; // Sets all to 44.2
+\endcode
+\note You cannot have vectors of zero length
+
+Strings are just like scalars, but inside single quotes:
+\code
+// var <name> := '<chars>';
+var foo := 'I like cheese';
+\endcode
+\warning The ExprTK documentation states that characters must be 8-bit. I've encountered difficulties with UTF-8 characters, so I'm assuming that only printable ASCII characters are allowed.
+
+\note If you assign a variable (foo := x, foo += x, etc.) that you didn't declare from Lua, ExprTK has been configured to resolve any variables that don't exist as scalars with a value of zero.
+
+
+\subsection expr_symbols_operations Operations
+
+Operations are very c-like - with the exception of ^, which is exponentiation as opposed to xor.<br>
+Also, there are no bitwise operations. So "&&" is replaced with "and", "||" with "or", etc.<br>
+The ExprTK documentation has more details.
+
+Normal \ref api_pattern "patterns" will register symbols (variables) from the \ref globalsymbols "global symbol table".<br>
+Entity expressions will register symbols from the 
+
+\section expr_functions Functions
+
+ExprTK comes packaged with a plethora of built-in functions, including abs, log, sin, cos, sng, sqrt...<br>
+See their documentation for the full list - it's too long to put here.
+
+There are global functions defined for all expressions by Danzun - see \ref globalsymbols "here".
+
+\section expr_examples Examples
+
+\code
+// Bouncy bullet
+// vx, ey, and m were defined by the client Lua code
+x += vx * dt;
+y := ey + m * sin(dt);
+// Only do it for like 10 seconds or so 
+if (t - ti > 10) {
+	gc := true;
+}
+\endcode
+

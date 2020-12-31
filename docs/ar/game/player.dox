@@ -1,0 +1,45 @@
+/*!
+\page api_player Player
+\ingroup game
+
+A singleton class that is used to represent the player-character.<br>
+Don't get it wrong however - the player is created and managed by the client (you). This class just keeps track if where the player "should be" based in key input and the game bounds, etc.<br>
+You are responsible for rendering the player sprite and managing its hitbox. This cane be done by creating an \ref api_entity "entity" that is part of the "player" group, and in its expression set the entity position to the player position (see \ref globalsymbols). For player actions such as bullets, you can add a \ref api_script "script" to the entity.
+
+The global singleton is named \c player.
+
+\section player_members Members
+
+\subsection player_properties Properties
+
+\subsubsection player_width width
+
+\code float width \endcode
+
+The width of the player. Used to calculate when the player is outside the game bounds.<br>
+If the player is prevented from going out-of-bounds.
+
+\subsubsection player_height height
+
+\code float height \endcode
+
+The height of the player, used to calculate when the playe ris outside the game bounds.<br>
+If the player is prevented from going out-of-bounds.<br>
+
+\subsubsection player_speed speed
+
+\code float speed \endcode
+
+The speed of the player. Determines the number of units travelled per second, with seconds being retrieved from \ref game_getdeltatime "delta time".<br>
+A negative speed will basically result in inverted controls.
+
+\subsubsection player_x x
+
+\code float x \endcode
+
+The x coordinate of the player.
+
+\subsubsection player_y y
+
+The y coordinate of the player.
+

@@ -1,0 +1,7 @@
+/*!
+\page api_effect Effect
+\ingroup game
+
+An extra special case of \ref api_element where you can spawn new instances of it from a parent obeject. Those instances are all given to the render callback, along with a master \c self object, allowing for normally expensive effects to be batch rendered.
+
+

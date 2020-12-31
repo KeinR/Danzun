@@ -1,0 +1,26 @@
+/*!
+\page gobalcallbacks Global Callbacks
+
+There are a number of global functions that are executed by Danzun by name.<br>
+They are as follows:
+
+- `init`
+- `start`
+- `main`
+
+\section callback_init init
+
+Called before the window displays.<br>
+Intended to be the time to prepare the window before it is shown to the user.
+
+\section callback_start start
+
+Called after the window is shown.<br>
+This is the time to take care of resource loading and all other initialization.
+
+\section callback_main main
+
+Called after \ref callback_start every frame.<br>
+This is the main loop for the game.<br>
+It is at this point that, if game's \ref game_running flag is set true, the game will start doing logic.
+

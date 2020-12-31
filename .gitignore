@@ -45,3 +45,7 @@ GTAGS
 
 # Don't wanna' get copyright striked IYKWIM
 /tests/test.ogg
+
+# Damn swap files
+*.swp
+

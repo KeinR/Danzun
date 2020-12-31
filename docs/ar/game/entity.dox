@@ -1,0 +1,63 @@
+/*!
+\page api_entity Entity
+\ingroup game
+
+Entity is the basic representation of something physical on the game scene. It is the only way to use hitboxes. It is controlled through \ref expressions and executes scripts (the latter only if given).
+
+The player is an entity. Bullets are entities. Enemies are entities. Even collectables are entities.
+
+\section entity_constructors Constructors
+
+\code
+Entity.new(function hitCallback, Element renderElement, string expression, PatternVars expressionVariables...) (1)
+\endcode
+
+(1) Construct an Entity
+\note Upon construction, \ref entity_activate will be called
+
+\param hitCallback Function to execute when the entity hits something (hitbox)
+\param renderElement Element to be rendered as part of the Entity. The entity's object will be appended to the element's argument list (when the callback is called - there is no persistance)
+\param expression The \ref expressions "expression" controlling the entity's behavior
+\param expressionVariables Variable tables to be attached to the expression
+
+\section entity_members Members
+
+\subsection entity_methods Methods
+
+\subsubsection entity_setscript setScript
+
+`void setScript(Script script)`
+
+Set the script that will be tied to an executed alongside the entity.
+
+\param script A instance of \ref api_script
+
+\subsubsection entity_activate activate
+
+`void activate()`
+
+Similar to \ref element_activate "Element's"; adds to the game render loop with the render priority, 
+
+\subsubsection entity_deactivate deactivate
+
+`void deactivate()`
+
+Similar to \ref element_deactivate "Element's"; removes any occurrances of the entity from the render loop.
+
+\subsubsection entity_setrenderpriority setRenderPriority
+
+`void setRenderPriority(int level)`
+
+Similar to \ref element_setrenderpriority "Element's"; calls \ref entity_deactivate, changes the render priority, then calls \ref entity_activate.
+
+\param level The new render priority
+
+\subsubsection entity_regcircle regCircle
+
+`void regCircle(string groupName)`
+
+Registers a circle hitbox tied to this entity with the group of the given name.<br>
+The circle will have a radius of half the max of the entity's `width` and `height`, and a position equal to the `x`/`y` coordinates of the entiy.
+
+\param groupName Name of the group to register the hitbox with
+

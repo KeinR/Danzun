@@ -1,0 +1,53 @@
+/*!
+\page api_script Script
+\ingroup game
+
+Script is used to execute a sequence of discontinuous code.<br>
+It is implemented using Lua coruotines. The script will yield the number of seconds to wait before resuming.
+
+For example, in the following code:
+\code{.lua}
+spawnEntity()
+coroutine.yield(5)
+spawnAnotherEntity()
+\endcode
+First the \code spawnEntity() \endcode function is called. Then the coroutine yields `5`. This signals to the script to wait until a total of 5 seconds has passed before resuming execution. After the wait is up, `spawnAnotherEntity()` is called, and the script enters a "done" state, where it effectively dead and will no longer execute code. At this point, you must create a new script to execute again. If you want a repeating script, it is reasonable to use a while loop or some wrapper.
+
+\section script_constructors Constructors
+
+\code
+Script.new(function callback, object args...) (1)
+\endcode
+
+(1) Construct a script
+
+\param function The callback to execute
+\param args Arguments to forwarded to the callback
+
+\section script_members Members
+
+\subsection script_methods Methods
+
+\subsubsection script_run run
+
+\code bool run() \endcode
+
+Attempts to resume the script. If the wait time is up, the script will execute. Otherwise, nothing happens. If the script is "done", in a dead state, it will return true. If the script fails with an error, the \ref script_fail property will be set to true. If \ref script_stoponfail is set to true, then the script will refuse futher attempts to execute.
+
+\error the script callback errors when called
+
+\subsection script_properties Properties
+
+\subsubsection script_stoponfail stopOnFail
+
+\code bool stopOnFail = true \endcode
+
+Deternines if, when the callback is executed, the script should refuse to execute the callback.<br>
+Basically, if this is true and \ref script_failed is true, then the callback will not be executed.
+
+\subsubsection script_failed failed
+
+\code bool failed = false \endcode
+
+Is set to true whenever the callback fails. If \ref script_stoponfail is also true, execution of the callback will cease.
+

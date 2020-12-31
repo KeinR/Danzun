@@ -1,0 +1,158 @@
+/*!
+\page api_game Game
+\ingroup game
+
+A singleton glass that represents the game itself.<br>
+Takes care of things like event and collision processing, as well as time and rendering.
+
+The global singleton is named \c game.
+
+\section game_c_autogc AutoGC
+
+To make things easier, entites that have left the game area (see \ref game_setSize) can be automatically deleted. Of course, this isn't applied unconditionally - Entity has a property \ref entity_autoGC to control this. Additionally, entites are only deleted if their center is a certain distance from the boarder.
+
+Because of the disconnect between the entity and rendering (as there is a user-provided render callback that merely takes the entity's position as arguments), it is hard to determine for sure at what point the entity will no longer be visible. As an alternative to forcing users to registera seperate hitbox just for autoGC, game as properties \ref game_gcConstant and \ref game_gcFactor that are applied to the entity's hitbox (actual) width and height. The factor is used to multiply the dimensions, and the constant is added afterwards. The resultant bounds is taken and compared against the game dimensions, and if it falls out and the \ref entity_autoGC flag is set to true - it is deleted.
+
+The interval at which AutoGC is run is controlled through \ref game_gcInterval.
+
+\section globalsymbols Global Symbols
+
+Every \ref expressions "expression" registers with it the global symbol table.<br>
+This symbol table is of the lowest precidence, so user defined variables will always hold precidence.<br>
+As of writing, these variabels are as follows:
+
+Name | type | value
+--- | --- | ---
+t | scalar | The time from \ref game_gettime
+dt | scalar | The delta time from \ref game_getdeltatime
+px | scalar | The x position of the player from \ref player_x "player.x"
+py | scalar | The y position of the player from \ref player_y "player.y"
+pv | vector (2) | The x/y position vector of the \ref api_player "player"
+
+In addition to variables, there are a few global functions declared:
+
+Name | parameters | return | description
+--- | --- | --- | ---
+print | string | none | Prints a simple string to console. Intended for basic debugging.
+
+\section game_c_renderloop The Render Loop
+
+Game contains an internal render loop that is sorted by \ref game_c_renderpriority "priority".<br>
+It is executed at the end of each frame, right after the \ref programcallbacks "main loop"
+
+\subsection game_c_renderpriority Render Priority
+
+The render priority is what determines the order in which things are rendered to the screen.<br>
+A higher priority will mean it is rendered sooner.<br>
+Unless otherwise stated, the default render priority for anything is zero (0).
+
+\subsection game_c_hitboxes Hitbox calculations
+
+When \ref game_testcollisions is called, the game pits two sets of hitboxes in two different groups against each-other.<br>
+These hitboxes have an entity attached to them that will have its \ref entity_constructors "hit callback" executed when they collide with another.<br>
+Those callbacks will be given their parent entity as the first argument, and the offending (colliding, other, whatever) entity as the second argument.<br>
+If \ref game_running is true, then at the end of each frame all groups are "invalidated" after running logic functions for all entites (expression and script processing, as well as removing those that have flagged themselves for removal [not \ref game_c_autogc, mind you - see \ref api_entity for more details]). 
+
+\section game_members Members
+
+\subsection game_methods Methods
+
+\subsubsection game_testcollisions testCollisions
+
+\code void testCollisions(string groupA, string groupB) \endcode
+
+Tests the hitboxes of two different groups against each-other.<br>
+If there is a hit, the callback function of the hitbox's attached entity is called.
+
+The order is irrelivent.
+
+\param groupA The name of the first group
+\param groupB The name of the second group 
+
+\note If the group does not exist, an empty one is created.
+
+\subsubsection game_resetgroups resetGroups
+
+\code void resetGroups() \endcode
+
+Deletes all groups and their associated hitboxes.
+
+\note Entites are unaffected by this call, as they are merely associated with the hitboxes.
+
+\subsubsection game_gettime getTime
+
+\code float getTime() \endcode
+
+Gets the current game time, in seconds.<br>
+This is useful for this like animations or timed events.<br>
+Not garunteed to reflect actual time elapsed.
+
+\return The current time, in seconds
+
+\subsubsection game_getdeltatime getDeltaTime
+
+\code float getDeltaTime() \endcode
+
+Gets the ammunt of time that has passed since the last frame.<br>
+This value is added to \ref game_gettime at the end of each frame.
+
+\return The change in the time from last frame, in seconds. 
+
+\subsubsection game_setsize setSize
+
+\code void setSize(int width, int height) \endcode
+
+Sets the size of the game area.<br>
+This is used to determine things like where the player is allowed to move (boxing in), and for when entites can be automatically delted (autoGC).
+
+\param width The width of the area, in screen coordinates
+\param height The height of the area, in screne coordinates
+
+\subsection game_properties Properties
+
+\subsubsection game_gcconstant gcConstant
+
+\code float gcConstant \endcode
+
+A constant added to the width and height of the Entity during \ref game_c_autogc. 
+
+\subsubsection game_gcfactor gcFactor
+
+\code float gcFactor \endcode
+
+A factor the width and height of an Entity is multiplied by before adding the \ref game_gcConstant.
+
+\subsubsection game_gcinterval gcInterval
+
+\code float gcInterval \endcode
+
+Number of (real) seconds until the game "collects garbage".<br>
+Collecting Garbage involves things like running the \ref game_c_autogc, and deleting sounds that are no longer playing and have no references in the client Lua code.
+
+\subsubsection game_width width
+
+\code int width \endcode
+
+The width of the game area.<br>
+Similar to \ref game_setSize.
+
+\subsubsection game_height height
+
+\code int height \endcode
+
+The height of the game area.<br>
+Similar to \ref game_setSize.
+
+\subsubsection game_running running
+
+\code bool running = false \endcode
+
+True if the game should do logic processing (hitbox invalidation, time advancement, player movement, garbage collection...) 
+
+\subsubsection game_speed speed
+
+\code float speed = 1 \endcode
+
+Factor applied to the \ref game_getdeltatime "delta time".<br>
+Effectively speeds up/slows down time, as far as the game is concerned.
+

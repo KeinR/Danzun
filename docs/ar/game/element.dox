@@ -1,0 +1,53 @@
+/*!
+\page api_element Element
+\ingroup game
+
+An element is a function with optional parameters that can be submited to the game render loop in a "fire and forget" kind of way.
+
+\section element_constructors Constructors
+
+\code
+Element.new(function callback, object args...) (1)
+\endcode
+
+(1) Construct an element
+
+\param callback The function called as part of the element
+\param args Arguments forwarded to the function
+
+\section element_members Members
+
+\subsection element_methods Methods
+
+\subsubsection element_render render
+
+`void render()`
+
+Effectively calls the bound callback.<br>
+This is generally not necessary as an element is intended to be submitted to the game or an entity - however, there are instances where it would be useful.
+
+\subsubsection element_setrenderpriority setRenderPriority
+
+`void setRenderPriority(int level)`
+
+Sets the render priority of the element. See \ref game_c_renderpriority "here".<br>
+Applied retroactively - the element is removed from the game render loop, then re-added with the new priority.
+
+\param level The priority
+
+\subsubsection element_activate activate
+
+`void activate()`
+
+"Activates" this element, adding it to the \ref game_c_renderloop "render loop".<br>
+
+\note This function does not check if the element was already added. It assumes that you know what you're doing if you add it more than once.
+
+\subsubsection element_deactivate deactivate
+
+`void deactivate()`
+
+"Deactivates" this element, removing all occurences of it from the game render loop.<br>
+No effect if the element is not already in the render loop, other than wated CPU cycles.
+
+
