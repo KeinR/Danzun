@@ -2,9 +2,56 @@
 \page api_entity Entity
 \ingroup game
 
+`Entity`
+
 Entity is the basic representation of something physical on the game scene. It is the only way to use hitboxes. It is controlled through \ref expressions and executes scripts (the latter only if given).
 
 The player is an entity. Bullets are entities. Enemies are entities. Even collectables are entities.
+
+\tableofcontents
+
+\section entity_c_cleanup Entity Cleanup
+
+When an entity destructs normally (through setting its \ref entity_gc flag), all references such as hitboxes, render activation, etc. are automatically taken care of. Functions like \ref entity_deactivate and \ref entity_unreghitboxes are available merely to give more low-level access to the client, and should not often be needed.
+
+\section entity_c_symbols Expression Symbols
+
+Expressions that are executed by entites are given access to variables that are tied to the entity's properties. These are:
+
+Name | Type | Default | Description
+--- | --- | --- | ---
+p | vector (2) | { 0, 0 }  | Vector respresenting the x/y position
+x | scalar | 0 | The x position
+y | scalar | 0 | The y position
+pivot | vector (2) | {0, 0} | vector representing the x/y of the rotation pivot
+pivotX | scalar | 0 | Rotation pivot x
+pivotY | scalar | 0 | Rotation pivot y
+ti | scalar | \ref game_gettime | The game time when the entity was created
+rotation | scalar | 0 | The rotation (in radians)
+height | scalar | 30 | The height
+width | scalar | 30 | The width
+autoGC | scalar (boolean) | true | If the entity should be included in \ref game_c_autgc "auto gc"
+gc | scalar (boolean) | false | If the entity should be deleted (note that this will take effect immediately after the frame ends, unlike normal auto gc)
+display | scalar (boolean) | true | If the entity should be rendered
+tangible | scalar (boolean) | true | If the entity's hitboxes should be iterated over. If this is false, the entity's hitboxes will not be tested.
+
+All these variables can be set through the \ref entity_meta_newindex metamethod, and gotten through \ref entity_meta_index.<br>
+Example:
+\code{.lua}
+entity = Entity.new(hitCallback, element, "x := width * 3 + t - ti;")
+entity.width = 15
+entity.ti = entity.ti - 5
+print(entity.x)
+\endcode
+
+\note Since expressions do not have a dedicated boolean type, `false` corresponds to `0`, and `true` to anything *not* `0`. If it helps, it is determined by the behavor if the C++ `static_cast<bool>(x)`.
+\note The vectors of positions (p, pivot) are tied to their scalar counterparts (x/y, pivotX/pivotY) - their are tied to the same variables on the back end
+\note The rotation pivot is relative to the x/y position
+\note These properties are all accessable via \ref entity_meta_index.
+
+\subsubsection entity_c_unknownsymbols Unknown Symbol resolution
+
+If at the time of compilation (which happens during \ref entity_constructors "entity construction") a symbol is not registered with the symbol table, a new scalar with the the variable name is created in the entity's base symbol table (not any PatternVars that are given during construction, nor the global symbol table). Thse variables can later be set with the \ref entity_meta_newindex and \ref entity_meta_index metamethods, just as described above for the built-in symbols. 
 
 \section entity_constructors Constructors
 
@@ -60,4 +107,48 @@ Registers a circle hitbox tied to this entity with the group of the given name.<
 The circle will have a radius of half the max of the entity's `width` and `height`, and a position equal to the `x`/`y` coordinates of the entiy.
 
 \param groupName Name of the group to register the hitbox with
+
+\subsubsection entity_regpolygon regPolygon
+
+`void regPolygon(string groupName, table[any,number] vertices)`
+
+Registers a polygon hitbos tied to this entity with the group of the given name.<br>
+The points should be in normalized coordinates, that is the center being at zero and the leftmost and rightmost positions being at -1 and 1 respectively.<br>
+There is no way to change the polygon's vertices after they are submitted.<br>
+The vertices will then be multiplied by the matricies constructed by the entity's (built-in) attributes. 
+
+\param groupName The name of the group to register the hitbox with
+\param vertices The vertices making up the shape of the polygom. They should be in a contiguous array, with each subsequent pair representing the (first) x and (second) y positions.
+
+\subsubsection entity_unreghitboxes unregHitboxes
+
+`void unregHitboxes()`
+
+Removes all hitboxes that are attached to this entity.
+
+\subsection entity_metamethods Meta Methods
+
+\subsubsection entity_meta_index __index
+
+`float __index(string name)`
+
+Looks up a variable in the entity's symbol table.<br>
+Note that variables in symbol tables (PatternVars) in the constructor are not searched.<br>
+Ex: `print(entity.x)`
+
+\param name The name of the variable
+\return The value
+
+\subsubsection entity_meta_newindex
+
+\code
+void __new_index(string name, float number)
+void __new_index(string name, bool boolean)
+\endcode
+
+Sets a variable in the entity's symbol table.<br>
+Note that variables in symbol tables (PatternVars) in the constructor are not searched.<br>
+Ex: `entity.x = 5`
+
+*/
 

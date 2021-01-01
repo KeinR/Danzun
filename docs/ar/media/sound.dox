@@ -1,0 +1,74 @@
+/*!
+\page api_sound Sound
+\ingroup media
+
+`Sound`
+
+Sounds are the means by which to play music or sound effects.<br>
+There are two types of sounds:<br>
+- Streamed: the file contents are read from the source file and progressively decoded, saving memory while at the same time taking more resources.
+- Loaded: the entire file contents are decoded and loaded into memory. Faster playback, but more memory overhead. While it may seem like you could easially get away with loading a 1-2 MB ogg file, keep in mind that oggs are compressed, and that their decompressed form is much larger - not to mention, loading times will be longer.
+
+Because of the above points, you generally want to use streamed for large files, and loaded for small sound effects. Especially for the latter, for if the sound is small enough it would fit entirely inside the playback buffer, which would totally defeat the purpose of streaming.
+
+There are no constructors for Sound - instead, there are static factories that you can use to create the kind of sound that you want.
+
+Worth noting that only one sound can be playing at a time - this is due to simple software limitations. If you play a sound that is already playing, it will restart from the beginning. If you want to have multible of the same sound playing at the same time and not just re-starting, you should create new sound instances from the same file (although, this will have drastic performance impacts if you're not careful - sounds use a thread for playback, and even the streamed sounds need a memory buffer for sound).
+
+Note that the supported formats as of writing are:
+- WAV
+- OGG Vorbis
+
+The details for the subsets that are supported can be found in the documentation of dr_wav and stb_vorbis, but you should be able to load most WAV and Vorbis files without problem.
+
+\tableofcontents
+
+\section sound_members Members
+
+\subsection sound_static_methods Static Methods
+
+\subsubsection sound_openstream openStream
+
+`Sound openStream(string path)`
+
+Creates a new streamed Sound from the file at the specified path.
+
+\param path The path to the sound file
+\return The new sound object
+
+\error The sound file format is not supported, is corrupted, doesn't exist, or otherwise fails to load.
+
+\subsubsection sound_loadfile loadFile
+
+`Sound loadFile(string path)`
+
+Creates a new loaded Sound from the file at the specified path.
+
+\param path The path to the sound file
+\return The new sound object
+
+\error The sound file format is not supported, is corrupted, doesn't exist, or otherwise fails to load.
+
+\subsection sound_methods Methods
+
+\subsubsection sound_play play
+
+`void play()`
+
+Plays the sound.<br>
+If the sound is already playing, stopps the sound.
+
+\error If there is some internal error
+
+\subsection sound_properties Properties
+
+\subsubsection sound_failed failed
+
+`boolean failed`
+
+Set to true if the sound failed to load, or some other error happened in initialization.<br>
+Point is, if the sound is invalid, this will be true.<br>
+In all other cases it will be false.
+
+*/
+

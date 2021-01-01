@@ -24,3 +24,5 @@ Called after \ref callback_start every frame.<br>
 This is the main loop for the game.<br>
 It is at this point that, if game's \ref game_running flag is set true, the game will start doing logic.
 
+*/
+

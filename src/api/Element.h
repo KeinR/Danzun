@@ -1,6 +1,8 @@
 #ifndef DANZUN_API_ELEMENT_H_INCLUDED
 #define DANZUN_API_ELEMENT_H_INCLUDED
 
+#include <vector>
+
 #include <sol/sol.hpp>
 
 #include "../game/Element.h"
@@ -13,7 +15,7 @@ namespace dan::api {
         elem_t elem;
         int renderPriority;
     public:
-        Element(sol::this_state l, sol::function callback, sol::object self);
+        Element(sol::this_state l, sol::function callback, sol::variadic_args self);
 
         elem_t getHandle() const;
 

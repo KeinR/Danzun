@@ -3,7 +3,7 @@ message(STATUS "Generating documentation target...")
 file(GLOB_RECURSE DANZUN_DOXYGEN_SRC "*.dox")
 file(GLOB_RECURSE DANZUN_CUSTOM_STYLES_SRC "*.css")
 
-if (NOT BUILD_PRIVATE_DOCS)
+if (BUILD_PRIVATE_DOCS)
     message(STATUS "Including code docs")
     file(GLOB_RECURSE DANZUN_DOXYGEN_SRC_HEADS "src/*.h")
     set(DANZUN_DOXYGEN_SRC ${DANZUN_DOXYGEN_SRC} ${DANZUN_DOXYGEN_SRC_HEADS})
@@ -16,6 +16,9 @@ endforeach()
 foreach(path IN LISTS DANZUN_CUSTOM_STYLES_SRC)
     set(DANZUN_CUSTOM_STYLES "${DANZUN_CUSTOM_STYLES} \\\n\"${path}\"")
 endforeach()
+
+
+message("Files found: ${DANZUN_DOXYGEN_INPUT}")
 
 configure_file(Doxyfile.in Doxyfile @ONLY)
 

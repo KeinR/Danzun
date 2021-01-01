@@ -3,20 +3,50 @@
 
 Reference for interfacing with the exposed C++ classes from Lua.
 
-\subpage api_bfffont
-\subpage api_engine
-\subpage api_mesh 
-\subpage api_patternvars
-\subpage api_shader
-\subpage api_sound
-\subpage api_effect
-\subpage api_entity
-\subpage api_player
-\subpage api_window
-\subpage api_element
-\subpage api_game
-\subpage api_matrix
-\subpage api_pattern
-\subpage api_script
+\tableofcontents
+
+\section ref_singletons Singletons
+
+Name | Brief
+--- | ---
+\subpage api_engine | Configuration
+\subpage api_game | Rendering and logic
+\subpage api_window | Configuration and input
+\subpage api_player | Input processing
+\subpage api_util | Static utility functions
+
+\section ref_classes Instanced classes
+
+\subsection ref_expression Expressions
+
+Name | Brief
+--- | ---
+\subpage api_pattern | Client-controlled expression evaluation
+\subpage api_patternvars | Lua-expression variable bridge
+
+\subsection ref_game Game
+
+Name | Brief
+--- | ---
+\subpage api_entity | A game entity
+\subpage api_element | A single renderable node
+\subpage api_effect | Element specialization
+\subpage api_script | Timable, resumable, executable logic
+
+\subsection ref_media Media
+
+Name | Brief
+--- | ---
+\subpage api_image | Image loading
+\subpage api_sound | Sound loading/streaming & playback
+
+\subsection ref_render Render
+
+Name | Brief
+--- | ---
+\subpage api_bfffont | BFF Bitmap-font type loading and processing
+\subpage api_matrix | Matrix abstraction (positioning)
+\subpage api_mesh | Mesh abstraction (rendering)
 
 */
+

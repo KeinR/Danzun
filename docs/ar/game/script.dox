@@ -2,6 +2,8 @@
 \page api_script Script
 \ingroup game
 
+`Script`
+
 Script is used to execute a sequence of discontinuous code.<br>
 It is implemented using Lua coruotines. The script will yield the number of seconds to wait before resuming.
 
@@ -12,6 +14,8 @@ coroutine.yield(5)
 spawnAnotherEntity()
 \endcode
 First the \code spawnEntity() \endcode function is called. Then the coroutine yields `5`. This signals to the script to wait until a total of 5 seconds has passed before resuming execution. After the wait is up, `spawnAnotherEntity()` is called, and the script enters a "done" state, where it effectively dead and will no longer execute code. At this point, you must create a new script to execute again. If you want a repeating script, it is reasonable to use a while loop or some wrapper.
+
+\tableofcontents
 
 \section script_constructors Constructors
 
@@ -50,4 +54,6 @@ Basically, if this is true and \ref script_failed is true, then the callback wil
 \code bool failed = false \endcode
 
 Is set to true whenever the callback fails. If \ref script_stoponfail is also true, execution of the callback will cease.
+
+*/
 

@@ -10,3 +10,8 @@
 - Text boxes (perhaps? Or is that too much? I suppose it would depend a lot on the implementation...)
 - Async loading
     - Thread safety
+- Have only one speaker object, as only one sound can... Well... I mean... I dunno'... Yah that is true... Yah... Ok nvm
+- Frequenty check for errors - OpenGL and OpenAL
+- Set the active image via engine
+- Always catch any call that might thow from std lib funcs, etc.
+- Matrix should be take uniform name as paramter (docs say so now)!!!!

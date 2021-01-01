@@ -1,0 +1,69 @@
+/*!
+\page api_image Image
+\ingroup media
+
+`Image`
+
+Image is used to load conventional image data.<br>
+Supported formats are listed in deps/stb/stb_image.h, but for convenience here they are ripped from the aforementioned file:
+
+- JPEG baseline & progressive (12 bpc/arithmetic not supported, same as stock IJG lib)
+- PNG 1/2/4/8/16 bit-per-channel
+- TGA
+- BMP non-1bpp, non-RLE
+- PSD (composite view only, no extra channels, 8/16 bit-per-channel)
+- GIF (no animation)
+- HDR (radiance rgbE format)
+- PIC (Softimage PIC)
+- PNM (PPM and PGM binary)
+
+It is recommended however that you stick with the popular formats, those being JPEG and PNG.
+
+\tableofcontents
+
+\section image_constructors Constructors
+
+\code
+Image.new(string path, boolean flipOnLoad = false) (1)
+\endcode
+
+(1) Load an image from a file path and optional parameters
+
+\param path The path to the file
+\param flipOnLoad If the image should be flipped across the x-axis on load
+
+\error The image failed to load
+
+\section image_members Members
+
+\subsection image_methods Methods
+
+\subsubsection image_bind  bind
+
+`void bind()`
+
+Binds the image to the currenetly active \ref engine_activetexture "texture".
+
+\subsection image_properties Properties
+
+\subsubsection image_width width
+
+`float width [readonly]`
+
+The width, in pixels, of the image.
+
+\subsubsection image_height height
+
+`float height [readonly]`
+
+The height, in pixels, of the image.
+
+\subsubsection image_failed failed
+
+`boolean failed`
+
+If the image failed to load (in the constructor), this will be true, indicating that the image is invalid.<br>
+In all other cases, it will be false.
+
+*/
+

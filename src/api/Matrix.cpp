@@ -8,13 +8,13 @@
 dan::api::Matrix::Matrix(): x(0), y(0), pivotXOfs(0), pivotYOfs(0), width(10), height(10), rotation(0) {
 }
 dan::api::Matrix::Matrix(sol::table t): Matrix() {
-    x = t["x"].get_or<float>(0);
-    y = t["y"].get_or<float>(0);
-    pivotXOfs = t["pivotX"].get_or<float>(0);
-    pivotYOfs = t["pivotY"].get_or<float>(0);
-    width = t["width"].get_or<float>(0);
-    height = t["height"].get_or<float>(0);
-    rotation = t["rotation"].get_or<float>(0);
+    x = t["x"].get_or<float>(x);
+    y = t["y"].get_or<float>(y);
+    pivotXOfs = t["pivotX"].get_or<float>(pivotXOfs);
+    pivotYOfs = t["pivotY"].get_or<float>(pivotYOfs);
+    width = t["width"].get_or<float>(width);
+    height = t["height"].get_or<float>(height);
+    rotation = t["rotation"].get_or<float>(rotation);
 }
 void dan::api::Matrix::load(sol::this_state l) {
     ::dan::Matrix(x, y, pivotXOfs, pivotYOfs, width, height, rotation, false).load(Context::fromLua(l));

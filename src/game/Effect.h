@@ -10,21 +10,22 @@
 namespace dan {
     class Effect: public Renderable {
         typedef std::vector<sol::table> objects_t;
-        sol::object masterObject;
-        objects_t objects;
+		typedef std::vector<sol::object> args_t;
+        args_t args;
+		objects_t objects;
         sol::function callback;
         sol::state_view lua;
         int renderPriority;
         bool detached;
     public:
-        Effect(sol::state_view lua, sol::object masterObject, sol::function callback);
+        Effect(sol::state_view lua, args_t args, sol::function callback);
 
         void setDetached(bool value);
 
         void setRenderPriority(int value);
         int getRenderPriority();
 
-        void spawn(sol::table obj);
+        void spawn(sol::object obj);
 
         void render(Context &c) override;
     };

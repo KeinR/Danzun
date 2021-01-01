@@ -1,0 +1,124 @@
+/*!
+\page api_bfffont BffFont
+
+`BffFont`
+
+A bitmap font specializing in the Binary Font Format (BFF) from [Codehead's Bitmap Font Generator](http://www.codehead.co.uk/cbfg/).<br>
+The reasons for selecting BFF as the bitmap font format for Danzun... Well, it's really nice for one, more lightweight than vector font rendering... Faster too...
+
+It is worth noting that BFF fonts onlt support 8-bit characters (extended ASCII, or some other 8-bit charset).
+
+Support for general bitmap fonts will be added later, but it's not that hard to implement in the meantime.
+
+\tableofcontents
+
+\section bfffont_constructors Constructors
+
+\code
+BffFont.new(string path) (1)
+\endcode
+
+(1) Creates a new font from a BFF file
+
+\param path Path to the BFF file
+
+\error The font fails to load, for whatever reason
+
+\section bfffont_members Members
+
+\subsection bfffont_methods Methods
+
+\subsubsection bfffont_getcharwidth getCharWidth
+
+`int getCharWidth(char c)`
+
+Gets the width of a 1-length string (character).
+
+\param c The character to measure
+\return The length of the character, in pixels
+
+\subsubsection bfffont_setstrwidth getStrWidth
+
+`int getStrWidth(string str)`
+
+Gets the width of a string.
+
+\param str The string to measure
+\return The length of the string, in pixels
+
+\note This ignores newlines
+
+\subsubsection bfffont_getlineswidth getLinesWidth
+
+`int getLinesWidth(string str)`
+
+From a string consisting of lines deliminated by newline characters (LF), returns the length of the longest.<br>
+In other words, is like \ref bfffont_getstrwidth except it takes into account the effects of newlines.
+
+\param str The string with the lines to be measured - each seperated by a newline character (LF)
+\return The length of the longest line
+
+\subsubsection bfffont_getheight getHeight
+
+`int getHeight()`
+
+Gets the height of each character in the font.
+
+\return The character height
+
+\subsubsection bfffont_getlinesheight getLinesHeight
+
+`int getLinesHeight(string str)`
+
+Gets the height of the combined lines in the provided string, with each line deliminated by a newline (LF).<br>
+Basically just counts the number of newlines, adds 1, then multiplies by \ref bfffont_getheight.
+
+\param str The lines to measure, deliminated by newlines (LF)
+\return The combined height of the lines
+
+\subsubsection bfffont_bind bind
+
+`void bind()`
+
+Binds the internal \ref api_image holding the bitmap image so that vertex data can be rendered.
+
+\subsubsection bfffont_getvertexdata getVertexData
+
+`void getVertexData(string str, array vertices, array indices)`
+
+Fills two arrays with vertex and index data information for rendering the given string.<br>
+The index data is in the conventional format (groups of three for triangle).<br>
+The vertex data is organized as follows:
+
+Index | Size | Description
+--- | --- | ---
+0 | 2 | The position coordinates
+1 | 2 | The texture coordinates
+The stride for both is **4**.
+
+This data can later be use to initalize a \ref api_mesh.
+
+\param str The string to generate the vertices and indices from
+\param [out] vertices Table to add the vertices to
+\param [out] indices Table to add the indices to
+
+\subsubsection bfffont_makemesh makeMesh
+
+`Mesh makeMesh(string str)`
+
+An abstraction on top of \ref bfffont_getvertexdata: generates the vertex and index data, then creates and returns a mesh created from the data, width parameters set and everything.
+
+\param str The string to generate the mesh from
+\return A \ref api_mesh generated from the string
+
+\subsection bfffont_properties Properties
+
+\subsubsection bfffont_failed failed
+
+`bool failed`
+
+If the font failed to load during construction (and therefore is invalid), this will be true.<br>
+Otherwise, if it is valid to use this font, it will be false.
+
+*/
+

@@ -1,0 +1,69 @@
+/*!
+\page api_mesh Mesh
+\ingroup render
+
+`Mesh`
+
+A class representing the combination of an OpenGL vertex array, element array buffer, and vertex buffer.<br>
+This is the primary more through which anything will be rendered, whether directly or indirectly.<br>
+A knowledge of OpenGL is required to really understand understand how this class works. (tbh, this whole game engine kinda' leans on you being familiar with OpenGL).
+
+\tableofcontents
+
+\section mesh_constructors Constructors
+
+\code
+Mesh.new() (1)
+\endcode
+
+(1) Construct a new mesh. Under the hood, allocates new OpenGL buffers.
+
+\warning In this state, nothing will render! You have to set the vertices and indices, as well as set the data parameters (if you know something of OpenGL, you know what I'm talking about). See \ref mesh_methods,
+
+\section mesh_members Members
+
+\subsection mesh_methods Methods
+
+\subsubsection mesh_setvertices setVertices
+
+`void setVertices(array data)`
+
+Sets the vertex buffer data to the provided data.
+
+\param data Table of the vertex data
+
+\subsubsection mesh_setindices setIndices
+
+`void setIndices(array data)`
+
+Sets the element array buffer data to the provided data.
+
+\param data Table of the index data
+
+\subsubsection mesh_setparam setParam
+
+`void setParam(unsigned int index, int size, int stride, int offset)`
+
+Sets one of the parameters for the vertex array.<br>
+This basically tells OpenGL how to extract the vertex data and present it to the shader.<br>
+To better illustrate how this translates to OpenGL, here's a snippet (adapted) of how it is actually translated in the source:
+\code{.cpp}
+bindBuffers();
+glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride * sizeof(float), (void*)(offset * sizeof(float)));
+glEnableVertexAttribArray(index);
+unbindBuffers();
+\endcode
+
+\param index The index to set the parameter for
+\param size The number of values in the vertex
+\param stride Number of values that must be traversed each iteration to get to the next set of values
+\param offset Index of the first set of values
+
+\subsubsection mesh_render render
+
+`void render()`
+
+Renders the indices with `glDrawElements()`.
+
+*/
+

@@ -1,11 +1,12 @@
 #include "Effect.h"
 
+#include <vector>
+
 #include "../game/Game.h"
 
-dan::api::Effect::Effect(sol::this_state l, int renderPriority, sol::function callback, sol::object masterObject):
-    effect(std::make_shared<::dan::Effect>(l, masterObject, callback))
+dan::api::Effect::Effect(sol::this_state l, sol::function callback, sol::variadic_args args):
+    effect(std::make_shared<::dan::Effect>(l, std::vector<sol::object>(args.begin(), args.end()), callback))
 {
-    effect->setRenderPriority(renderPriority);
     activate(l);
 }
 dan::api::Effect::~Effect() {
@@ -32,7 +33,7 @@ void dan::api::Effect::deactivate(sol::this_state l) {
 
 void dan::api::Effect::open(sol::state_view lua) {
     sol::usertype<Effect> type = lua.new_usertype<Effect>("Effect",
-        sol::constructors<Effect(sol::this_state,int,sol::function,sol::object)>()
+        sol::constructors<Effect(sol::this_state,sol::function,sol::variadic_args)>()
     );
 
     type["spawn"] = &Effect::spawn;

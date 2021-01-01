@@ -2,10 +2,14 @@
 \page api_game Game
 \ingroup game
 
+`game`
+
 A singleton glass that represents the game itself.<br>
 Takes care of things like event and collision processing, as well as time and rendering.
 
 The global singleton is named \c game.
+
+\tableofcontents
 
 \section game_c_autogc AutoGC
 
@@ -155,4 +159,6 @@ True if the game should do logic processing (hitbox invalidation, time advanceme
 
 Factor applied to the \ref game_getdeltatime "delta time".<br>
 Effectively speeds up/slows down time, as far as the game is concerned.
+
+*/
 

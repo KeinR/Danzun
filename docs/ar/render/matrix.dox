@@ -1,0 +1,84 @@
+/*!
+\page api_matrix Matrix
+\ingroup render
+
+`Matrix`
+
+This is an abstraction over your typical linear-algebra matrix.<br>
+You give parameters such as x, y, width, etc. and the matrix is created and loaded for you - no math required.<br>
+Note that if this is too high level you, you can \ref shader_setmat4 "bind your own to the shader manually".
+
+\tableofcontents
+
+\section matrix_constructors Constructors
+
+\code
+Matrix.new() (1)
+Matrix.new(table object) (2)
+\endcode
+
+`Matrix`
+
+(1) Creates a empty matrix with default values (see individual defaults).<br>
+(2) Initializes the matrix with the values found in `object`. Any values in the aforementioned that have the same names as properties in the matrix, and are numbers, will be promptly copied.<br>
+So, for example, if we have `obj = {x = 4, y = 6, q = "fef", width = "hi"}` given as `object`, x and y will be given their values in `obj`, however q would be ignored as it doesn't have a counterpart in Matrix, and width is of an invalid type. All values that are not set in this fashon will be at their defaults.
+
+\param object Object to initialize from
+
+\section matrix_members Members
+
+\subsection matrix_methods Methods
+
+`void load(string uniform = "model")`
+
+Loads the matrix into the shader, optionally specifying a different location.<br>
+The matrix in the shader must be a `mat4`.
+
+\param uniform The name of the uniform in the shader
+
+\subsection matrix_properties Properties
+
+\subsubsection matrix_x x
+
+`float x = 0`
+
+The x translation, in screen coordinates.
+
+\subsubsection matrix_y y
+
+`float y = 0`
+
+The y translation, in screen coordinates.
+
+\subsubsection matrix_pivotx pivotX
+
+`float pivotX = 0`
+
+The rotation pivot x relative to \ref matrix_x. 
+
+\subsubsection matrix_pivoty pivotY
+
+`float pivotY = 0`
+
+The rotation pivot y relative to \ref matrix_y.
+
+\subsubsection matrix_width width
+
+`float width = 10`
+
+The x scale (width), in screen coordinates.
+
+\subsubsection matrix_height height
+
+`float height = 10`
+
+The y scale (height), in screen coordinates.
+
+\subsubsection matrix_rotation rotation
+
+`float rotation = 0`
+
+The rotation, in radians, about the pivot.
+
+*/
+

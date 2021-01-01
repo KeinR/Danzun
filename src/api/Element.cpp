@@ -1,9 +1,11 @@
 #include "Element.h"
 
+#include <vector>
+
 #include "../game/Game.h"
 
-dan::api::Element::Element(sol::this_state l, sol::function callback, sol::object self):
-    elem(std::make_shared<::dan::Element>(callback, self)), renderPriority(0)
+dan::api::Element::Element(sol::this_state l, sol::function callback, sol::varadic_args self):
+    elem(std::make_shared<::dan::Element>(callback, std::vector<sol::object>(self.begin(), self.end()))), renderPriority(0)
 {
 }
 

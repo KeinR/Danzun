@@ -2,11 +2,13 @@
 \page api_player Player
 \ingroup game
 
+`player`
+
 A singleton class that is used to represent the player-character.<br>
 Don't get it wrong however - the player is created and managed by the client (you). This class just keeps track if where the player "should be" based in key input and the game bounds, etc.<br>
 You are responsible for rendering the player sprite and managing its hitbox. This cane be done by creating an \ref api_entity "entity" that is part of the "player" group, and in its expression set the entity position to the player position (see \ref globalsymbols). For player actions such as bullets, you can add a \ref api_script "script" to the entity.
 
-The global singleton is named \c player.
+\tableofcontents
 
 \section player_members Members
 
@@ -42,4 +44,6 @@ The x coordinate of the player.
 \subsubsection player_y y
 
 The y coordinate of the player.
+
+*/
 

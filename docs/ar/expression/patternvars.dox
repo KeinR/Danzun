@@ -1,0 +1,42 @@
+/*!
+\page api_patternvars PatternVars
+\ingroup expression
+
+'PattenrVars`
+
+A bridge between an ExprTK symbol table (for \ref expressions "expressions") and a Lua table.<br>
+The class is initalized with a table that serves as the Lua "port", and creates a hash map buffer and the expression table.<br>
+You can make changes to the table that you provided and call \ref patternvars_push to write the variables from that object to the expression table so that the correct values are used by the expressoin. If you just want to read the values from an expression, you can call \ref patternvars_pull and write the values from the symbol table to the Lua table so that you can manipulate them.
+
+\tableofcontents
+
+\section patternvars_constructors Constructors
+
+\code
+PatternVars.new(table t) (1)
+\endcode
+
+(1) Construct a PatternVars instance with a table port.
+
+\param t Table to be used as the Lua port for variables
+
+\note Only variables that exist during construction in `t` will be registered to the buffer. This means that if you later add variables to the table, they will be ignored when pushing/pulling
+
+\section patternvars_members Members
+
+\subsection patternvars_methods Methods
+
+\subsubsection patternvars_push push
+
+`void push()`
+
+Writes values from the Lua table to the buffer, reflecting their values in any attached expressions.
+
+\subsubsection patternvars_pull pull
+
+`void pull()`
+
+Writes values from the buffer to the Lua table.
+
+*/
+

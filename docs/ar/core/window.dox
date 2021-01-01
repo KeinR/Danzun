@@ -1,6 +1,8 @@
 /*!
 \page api_window Window
-\ingroup api_core
+\ingroup core
+
+`window`
 
 The Window class is a singleton that represents the actual program window.<br>
 There is only ever one window.

@@ -2,6 +2,58 @@
 \page api_effect Effect
 \ingroup game
 
-An extra special case of \ref api_element where you can spawn new instances of it from a parent obeject. Those instances are all given to the render callback, along with a master \c self object, allowing for normally expensive effects to be batch rendered.
+`Effect`
 
+An extra special case of \ref api_element where you can spawn new instances of it from a parent obeject. Those instances are all given to the render callback, along with optional forwarded arguments, allowing for normally expensive effects to be batch rendered.
+
+\tableofcontents
+
+\section effect_constructors Constructors
+
+\code
+Effect.new(function callback, object args...) (1)
+\endcode
+
+(1) Create an effect with a callback and arguments
+
+\param callback Function to execute as part of the effect
+\param args Arguments to be forwarded to the function
+
+\section effect_members Members
+
+\subsection effect_methods Methods
+
+\subsubsection effect_spawn spawn
+
+`void spawn(table object)`
+
+"Spawns" another effect of this type.<br>
+All objects submitted to `spawn()` are packed into an array and given as the last argument to the callback (after the forwarded arguments).<br>
+The Effect class checks that effect objects (that are spawned from here) are done and should be cleaned up by the "done" boolean property if the object.
+
+\note The object will never be cleared if the `done` property is not set. Removing it from the table parameter to the callback does nothing.
+\note \ref effect_activate is called upon construction
+
+\subsubsection effect_setrenderpriority setRenderPriority
+
+`void setRenderPriority(int level)`
+
+Sets the render priority of the effect.<br>
+Identical to \ref element_setrenderpriority "effect".
+
+\param level The new priority
+
+\subsubsection effect_activate activate
+
+`void activate()`
+
+"Activates" the effect.<br>
+Identical to \ref element_activate "element".
+
+\subsubsection effect_deactivate deactivate
+
+"Deactivates" the effect.<br>
+Identical to \ref element_deactivate "element".
+
+*/
 

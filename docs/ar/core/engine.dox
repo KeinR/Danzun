@@ -1,8 +1,10 @@
 /*!
 \page api_engine Engine
-\ingroup api_core
+\ingroup core
 
-The engine representes the core driver of the game engine.
+`engine`
+
+The engine is a singleton class that representes the core driver of the game engine.
 Its methods generally revolve around configuration and termination.
 
 \tableofcontents

@@ -1,0 +1,40 @@
+/*!
+\page api_util Util
+\ingroup media
+
+`util`
+
+This is a table with static methods that provide functionality that is not dependent on a class instance.
+
+\tableofcontents
+
+\section util_members Members
+
+\subsection util_functions Functions
+
+`table loadAsepriteFrames(string path)`
+
+Loads JSON metadata generatd by [Aseprite](www.aseprite.org) in array format.<br>
+This is useful when you export an animation spritesheet and need to extract the frame metadata.
+
+The returned table will have two properties:
+Name | Type | Description
+--- | --- | ---
+array | array | An array of frames
+hash | table | Keys with the frame names, values indices in the array of the corresponding frame. It is worth noting that the suffix ".ase" is stripped from all keys (it felt a DRY thing to do).
+
+each frame has four properties:
+Name | Type | Description
+--- | --- | ---
+width | number | The width, in pixels, of the frame
+height | number | The height, in pixels, of the frame
+duration | number | The duration, in seconds, of the frame
+coords | array (8) | The texture coordinates representing the frame (these are pre-flipped to account for how OpenGL renders textures)
+
+\note When I say "array", I mean a table with contiguous indices starting at 1 - a "Lua array"
+
+\param path Path to the JSON file
+\return A table with the resultant frame data
+
+*/
+

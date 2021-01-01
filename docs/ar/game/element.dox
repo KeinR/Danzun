@@ -2,7 +2,11 @@
 \page api_element Element
 \ingroup game
 
+`Element`
+
 An element is a function with optional parameters that can be submited to the game render loop in a "fire and forget" kind of way.
+
+\tableofcontents
 
 \section element_constructors Constructors
 
@@ -50,4 +54,5 @@ Applied retroactively - the element is removed from the game render loop, then r
 "Deactivates" this element, removing all occurences of it from the game render loop.<br>
 No effect if the element is not already in the render loop, other than wated CPU cycles.
 
+*/
 

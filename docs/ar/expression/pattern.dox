@@ -1,0 +1,85 @@
+/*!
+\page api_pattern Pattern
+\ingroup expression
+
+`Pattern`
+
+While \ref api_entity has it's own special expression interpreter, this one is standalone and indended to be used by clients.<br>
+variables (symbols) can be gotten/set with \ref pattern_metamethods, and the time of execution can be controlled through \ref pattern_run.<br>
+\ref globalsymbols "Global symbols" are still included in Patterns, however note that they are of lowest precidence and therefore can be overriden.
+
+\tableofcontents
+
+\section pattern_constructors Constructors
+
+\code
+Pattern.new(string expression, PatternVars symbolTables...) (1)
+\endcode
+
+(1) Construct a new pattern, optionally specifying other symbol tables (akin to \ref entity_constructors "entity")
+
+\param expression The expression to execute
+\param symbolTables Optional \ref api_patternvars to add to the expression
+
+\note Like in Entity, any variables not defined in the provided symbol tables are initialized as scalars with a value of zero. These can later be set with metamethods.
+
+\error The expression fails to compile
+
+\section pattern_members Members
+
+\subsection pattern_methods Methods
+
+\subsubsection pattern_run run
+
+`void run()`
+
+Runs the expression.<br>
+Note that just like in Entity, changes made to variables in an expression will persist in the symbol tables.
+
+\subsection pattern_properties Properties
+
+\subsubsection pattern_failed failed
+
+`boolean failed`
+
+Set to true if the expression failed to compile (is invalid).<br>
+Otherwise it will be false.
+
+\subsection pattern_metamethods Metamethods
+
+\subsubsection pattern_meta_index __index
+
+`float __index(string name)`
+
+Looks up a variable in the pattern's base symbol table (where any variable not specified in the global symbol table or provided tables are stored).<br>
+If found, returns its value.<br>
+Else, returns zero (0).
+
+\param name Name of the variable to look up
+\return The value of the variable, or zero (0) if it doesn't exist.
+
+\subsubsection pattern_meta_newindex __new_index
+
+\code
+void __new_index(string name, float num)
+void __new_index(string name, boolean flag)
+\endcode
+
+Looks up a variable and attempts to set it.<br>
+If the variable does not exist, does nothing.
+
+\param name The name of the variable to set
+\param num Value to set the variable to
+\param flag If true, sets the variabe to 1. Else, 0.
+
+\subsubsection pattern_meta_call __call
+
+`float __call()`
+
+Executes the expression.<br>
+Returns the last expression on the stack (what is returned by expression.value() in ExprTK - see their docs for more info). Note that this propobly is't that useful to you unless you're interested in one resultant variable...
+
+\return The "result" of the expression
+
+*/
+

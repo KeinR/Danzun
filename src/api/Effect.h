@@ -11,7 +11,7 @@ namespace dan::api {
     class Effect {
         std::shared_ptr<::dan::Effect> effect;
     public:
-        Effect(sol::this_state l, int renderPriority, sol::function callback, sol::object masterObject);
+        Effect(sol::this_state l, sol::function callback, sol::variadic_args args);
         ~Effect();
 
         void spawn(sol::table obj);
