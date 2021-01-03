@@ -17,7 +17,7 @@ namespace dan::api {
         Image(sol::this_state l, const std::string &path);
         Image(sol::this_state l, const std::string &path, bool loadFlipped);
 
-        void bind();
+        void bind(sol::this_state l);
 
         int getWidth();
         int getHeight();

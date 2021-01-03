@@ -4,18 +4,22 @@
 #include "SoundEffect.h"
 #include "../game/Game.h"
 #include "../core/error.h"
+#include "../core/util.h"
 
 dan::api::SpeakerConf::SpeakerConf(const std::shared_ptr<Sound> &sound):
     speaker(std::make_shared<audio::Speaker>()), sound(sound) {
 }
 
 dan::api::SpeakerConf dan::api::SpeakerConf::makeStream(sol::this_state l, const std::string &path) {
-    return SpeakerConf(std::make_shared<Music>(l, path));
+     SpeakerConf c(std::make_shared<Music>(l, path));
+     ut::checkALError("api::SpeakerCOnf::makeStream", l);
+     return c;
 }
 dan::api::SpeakerConf dan::api::SpeakerConf::makeEffect(sol::this_state l, const std::string &path) {
     std::shared_ptr<SoundEffect> s = std::make_shared<SoundEffect>(l, path);
     SpeakerConf speaker(s);
     s->initSpeaker(&speaker);
+    ut::checkALError("api::SpeakerConf::makeEffect", l);
     return speaker;
 }
 
@@ -35,6 +39,7 @@ void dan::api::SpeakerConf::play(sol::this_state l) {
         // Is very unlikely
         err("api::SpeakerConf::play", l) << "[UNEXPECTED] Failed in playing sound: " << e.what();
     }
+    ut::checkALError("api::SpeakerCOnf::play", l);
 }
 
 void dan::api::SpeakerConf::open(sol::state_view lua) {

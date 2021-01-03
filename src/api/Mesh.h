@@ -9,12 +9,12 @@ namespace dan::api {
     class Mesh {
         ::dan::Mesh mesh;
     public:
-        Mesh();
+        Mesh(sol::this_state l);
         Mesh(::dan::Mesh &&omesh);
-        void setVertices(sol::table rawData);
-        void setIndices(sol::table rawData);
-        void setParam(unsigned int index, int size, int stride, int offset);
-        void render();
+        void setVertices(sol::this_state l, sol::table rawData);
+        void setIndices(sol::this_state l, sol::table rawData);
+        void setParam(sol::this_state l, unsigned int index, int size, int stride, int offset);
+        void render(sol::this_state l);
 
         static void open(sol::state_view &lua);
     };

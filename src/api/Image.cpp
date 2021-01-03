@@ -3,6 +3,7 @@
 #include <stb/stb_image.h>
 
 #include "../core/error.h"
+#include "../core/util.h"
 
 dan::api::Image::Image(sol::this_state l, const std::string &path): Image(l, path, false) {
 }
@@ -28,10 +29,12 @@ dan::api::Image::Image(sol::this_state l, const std::string &path, bool loadFlip
         stbi_image_free(data);
         err("api::Image::Image", l) << "Invalid image format for \"" << path << "\" (channels=" << channels << ")";
     }
+    ut::checkGLError("api::Image::Image", l);
 }
 
-void dan::api::Image::bind() {
+void dan::api::Image::bind(sol::this_state l) {
     tex.bind();
+    ut::checkGLError("api::Image::bind", l);
 }
 
 int dan::api::Image::getWidth() {

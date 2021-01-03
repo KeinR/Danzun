@@ -23,14 +23,15 @@ namespace dan::api {
         int getHeight() const;
         int getLinesHeight(const std::string &str) const;
 
-        void bind();
+        void bind(sol::this_state l);
 
         void getVertexData(const std::string &str, sol::table vertices, sol::table indices);
 
-        Mesh makeMesh(const std::string &str);
+        Mesh makeMesh(sol::this_state l, const std::string &str);
 
         static void open(sol::state_view lua);
     };
 }
 
 #endif
+

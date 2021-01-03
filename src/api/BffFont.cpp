@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "../core/error.h"
+#include "../core/util.h"
 
 dan::api::BffFont::BffFont(sol::this_state l, const std::string &path) {
     font = std::make_shared<::dan::BffFont>(l, path);
@@ -29,8 +30,9 @@ int dan::api::BffFont::getLinesHeight(const std::string &str) const {
     return font->getLinesHeight(str);
 }
 
-void dan::api::BffFont::bind() {
+void dan::api::BffFont::bind(sol::this_state l) {
     font->bindAtlas();
+    ut::checkGLError("api::BffFont::bind", l);
 }
 
 void dan::api::BffFont::getVertexData(const std::string &str, sol::table vertices, sol::table indices) {
@@ -45,8 +47,10 @@ void dan::api::BffFont::getVertexData(const std::string &str, sol::table vertice
     }
 }
 
-dan::api::Mesh dan::api::BffFont::makeMesh(const std::string &str) {
-    return Mesh(font->genMesh(str));
+dan::api::Mesh dan::api::BffFont::makeMesh(sol::this_state l, const std::string &str) {
+    Mesh m(font->genMesh(str));
+    ut::checkGLError("api::BffFont::makeMesh", l);
+    return m;
 }
 
 // Static members
