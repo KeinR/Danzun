@@ -42,7 +42,7 @@ Image.new(string path, boolean flipOnLoad = false) (1)
 
 `void bind()`
 
-Binds the image to the currenetly active \ref engine_activetexture "texture".
+Binds the image to the currenetly active \ref engine_setactivetexture "texture".
 
 \subsection image_properties Properties
 

@@ -1,0 +1,14 @@
+/*!
+\page key Key
+
+Function and variable prototypes:<br>
+`[return] [name]([tyoe] [name]...)`<br>
+`[type] [name] = [default]`
+
+Name | Description | Example
+--- | --- | ---
+? | an optional parameter | void foo(int need, string donotneed?)
+array | a contiguous table with integer keys | foo = { "fe", 43, 10 }
+
+*/
+

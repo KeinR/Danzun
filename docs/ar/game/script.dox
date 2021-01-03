@@ -36,7 +36,7 @@ Script.new(function callback, object args...) (1)
 
 \code bool run() \endcode
 
-Attempts to resume the script. If the wait time is up, the script will execute. Otherwise, nothing happens. If the script is "done", in a dead state, it will return true. If the script fails with an error, the \ref script_fail property will be set to true. If \ref script_stoponfail is set to true, then the script will refuse futher attempts to execute.
+Attempts to resume the script. If the wait time is up, the script will execute. Otherwise, nothing happens. If the script is "done", in a dead state, it will return true. If the script fails with an error, the \ref script_failed property will be set to true. If \ref script_stoponfail is set to true, then the script will refuse futher attempts to execute.
 
 \error the script callback errors when called
 

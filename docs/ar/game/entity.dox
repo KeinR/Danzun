@@ -12,7 +12,7 @@ The player is an entity. Bullets are entities. Enemies are entities. Even collec
 
 \section entity_c_cleanup Entity Cleanup
 
-When an entity destructs normally (through setting its \ref entity_gc flag), all references such as hitboxes, render activation, etc. are automatically taken care of. Functions like \ref entity_deactivate and \ref entity_unreghitboxes are available merely to give more low-level access to the client, and should not often be needed.
+When an entity destructs normally (through setting its \ref entity_c_symbols "gc" flag), all references such as hitboxes, render activation, etc. are automatically taken care of. Functions like \ref entity_deactivate and \ref entity_unreghitboxes are available merely to give more low-level access to the client, and should not often be needed.
 
 \section entity_c_symbols Expression Symbols
 
@@ -30,7 +30,7 @@ ti | scalar | \ref game_gettime | The game time when the entity was created
 rotation | scalar | 0 | The rotation (in radians)
 height | scalar | 30 | The height
 width | scalar | 30 | The width
-autoGC | scalar (boolean) | true | If the entity should be included in \ref game_c_autgc "auto gc"
+autoGC | scalar (boolean) | true | If the entity should be included in \ref game_c_autogc "auto gc"
 gc | scalar (boolean) | false | If the entity should be deleted (note that this will take effect immediately after the frame ends, unlike normal auto gc)
 display | scalar (boolean) | true | If the entity should be rendered
 tangible | scalar (boolean) | true | If the entity's hitboxes should be iterated over. If this is false, the entity's hitboxes will not be tested.
@@ -49,7 +49,7 @@ print(entity.x)
 \note The rotation pivot is relative to the x/y position
 \note These properties are all accessable via \ref entity_meta_index.
 
-\subsubsection entity_c_unknownsymbols Unknown Symbol resolution
+\section entity_c_unknownsymbols Unknown Symbol resolution
 
 If at the time of compilation (which happens during \ref entity_constructors "entity construction") a symbol is not registered with the symbol table, a new scalar with the the variable name is created in the entity's base symbol table (not any PatternVars that are given during construction, nor the global symbol table). Thse variables can later be set with the \ref entity_meta_newindex and \ref entity_meta_index metamethods, just as described above for the built-in symbols. 
 

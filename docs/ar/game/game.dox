@@ -13,11 +13,11 @@ The global singleton is named \c game.
 
 \section game_c_autogc AutoGC
 
-To make things easier, entites that have left the game area (see \ref game_setSize) can be automatically deleted. Of course, this isn't applied unconditionally - Entity has a property \ref entity_autoGC to control this. Additionally, entites are only deleted if their center is a certain distance from the boarder.
+To make things easier, entites that have left the game area (see \ref game_setsize) can be automatically deleted. Of course, this isn't applied unconditionally - Entity has a property, \ref entity_c_symbols "autogo", to control this. Additionally, entites are only deleted if their center is a certain distance from the boarder.
 
-Because of the disconnect between the entity and rendering (as there is a user-provided render callback that merely takes the entity's position as arguments), it is hard to determine for sure at what point the entity will no longer be visible. As an alternative to forcing users to registera seperate hitbox just for autoGC, game as properties \ref game_gcConstant and \ref game_gcFactor that are applied to the entity's hitbox (actual) width and height. The factor is used to multiply the dimensions, and the constant is added afterwards. The resultant bounds is taken and compared against the game dimensions, and if it falls out and the \ref entity_autoGC flag is set to true - it is deleted.
+Because of the disconnect between the entity and rendering (as there is a user-provided render callback that merely takes the entity's position as arguments), it is hard to determine for sure at what point the entity will no longer be visible. As an alternative to forcing users to registera seperate hitbox just for autoGC, game as properties \ref game_gcconstant and \ref game_gcfactor that are applied to the entity's hitbox (actual) width and height. The factor is used to multiply the dimensions, and the constant is added afterwards. The resultant bounds is taken and compared against the game dimensions, and if it falls out and the \ref entity_c_symbols flag is set to true - it is deleted.
 
-The interval at which AutoGC is run is controlled through \ref game_gcInterval.
+The interval at which AutoGC is run is controlled through \ref game_gcinterval.
 
 \section globalsymbols Global Symbols
 
@@ -42,7 +42,7 @@ print | string | none | Prints a simple string to console. Intended for basic de
 \section game_c_renderloop The Render Loop
 
 Game contains an internal render loop that is sorted by \ref game_c_renderpriority "priority".<br>
-It is executed at the end of each frame, right after the \ref programcallbacks "main loop"
+It is executed at the end of each frame, right after the \ref globalcallbacks "main loop"
 
 \subsection game_c_renderpriority Render Priority
 
@@ -124,7 +124,7 @@ A constant added to the width and height of the Entity during \ref game_c_autogc
 
 \code float gcFactor \endcode
 
-A factor the width and height of an Entity is multiplied by before adding the \ref game_gcConstant.
+A factor the width and height of an Entity is multiplied by before adding the \ref game_gcconstant.
 
 \subsubsection game_gcinterval gcInterval
 
@@ -138,14 +138,14 @@ Collecting Garbage involves things like running the \ref game_c_autogc, and dele
 \code int width \endcode
 
 The width of the game area.<br>
-Similar to \ref game_setSize.
+Similar to \ref game_setsize.
 
 \subsubsection game_height height
 
 \code int height \endcode
 
 The height of the game area.<br>
-Similar to \ref game_setSize.
+Similar to \ref game_setsize.
 
 \subsubsection game_running running
 

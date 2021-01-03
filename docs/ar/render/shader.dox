@@ -1,0 +1,82 @@
+/*!
+\page api_shader Shader
+\ingroup render
+
+`Shader`
+
+Used to load and manipulate an OpenGL shader program.<br>
+If you are infamiliar with OpenGL shaders, it is recommended that you read up on them yourself.<br>
+It's an entirely seperate language (however very C-like, ofc), and you can do some very interesting things with them.<br>
+Also, there are no shaders packaged in with Danzun (for portability), so you will have to search for or write your own.
+
+Note that, at the time of writing this, other fancy shaders like geom are not suported. However, for most purposes, vertex and fragment will be enough.
+
+It is especially important to reiterate here that Danzun uses OpenGL 3.3 - which means that [the shader version should be 3.30](https://stackoverflow.com/a/27410925/10821333).
+
+\note This is being put here because it would be superfluous to put it at the end of each method: If the shader is not currently "used" when a uniform is set (through \ref shader_setint or whatevre), \ref shader_use will be called.
+
+\tableofcontents
+
+\section shader_constructors Constructors
+
+\code
+Shader.new(string vertexPath, string fragmentPath) (1)
+\endcode
+
+(1) Create a shader program with a vertex shader and fragment shader
+
+\param vertexPath Path to the vertex shader file
+\param fragmentPath Path to the fragment shader file
+
+\section shader_members Members
+
+\subsection shader_methods Methods
+
+\subsubsection shader_use use
+
+`void use()`
+
+Loads the shader as "used".<br>
+Calls `glUseProgram` if that helps.
+
+In case you forgot, do note that there is only one "used" shader at a time, and it is this shader that will pre-process and render vertex data.
+
+\subsubsection shader_setint setInt
+
+`void setInt(string uniform, int x, int y?, int z?, int w?)`
+
+Sets an integer uniform to the provided values.<br>
+The number of provided arguments determines the type that will be set.<br>
+Ex: setInt("foo", 4, 3) will attempt to set a vec2 uniform named foo to a vec2(4, 3)
+
+\param uniform The name of the uniform
+\param x The x (first) value of the uniform (note: required)
+\param y The y (second) value
+\param z The z (third) value
+\param w The w (fourth) value
+
+
+\subsubsection shader_setfloat setFloat
+
+`void setFloat(string uniform, float x, float y?, float z?, float w?)`
+
+Sets a floating point uniform to the provided values.<br>
+Like \ref shader_setint, the number of provided arguments determines the type that will be set.
+
+\param uniform The name of the uniform
+\param x The x (first) value of the uniform (note: required)
+\param y The y (second) value
+\param z The z (third) value
+\param w The w (fourth) value
+
+\subsubsection shader_setmat4 setMat4
+
+`void setMat4(string uniform, array[float] (16) values)`
+
+Sets a 4x4 matrix uniform to the proivded values.
+
+\param uniform The name of the uniform
+\param values An array of 16 numbers
+
+
+*/

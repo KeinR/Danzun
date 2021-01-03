@@ -43,7 +43,9 @@ Features:
 
 \section _main_getting_started Getting Started
 
-See the quick tutorial
+You can view the \ref key "documentation key" and the \ref apiref "api reference".
+
+You can also view the tutorial (TODO)
 
 */
 

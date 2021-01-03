@@ -17,9 +17,6 @@ foreach(path IN LISTS DANZUN_CUSTOM_STYLES_SRC)
     set(DANZUN_CUSTOM_STYLES "${DANZUN_CUSTOM_STYLES} \\\n\"${path}\"")
 endforeach()
 
-
-message("Files found: ${DANZUN_DOXYGEN_INPUT}")
-
 configure_file(Doxyfile.in Doxyfile @ONLY)
 
 add_custom_target(docs "${DOXYGEN_EXECUTABLE}"

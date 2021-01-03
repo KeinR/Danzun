@@ -37,7 +37,7 @@ Gets the width of a 1-length string (character).
 \param c The character to measure
 \return The length of the character, in pixels
 
-\subsubsection bfffont_setstrwidth getStrWidth
+\subsubsection bfffont_getstrwidth getStrWidth
 
 `int getStrWidth(string str)`
 
@@ -106,7 +106,7 @@ This data can later be use to initalize a \ref api_mesh.
 
 `Mesh makeMesh(string str)`
 
-An abstraction on top of \ref bfffont_getvertexdata: generates the vertex and index data, then creates and returns a mesh created from the data, width parameters set and everything.
+An abstraction on top of \ref bfffont_getvertexdata : generates the vertex and index data, then creates and returns a mesh created from the data, width parameters set and everything.
 
 \param str The string to generate the mesh from
 \return A \ref api_mesh generated from the string

@@ -55,6 +55,16 @@ void setThrowAll()
 
 Configures the throw policy to throw on every error - better get your pcalls ready, this one's a doozy. 
 
+\subsubsection engine_setactivetexture setActiveTexture
+
+`void setActiveTexture(unsigned int v)`
+
+Sets the active texture (`glActiveTexture`)
+
+\param v The texture number
+
+\note This is implemented by doing `glActiveTexture(GL_TEXTURE0 + v)`. Be careful!
+
 \subsection engine_properties Properties
 
 \subsubsection engine_vsync vSync

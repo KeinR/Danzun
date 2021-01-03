@@ -1,5 +1,5 @@
 /*!
-\page gobalcallbacks Global Callbacks
+\page globalcallbacks Global Callbacks
 
 There are a number of global functions that are executed by Danzun by name.<br>
 They are as follows:

@@ -5,6 +5,12 @@ Reference for interfacing with the exposed C++ classes from Lua.
 
 \tableofcontents
 
+\section ref_concepts Misc
+
+Name | Brief
+--- | ---
+\ref globalcallbacks | Global functions executed by Danzun
+
 \section ref_singletons Singletons
 
 Name | Brief
@@ -47,6 +53,7 @@ Name | Brief
 \subpage api_bfffont | BFF Bitmap-font type loading and processing
 \subpage api_matrix | Matrix abstraction (positioning)
 \subpage api_mesh | Mesh abstraction (rendering)
+\subpage api_shader | Shader abstraction
 
 */
 

@@ -23,7 +23,7 @@ bool dan::api::Script::run(sol::this_state l) {
     if (!done && !(stopOnFail && failed)) {
         float time = Game::fromLua(l).getClock().getTime();
         if (time >= timeOfNextRun) {
-            sol::function_result result = routine(sol::as_args(args));
+            sol::function_result result = routine.call(sol::as_args(args));
             switch (result.status()) {
                 case sol::call_status::ok:
                     // We're all done here, thread's ended
