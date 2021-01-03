@@ -4,7 +4,7 @@
 
 #include "../game/Game.h"
 
-dan::api::Element::Element(sol::this_state l, sol::function callback, sol::varadic_args self):
+dan::api::Element::Element(sol::this_state l, sol::function callback, sol::variadic_args self):
     elem(std::make_shared<::dan::Element>(callback, std::vector<sol::object>(self.begin(), self.end()))), renderPriority(0)
 {
 }
@@ -33,7 +33,7 @@ void dan::api::Element::deactivate(sol::this_state l) {
 
 void dan::api::Element::open(sol::state_view lua) {
     sol::usertype<Element> type = lua.new_usertype<Element>("Element",
-        sol::constructors<Element(sol::this_state,sol::function,sol::object)>()
+        sol::constructors<Element(sol::this_state,sol::function,sol::variadic_args)>()
     );
 
     type["render"] = &Element::render;
@@ -41,3 +41,4 @@ void dan::api::Element::open(sol::state_view lua) {
     type["activate"] = &Element::activate;
     type["deactivate"] = &Element::deactivate;
 }
+

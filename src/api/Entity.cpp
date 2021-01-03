@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 #include <vector>
+#include <iostream>
 
 #include "../math/Polygon.h"
 #include "../game/Game.h"

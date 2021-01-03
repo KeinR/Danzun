@@ -96,6 +96,10 @@ float dan::Engine::getMaxFPS() {
     return maxFPS;
 }
 
+void dan::Engine::collectGarbage() {
+	s.collect_garbage();
+}
+
 void dan::Engine::run() {
     window.makeCurrent();
 
@@ -121,8 +125,6 @@ void dan::Engine::run() {
         rc.setViewport(window.getWidth(), window.getHeight());
         glClearColor(0, 0.4, 0.4, 1);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        s.collect_garbage();
 
         sol::function_result mr = s["main"].call();
         if (!mr.valid()) {

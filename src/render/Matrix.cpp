@@ -24,7 +24,8 @@ dan::Matrix::Matrix(float x, float y, float pivotXOfs, float pivotYOfs, float wi
 glm::mat4 dan::Matrix::getModel(bool flipY) {
     float px = pivotXOfs * 2;
     float py = pivotYOfs * 2;
-    float fy = y;
+    float fx = x * 2;
+    float fy = y * 2;
     float r = -rotation;
     if (flipY) {
         fy = -fy;
@@ -37,7 +38,7 @@ glm::mat4 dan::Matrix::getModel(bool flipY) {
     rot = glm::translate(rot, glm::vec3(-px , -py, 0));
     rot = glm::rotate(rot, r, glm::vec3(0, 0, 1));
     rot = glm::translate(rot, glm::vec3(px, py, 0));
-    glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(x, fy, 0));
+    glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(fx, fy, 0));
     if (reflectAcrossYAxis) {
         trans = reflectYAxis(trans);
     }
@@ -50,7 +51,7 @@ void dan::Matrix::load(Context &c, const std::string &location) {
 
     glm::mat4 view(1.0f);
     view = glm::translate(view, glm::vec3(-1, 1, 0));
-    view = glm::scale(view, glm::vec3(2.0f / c.getVPWidth(), 2.0f / c.getVPHeight(), 0));
+    view = glm::scale(view, glm::vec3(1.0f / c.getVPWidth(), 1.0f / c.getVPHeight(), 0));
 
     glm::mat4 model = getModel(true);
     glm::mat4 matrix = view * model;

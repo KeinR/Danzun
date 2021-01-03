@@ -15,6 +15,8 @@ namespace dan::api {
     public:
         Matrix();
         Matrix(sol::table t);
+
+        void load2(sol::this_state l, const std::string &name);
         void load(sol::this_state l);
 
         static void open(sol::state_view &lua);

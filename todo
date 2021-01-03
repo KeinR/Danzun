@@ -3,7 +3,7 @@
 - Instanced rendering
 - Geometry shaders
 - Window icon
-- Set Lua GC interval
+- Set Lua GC interval [DONE, now done on game GC]
 - Set more properties via properties (linke window title) rather than through functions
 - score serializer, choose between binary and something ubiquitous like ini
 - replay save format that records the positions of the player 
@@ -12,6 +12,6 @@
     - Thread safety
 - Have only one speaker object, as only one sound can... Well... I mean... I dunno'... Yah that is true... Yah... Ok nvm
 - Frequenty check for errors - OpenGL and OpenAL
-- Set the active image via engine
+- Set the active image via engine [DONE]
 - Always catch any call that might thow from std lib funcs, etc.
-- Matrix should be take uniform name as paramter (docs say so now)!!!!
+- Matrix should be take uniform name as paramter (docs say so now)!!!! [DONE]

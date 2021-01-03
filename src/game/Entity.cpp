@@ -127,7 +127,8 @@ bool dan::Entity::isAutoGC() {
 }
 
 bool dan::Entity::isTangible() {
-    return f2b(tangible);
+    // return f2b(tangible);
+    return true; // TEMP
 }
 
 sol::function dan::Entity::getHitCallback() {

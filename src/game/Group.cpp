@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-dan::Group::Group() {
+dan::Group::Group(): valid(false) {
 }
 void dan::Group::pushCircle(const entity_t &owner) {
     circles.emplace_back(owner, Circle());
@@ -31,20 +31,19 @@ void dan::Group::clear() {
     polygons.clear();
 }
 void dan::Group::invalidate() {
-	valid = false;
+    valid = false;
 }
 void dan::Group::update() {
-	if (!valid) {
-		doUpdate();
-		valid = true;
-	}
+    if (!valid) {
+	doUpdate();
+	valid = true;
+    }
 }
 void dan::Group::doUpdate() {
-
     for (circles_t::iterator it = circles.begin(); it < circles.end(); ++it) {
         it->second.setX(it->first->getX());
         it->second.setY(it->first->getY());
-        it->second.setRadius(std::min(it->first->getWidth(), it->first->getHeight()) / 2);
+        it->second.setRadius(std::min(it->first->getWidth(), it->first->getHeight()) / 2.0f);
     }
     for (polygons_t::iterator it = polygons.begin(); it < polygons.end(); ++it) {
         it->second.setX(it->first->getX());
@@ -59,7 +58,8 @@ void dan::Group::doUpdate() {
 }
 
 void dan::Group::test(Group &other, output_t &output) {
-	update();
+    update();
+    other.update();
 
     for (circle_t &c : other.circles) {
         if (c.first->isTangible()) {

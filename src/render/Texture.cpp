@@ -2,6 +2,7 @@
 
 #include <cstddef>
 
+#include "../core/util.h"
 #include "../lib/opengl.h"
 
 // In-use enum values for Texture.

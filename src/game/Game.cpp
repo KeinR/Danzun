@@ -1,7 +1,5 @@
 #include "Game.h"
 
-#include <iostream>
-
 #include "../core/Engine.h"
 
 template <typename T>
@@ -231,6 +229,8 @@ void dan::Game::gc() {
             ++it;
         }
     }
+
+	engine->collectGarbage();
 }
 
 void dan::Game::render(Context &c) {

@@ -62,6 +62,8 @@ namespace dan {
         void setMaxFPS(float value);
         float getMaxFPS();
 
+		void collectGarbage();
+
         void open(const std::filesystem::path &filePath);
         void run();
 

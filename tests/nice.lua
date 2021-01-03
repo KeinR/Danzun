@@ -20,10 +20,10 @@ function BasicSprite.new(img, mesh, shader)
     return wrapper
 end
 
-function BasicSprite.render(entity, s)
+function BasicSprite:render(entity)
 
-    s.shader:use()
-    s.img:bind()
+    self.shader:use()
+    self.img:bind()
 
     mat = Matrix.new()
         mat.x = entity.x
@@ -32,7 +32,7 @@ function BasicSprite.render(entity, s)
         mat.height = entity.height
     mat:load()
 
-    s.mesh:render()
+    self.mesh:render()
 end
 
 
@@ -78,21 +78,21 @@ function Animation.new(frames)
     return wrapper
 end
 
-function Animation.render(e, s)
+function Animation:render(e)
     local skips = 0 -- Prevent possible near-infinate loop from short frames
-    while game:getTime() >= s.frameEnd and skips < 100 do
-        if s.index < #s.frames then
+    while game:getTime() >= self.frameEnd and skips < 100 do
+        if self.index < #self.frames then
             -- Advance
-            s.index = s.index + 1
+            self.index = self.index + 1
         else
             -- Loop
-            s.index = 1
+            self.index = 1
         end
-        s.frameEnd = s.frameEnd + s.frames[s.index].duration
+        self.frameEnd = self.frameEnd + self.frames[self.index].duration
         skips = skips + 1
     end
 
-    local f = s.frames[s.index];
+    local f = self.frames[self.index];
     f.shader:use()
     f.img:bind()
     f.mesh:render()

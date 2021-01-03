@@ -19,6 +19,9 @@ dan::api::Matrix::Matrix(sol::table t): Matrix() {
 void dan::api::Matrix::load(sol::this_state l) {
     ::dan::Matrix(x, y, pivotXOfs, pivotYOfs, width, height, rotation, false).load(Context::fromLua(l));
 }
+void dan::api::Matrix::load2(sol::this_state l, const std::string &name) {
+	::dan::Matrix(x, y, pivotXOfs, pivotYOfs, width, height, rotation, false).load(Context::fromLua(l), name);
+}
 
 void dan::api::Matrix::open(sol::state_view &lua) {
     sol::usertype<Matrix> type = lua.new_usertype<Matrix>("Matrix",
@@ -32,5 +35,5 @@ void dan::api::Matrix::open(sol::state_view &lua) {
     type["width"] = &Matrix::width;
     type["height"] = &Matrix::height;
     type["rotation"] = &Matrix::rotation;
-    type["load"] = &Matrix::load;
+    type["load"] = sol::overload(&Matrix::load, &Matrix::load2);
 }

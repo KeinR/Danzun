@@ -23,6 +23,7 @@ namespace dan::api {
         void setThrowAll();
 
         float getMaxFPS();
+        void setActiveTexture(sol::this_state l, unsigned int value);
 
         static void open(sol::state_view &lua);
     };

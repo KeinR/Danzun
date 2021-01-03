@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "../core/error.h"
+
 dan::api::BffFont::BffFont(sol::this_state l, const std::string &path) {
     font = std::make_shared<::dan::BffFont>(l, path);
 }

@@ -3,7 +3,6 @@
 
 namespace dan {
     class Image;
-    class Context;
 }
 
 namespace dan {

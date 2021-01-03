@@ -4,6 +4,7 @@
 
 #include "../core/Engine.h"
 #include "../core/error.h"
+#include "../core/util.h"
 
 dan::api::Engine::Engine(::dan::Engine &handle): handle(&handle) {
 }
@@ -40,6 +41,10 @@ float dan::api::Engine::getMaxFPS() {
     return handle->getMaxFPS();
 }
 
+void dan::api::Engine::setActiveTexture(sol::this_state l, unsigned int value) {
+    glActiveTexture(GL_TEXTURE0 + value);
+    ut::checkGLError("api::Engine", l);
+}
 
 void dan::api::Engine::open(sol::state_view &lua) {
     sol::usertype<Engine> type = lua.new_usertype<Engine>("Engine");
@@ -53,4 +58,5 @@ void dan::api::Engine::open(sol::state_view &lua) {
     type["vSync"] = sol::property(&Engine::toggleVSync);
     type["maxFPS"] = sol::property(&Engine::getMaxFPS, &Engine::setMaxFPS);
 
+    type["setActiveTexture"] = &Engine::setActiveTexture;
 }

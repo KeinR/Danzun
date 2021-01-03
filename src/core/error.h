@@ -41,6 +41,7 @@ namespace dan {
 
         void raise();
         static const char *glErrStr(int err);
+		static const char *alErrStr(int err);
         static std::string trace(sol::state_view lua);
         static void setThrowConfig(throwConf c);
     };    

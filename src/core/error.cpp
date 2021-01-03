@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "../lib/opengl.h"
+#include "../lib/audio.h"
 
 dan::err::throwConf dan::err::throwConfig = dan::err::throwConf::SEVERE;
 
@@ -64,6 +65,17 @@ const char *dan::err::glErrStr(int err) {
         case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
         case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
         default: return "-Unknown error-";
+    }
+}
+
+const char *dan::err::alErrStr(int err) {
+    switch (err) {
+	case AL_INVALID_NAME: return "AL_INVALID_NAME";
+	case AL_INVALID_ENUM: return "AL_INVALID_ENUM";
+	case AL_INVALID_VALUE: return "AL_INVALID_VALUE";
+	case AL_INVALID_OPERATION: return "AL_INVALID_OPERATION";
+	case AL_OUT_OF_MEMORY: return "AL_OUT_OF_MEMORY";
+	default: return "-Unknown error-";
     }
 }
 

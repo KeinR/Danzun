@@ -18,10 +18,10 @@ function start()
 
     mesh = Mesh.new()
     mesh:setVertices{
-        -1, -1, 0, 0,
-        -1, 1, 0, 1,
-        1, 1, 1, 1,
-        1, -1, 1, 0
+        -1, -1, 0, 1,
+        -1, 1, 0, 0,
+        1, 1, 1, 0,
+        1, -1, 1, 1
     }
     mesh:setIndices{
         0, 1, 2,
@@ -68,15 +68,16 @@ function start()
         mesh:render()
     end
 
-    pyrConf = Element.new(playerRenderFunc, nil)
+    pyrConf = Element.new(playerRenderFunc)
 
 
     font = BffFont.new("consolas18.bff")
 
+    print("HI!!!!")
 
     local e = Entity.new(
         function(self, other)
-            -- print ("player hit!")
+            print ("player hit!")
         end,
         pyrConf,
         [[
@@ -92,7 +93,8 @@ function start()
 
     magicCircleImg = Image.new("magic circle.png")
 
-    effect = Effect.new(1, magicCircleEffect, nil)
+    effect = Effect.new(magicCircleEffect)
+    effect:setRenderPriority(1);
 
     effectPattern = Pattern.new([[
         x := px;
@@ -130,8 +132,7 @@ function start()
 
             -- print("px = " .. player.x)
             -- print("py = " .. player.y)
-        end,
-        nil
+        end
     )
     zapCounter = 0
     lazarBeam = Entity.new(
@@ -143,7 +144,7 @@ function start()
             rotation += dt;
             if (t - st > 0.5) {
                 display := not(display);
-                tangible := not(tangible);
+                // tangible := not(tangible);
                 st := t;
             }
         ]]
