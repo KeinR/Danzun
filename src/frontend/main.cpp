@@ -37,6 +37,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    int msaa;
+    cmdl({"-s", "--msaa"}, 0) >> msaa;
+
     if (!cmdl.size()) {
         std::cerr << "Must provide path to game script" << '\n';
         return 1;
@@ -45,7 +48,7 @@ int main(int argc, char **argv) {
     std::string script = cmdl[cmdl.size() - 1];
 
     try {
-        dan::Engine e;
+        dan::Engine e(msaa);
         e.start(script);
     } catch (std::exception &e) {
         std::cerr << "Err - terminated: " << e.what() << '\n';

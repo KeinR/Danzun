@@ -21,8 +21,8 @@
 
 #include <cmake/config.h>
 
-dan::Engine::Engine():
-    window("Danzun", 500, 500, 0),
+dan::Engine::Engine(int msaa):
+    window("Danzun", 500, 500, msaa),
     rc(this),
     windowEventCallback(nullptr),
     eventCallback(nullptr),

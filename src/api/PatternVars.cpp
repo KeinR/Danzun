@@ -1,6 +1,6 @@
 #include "PatternVars.h"
 
-dan::api::PatternVars::PatternVars(sol::table table): luaTable(table) {
+dan::api::PatternVars::PatternVars(sol::table table): luaTable(table), compositor(symTable) {
     init();
 }
 
@@ -28,10 +28,23 @@ void dan::api::PatternVars::push() {
         }
     }
 }
+
 void dan::api::PatternVars::pull() {
     for (auto &v : buffer) {
         luaTable[v.first].set(v.second);
     }
+}
+
+void dan::api::PatternVars::addFunction(const std::string &name, const std::string &body, sol::variadic_args params) {
+    function_t func;
+    func.name(name);
+    func.expression(body);
+    for (auto v : params) {
+	if (v.get_type() == sol::type::string) {
+	    func.var(v.as<std::string>());
+	}
+    }
+    compositor.add(func);
 }
 
 // Static members
@@ -43,4 +56,7 @@ void dan::api::PatternVars::open(sol::state_view &lua) {
 
     type["push"] = &PatternVars::push;
     type["pull"] = &PatternVars::pull;
+    type["addFunction"] = &PatternVars::addFunction;
+
 }
+

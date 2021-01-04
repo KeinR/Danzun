@@ -47,7 +47,7 @@ namespace dan {
         void cCall(const std::string &functionGlobalName);
         bool callbackCallable();
     public:
-        Engine();
+        Engine(int msaa);
 
         void keyPressed(const event::KeyPress &e) override;
         void mouseMoved(const event::MouseMove &e) override;
