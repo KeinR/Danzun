@@ -90,7 +90,7 @@ void dan::api::Game::open(sol::state_view &lua) {
     type["gcConstant"] = sol::property(&Game::getGCConstant, &Game::setGCConstant);
     type["gcFactor"] = sol::property(&Game::getGCFactor, &Game::setGCFactor);
     type["width"] = sol::property(&Game::getWidth, &Game::setWidth);
-    type["heigth"] = sol::property(&Game::getHeight, &Game::setHeight);
+    type["height"] = sol::property(&Game::getHeight, &Game::setHeight);
     type["gcInterval"] = sol::property(&Game::getGCTimeSeconds, &Game::setGCTimeSeconds);
     type["running"] = sol::property(&Game::isRunning, &Game::setRunning);
     type["speed"] = sol::property(&Game::getSpeed, &Game::setSpeed);
