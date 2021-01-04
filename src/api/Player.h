@@ -22,6 +22,12 @@ namespace dan::api {
         float getX();
         float getY();
 
+	void addUpKey(sol::this_state l, const std::string &name);
+	void addDownKey(sol::this_state l, const std::string &name);
+	void addLeftKey(sol::this_state l, const std::string &name);
+	void addRightKey(sol::this_state l, const std::string &name);
+	void clearKeys(sol::this_state l);
+
         static void open(sol::state_view lua);
 
     };

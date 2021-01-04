@@ -2,11 +2,13 @@
 #define DANZUN_ENGINE_H_INCLUDED
 
 #include <filesystem>
+#include <map>
 
 #include <sol/sol.hpp>
 
 #include "Context.h"
 #include "../win/Window.h"
+#include "../win/enums.h"
 #include "../win/WindowEvent.h"
 #include "../game/Game.h"
 #include "../audio/Device.h"
@@ -19,7 +21,12 @@ namespace dan {
 
 namespace dan {
     class Engine: private WindowEvent {
+    public:
+	typedef std::map<std::string, dan::keyt> keyMappings_t;
+    private:
         Window window;
+
+	keyMappings_t keyMappings;
 
         Context rc;
 
@@ -48,6 +55,8 @@ namespace dan {
         void mouseScrolled(const event::MouseScroll &e) override;
         void charInput(const event::CharInput &e) override;
 
+	keyMappings_t &getKeyMappings();
+
         // Set `nullptr` for NONE (default)
         void setWindowEventCallback(WindowEvent *e);
         // Set `nullptr` for NONE (default)
@@ -62,7 +71,7 @@ namespace dan {
         void setMaxFPS(float value);
         float getMaxFPS();
 
-		void collectGarbage();
+	void collectGarbage();
 
         void open(const std::filesystem::path &filePath);
         void run();

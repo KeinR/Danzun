@@ -34,7 +34,43 @@ dan::Engine::Engine():
     window.setEventCallback(*this);
     s.open_libraries();
     audioContext.bind();
+
+    keyMappings["up"] = dan::keyt::UP;
+    keyMappings["down"] = dan::keyt::DOWN;
+    keyMappings["left"] = dan::keyt::LEFT;
+    keyMappings["right"] = dan::keyt::RIGHT;
+    keyMappings["esc"] = dan::keyt::ESCAPE;
+    keyMappings["lshift"] = dan::keyt::LEFT_SHIFT;
+    keyMappings["lalt"] = dan::keyt::LEFT_ALT;
+    keyMappings["space"] = dan::keyt::SPACE;
+    keyMappings["q"] = dan::keyt::Q;
+    keyMappings["w"] = dan::keyt::W;
+    keyMappings["e"] = dan::keyt::E;
+    keyMappings["r"] = dan::keyt::R;
+    keyMappings["t"] = dan::keyt::T;
+    keyMappings["y"] = dan::keyt::Y;
+    keyMappings["u"] = dan::keyt::U;
+    keyMappings["i"] = dan::keyt::I;
+    keyMappings["o"] = dan::keyt::O;
+    keyMappings["p"] = dan::keyt::P;
+    keyMappings["a"] = dan::keyt::A;
+    keyMappings["s"] = dan::keyt::S;
+    keyMappings["d"] = dan::keyt::D;
+    keyMappings["f"] = dan::keyt::F;
+    keyMappings["g"] = dan::keyt::G;
+    keyMappings["h"] = dan::keyt::H;
+    keyMappings["j"] = dan::keyt::J;
+    keyMappings["k"] = dan::keyt::K;
+    keyMappings["l"] = dan::keyt::L;
+    keyMappings["z"] = dan::keyt::Z;
+    keyMappings["x"] = dan::keyt::X;
+    keyMappings["c"] = dan::keyt::C;
+    keyMappings["v"] = dan::keyt::V;
+    keyMappings["b"] = dan::keyt::B;
+    keyMappings["n"] = dan::keyt::N;
+    keyMappings["m"] = dan::keyt::M;
 }
+
 
 bool dan::Engine::callbackCallable() {
     return windowEventCallback != nullptr;
@@ -64,6 +100,10 @@ void dan::Engine::charInput(const event::CharInput &e) {
     if (callbackCallable()) {
         windowEventCallback->charInput(e);
     }
+}
+
+dan::Engine::keyMappings_t &dan::Engine::getKeyMappings() {
+    return keyMappings;
 }
 
 void dan::Engine::setWindowEventCallback(WindowEvent *e) {

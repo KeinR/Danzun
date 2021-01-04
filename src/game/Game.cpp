@@ -44,6 +44,19 @@ dan::Game::Game(Engine &e):
     globalSymbols.add_function("print", printFunc);
 }
 
+dan::Game::pkeys_t &dan::Game::getUpKeys() {
+    return upKeys;
+}
+dan::Game::pkeys_t &dan::Game::getDownKeys() {
+    return downKeys;
+}
+dan::Game::pkeys_t &dan::Game::getLeftKeys() {
+    return leftKeys;
+}
+dan::Game::pkeys_t &dan::Game::getRightKeys() {
+    return rightKeys;
+}
+
 dan::Engine &dan::Game::getEngine() const {
     return *engine;
 }
@@ -159,6 +172,15 @@ unsigned int dan::Game::getGCTimeMilliseconds() {
     return gcTimer.getTime();
 }
 
+bool dan::Game::arePressed(const pkeys_t &keys) {
+    for (dan::keyt k : keys) {
+	if (engine->getWindow().keyPressed(k)) {
+	    return true;
+	}
+    }
+    return false;
+}
+
 void dan::Game::logic(float deltaTime) {
     if (!running) return;
 
@@ -171,13 +193,11 @@ void dan::Game::logic(float deltaTime) {
         gcTimer.start();
     }
 
-    Window &w = engine->getWindow();
-
     Player::dir d;
-    d.up = w.keyPressed(keyt::UP);
-    d.down = w.keyPressed(keyt::DOWN);
-    d.left = w.keyPressed(keyt::LEFT);
-    d.right = w.keyPressed(keyt::RIGHT);
+    d.up = arePressed(upKeys);
+    d.down = arePressed(downKeys);
+    d.left = arePressed(leftKeys);
+    d.right = arePressed(rightKeys);
     player.move(*this, d, deltaTime);
 
     sol::state_view lua = engine->getState();

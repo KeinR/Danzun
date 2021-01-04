@@ -17,6 +17,7 @@
 #include "../time/Clock.h"
 #include "Player.h"
 #include "../audio/Speaker.h"
+#include "../win/enums.h"
 
 namespace dan {
     class Context;
@@ -34,6 +35,7 @@ namespace dan {
         typedef std::multimap<int, renderable_t, std::greater<int>> renderQueue_t;
         typedef std::shared_ptr<audio::Speaker> speaker_t;
         typedef std::unordered_set<speaker_t> speakers_t;
+	typedef std::vector<keyt> pkeys_t;
     private:
         // Not used internally - exlcusively for use by
         // client applications
@@ -64,12 +66,23 @@ namespace dan {
 
         speakers_t speakers;
 
+	pkeys_t upKeys;
+	pkeys_t downKeys;
+	pkeys_t leftKeys;
+	pkeys_t rightKeys;
+
         // Clean up entities
         void gc();
         entities_t::iterator eraseEntity(const entities_t::iterator &it);
+	bool arePressed(const pkeys_t &keys);
 
     public:
         Game(Engine &e);
+
+	pkeys_t &getUpKeys();
+	pkeys_t &getDownKeys();
+	pkeys_t &getLeftKeys();
+	pkeys_t &getRightKeys();
 
         Engine &getEngine() const;
         Clock &getClock();
