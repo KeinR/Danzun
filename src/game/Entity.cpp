@@ -23,7 +23,8 @@ dan::Entity::Entity(
     tangible(b2f(true)),
     disp(disp),
     hitCallback(hitCallback),
-    renderPriority(0)
+    renderPriority(0),
+    activated(false)
 {
     initEquation(g, as, equation);
 }
@@ -39,6 +40,14 @@ std::shared_ptr<dan::Entity> dan::Entity::make(Game &g, sol::function hitCallbac
 
 dan::Entity::symbolTable_t &dan::Entity::getTable() {
     return symbols;
+}
+
+bool dan::Entity::isActivated() {
+    return activated;
+}
+
+void dan::Entity::setActivated(bool value) {
+    activated = value;
 }
 
 float dan::Entity::getX() const {

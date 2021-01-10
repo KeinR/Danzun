@@ -5,7 +5,8 @@
 #include "../game/Game.h"
 
 dan::api::Effect::Effect(sol::this_state l, sol::function callback, sol::variadic_args args):
-    effect(std::make_shared<::dan::Effect>(l, std::vector<sol::object>(args.begin(), args.end()), callback))
+    effect(std::make_shared<::dan::Effect>(l, std::vector<sol::object>(args.begin(), args.end()), callback)),
+    activated(false)
 {
     activate(l);
 }
@@ -23,10 +24,16 @@ void dan::api::Effect::setRenderPriority(sol::this_state l, int value) {
     activate(l);
 }
 void dan::api::Effect::activate(sol::this_state l) {
-    Game::fromLua(l).submitRenderable(effect->getRenderPriority(), effect);
+    if (!activated) {
+        activated = true;
+        Game::fromLua(l).submitRenderable(effect->getRenderPriority(), effect);
+    }
 }
 void dan::api::Effect::deactivate(sol::this_state l) {
-    Game::fromLua(l).removeRenderable(effect.get());
+    if (activated) {
+        activated = false;
+        Game::fromLua(l).removeRenderable(effect.get());
+    }
 }
 
 // Static members

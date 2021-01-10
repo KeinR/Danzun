@@ -26,8 +26,8 @@ namespace dan {
     private:
         circles_t circles;
         polygons_t polygons;
-		bool valid;
-		void doUpdate();
+        bool valid;
+        void doUpdate();
     public:
         Group();
         void pushCircle(const entity_t &owner);

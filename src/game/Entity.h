@@ -57,6 +57,8 @@ namespace dan {
         std::set<std::string> groups;
         int renderPriority;
 
+        bool activated;
+
         void initEquation(Game &g, const std::vector<symbolTable_t> &symbols, const std::string &eq);
 
         bool f2b(float f);
@@ -79,6 +81,9 @@ namespace dan {
         Entity &operator=(Entity&&) = delete;
 
         symbolTable_t &getTable();
+
+        bool isActivated();
+        void setActivated(bool value);
 
         float getX() const;
         float getY() const;

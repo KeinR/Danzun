@@ -15,6 +15,7 @@ void dan::api::Game::setSize(int width, int height) {
 
 void dan::api::Game::testCollisions(const std::string &groupA, const std::string &groupB) {
     for (std::pair<::dan::Game::entity_t, ::dan::Game::entity_t> &p : handle->testCollisions(groupA, groupB)) {
+        // Each pair contains the members of one collision
         p.first->getHitCallback().call(::dan::api::Entity(p.first), ::dan::api::Entity(p.second));
         p.second->getHitCallback().call(::dan::api::Entity(p.second), ::dan::api::Entity(p.first));
     }
@@ -66,7 +67,7 @@ float dan::api::Game::getSpeed() {
 }
 
 
-void dan::api::Game::resetGroups() {
+void dan::api::Game::clearGroups() {
     handle->clearGroups();
 }
 float dan::api::Game::getTime() {
@@ -82,10 +83,10 @@ void dan::api::Game::open(sol::state_view &lua) {
     sol::usertype<Game> type = lua.new_usertype<Game>("Game");
 
     type["testCollisions"] = &Game::testCollisions;
-    type["resetGroups"] = &Game::resetGroups;
     type["getTime"] = &Game::getTime;
     type["getDeltaTime"] = &Game::getDeltaTime;
     type["setSize"] = &Game::setSize;
+    type["clearGroups"] = &Game::clearGroups;
 
     type["gcConstant"] = sol::property(&Game::getGCConstant, &Game::setGCConstant);
     type["gcFactor"] = sol::property(&Game::getGCFactor, &Game::setGCFactor);

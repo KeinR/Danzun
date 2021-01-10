@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     int msaa;
     cmdl({"-s", "--msaa"}, 0) >> msaa;
 
-    if (!cmdl.size()) {
+    if (cmdl.size() < 2) {
         std::cerr << "Must provide path to game script" << '\n';
         return 1;
     }

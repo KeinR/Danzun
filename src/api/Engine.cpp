@@ -3,7 +3,6 @@
 #include <sol/sol.hpp>
 
 #include "../core/Engine.h"
-#include "../core/error.h"
 #include "../core/util.h"
 
 dan::api::Engine::Engine(::dan::Engine &handle): handle(&handle) {

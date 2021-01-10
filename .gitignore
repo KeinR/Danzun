@@ -49,3 +49,5 @@ GTAGS
 # Damn swap files
 *.swp
 
+/.ccls-cache/
+

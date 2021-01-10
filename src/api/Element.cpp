@@ -5,7 +5,9 @@
 #include "../game/Game.h"
 
 dan::api::Element::Element(sol::this_state l, sol::function callback, sol::variadic_args self):
-    elem(std::make_shared<::dan::Element>(callback, std::vector<sol::object>(self.begin(), self.end()))), renderPriority(0)
+    elem(std::make_shared<::dan::Element>(callback, std::vector<sol::object>(self.begin(), self.end()))),
+    renderPriority(0),
+    activated(false)
 {
 }
 
@@ -23,10 +25,16 @@ void dan::api::Element::setRenderPriority(sol::this_state l, int value) {
     activate(l);
 }
 void dan::api::Element::activate(sol::this_state l) {
-    Game::fromLua(l).submitRenderable(renderPriority, elem);
+    if (!activated) {
+        activated = true;
+        Game::fromLua(l).submitRenderable(renderPriority, elem);
+    {
 }
 void dan::api::Element::deactivate(sol::this_state l) {
-    Game::fromLua(l).removeRenderable(elem.get());
+    if (activated) {
+        activated = false;
+        Game::fromLua(l).removeRenderable(elem.get());
+    }
 }
 
 // Static members

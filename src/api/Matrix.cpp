@@ -6,7 +6,7 @@
 #include "../render/Matrix.h"
 #include "../core/util.h"
 
-dan::api::Matrix::Matrix(): x(0), y(0), pivotXOfs(0), pivotYOfs(0), width(10), height(10), rotation(0) {
+dan::api::Matrix::Matrix(): x(0), y(0), pivotXOfs(0), pivotYOfs(0), width(10), height(10), rotation(0), flipHorizontal(false) {
 }
 dan::api::Matrix::Matrix(sol::table t): Matrix() {
     x = t["x"].get_or<float>(x);
@@ -16,12 +16,13 @@ dan::api::Matrix::Matrix(sol::table t): Matrix() {
     width = t["width"].get_or<float>(width);
     height = t["height"].get_or<float>(height);
     rotation = t["rotation"].get_or<float>(rotation);
+    flipHorizontal = t["flipHorizontal"].get_or<bool>(flipHorizontal);
 }
 void dan::api::Matrix::load(sol::this_state l) {
     load2(l, "model");
 }
 void dan::api::Matrix::load2(sol::this_state l, const std::string &name) {
-    ::dan::Matrix(x, y, pivotXOfs, pivotYOfs, width, height, rotation, false).load(Context::fromLua(l), name);
+    ::dan::Matrix(x, y, pivotXOfs, pivotYOfs, width, height, rotation, flipHorizontal).load(Context::fromLua(l), name);
     ut::checkGLError("api::Matrix::load2", l);
 }
 
@@ -37,5 +38,6 @@ void dan::api::Matrix::open(sol::state_view &lua) {
     type["width"] = &Matrix::width;
     type["height"] = &Matrix::height;
     type["rotation"] = &Matrix::rotation;
+    type["flipHorizontal"] = &Matrix::flipHorizontal;
     type["load"] = sol::overload(&Matrix::load, &Matrix::load2);
 }

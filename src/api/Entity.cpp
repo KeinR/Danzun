@@ -23,6 +23,7 @@ dan::api::Entity::Entity(
 
     Game &g = ::dan::Game::fromLua(l);
 
+    // Extract symbol tables
     std::vector<PatternVars::symTable_t> tables;
     tables.reserve(vars.size()+1);
     for (auto d : vars) {
@@ -30,7 +31,7 @@ dan::api::Entity::Entity(
             tables.push_back(d.as<PatternVars>().getTable());
         }
     }
-    // Lowest priority
+    // Global table has lowest priority
     tables.push_back(g.getGlobalSymbols());
 
     handle = ::dan::Entity::make(
@@ -54,15 +55,26 @@ void dan::api::Entity::setScript(const Script &s) {
 }
 
 void dan::api::Entity::activate(sol::this_state l) {
-    Game::fromLua(l).submitRenderable(handle->getRenderPriority(), handle);
+    if (!handle->isActivated()) {
+        handle->setActivated(true);
+        Game::fromLua(l).submitRenderable(handle->getRenderPriority(), handle);
+    }
 }
 void dan::api::Entity::deactivate(sol::this_state l) {
-    Game::fromLua(l).removeRenderable(handle.get());
+    if (handle->isActivated()) {
+        handle->setActivated(false);
+        Game::fromLua(l).removeRenderable(handle.get());
+    }
 }
 void dan::api::Entity::setRenderPriority(sol::this_state l, int value) {
-    deactivate(l);
+    bool swap = handle->isActivated();
+    if (swap) {
+        deactivate(l);
+    }
     handle->setRenderPriority(value);
-    activate(l);
+    if (swap) {
+        activate(l);
+    }
 }
 
 void dan::api::Entity::regCircle(sol::this_state l, const std::string &group) {
@@ -71,6 +83,7 @@ void dan::api::Entity::regCircle(sol::this_state l, const std::string &group) {
 }
 void dan::api::Entity::regPolygon(sol::this_state l, const std::string &group, sol::table points) {
 
+    // Extract vertex data and convert to native format
     Polygon::points_t pts;
     pts.reserve(pts.size() / 2);
     for (std::size_t i = 1; i + 1 <= points.size(); i += 2) {

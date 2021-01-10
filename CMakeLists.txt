@@ -30,7 +30,7 @@ set_target_properties(Danzun PROPERTIES OUTPUT_NAME "danzun")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-find_package(glm 0.9 REQUIRED)
+find_package(glm REQUIRED)
 find_package(glfw3 3.2 REQUIRED)
 find_package(Lua53 REQUIRED)
 find_package(OpenAL 1.19 REQUIRED)
@@ -54,6 +54,12 @@ target_link_libraries(Danzun
     stdc++fs
     Threads::Threads
 )
+
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+endif()
 
 # Subdirectories
 
