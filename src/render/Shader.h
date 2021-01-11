@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 namespace dan {
     class Context;
@@ -13,6 +14,7 @@ namespace dan {
     public:
         typedef int uniform_t;
         typedef unsigned int program_t;
+        typedef std::shared_ptr<Shader> self_t;
     private:
         typedef std::unordered_map<std::string, uniform_t> uniforms_t;
 
@@ -36,7 +38,7 @@ namespace dan {
         Shader &operator=(Shader &&other);
 
         void doUse() const;
-        void use();
+        void use(const self_t &s);
         static void disuse();
 
         // Checks if this shader is in a valid state
@@ -44,7 +46,7 @@ namespace dan {
 
         program_t getHandle() const;
 
-        // NB: Binds this shader
+        // NB: The shader must be bound first (with use()) 
 
         void setMatrix4fv(const std::string &name, const float *data);
 

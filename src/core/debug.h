@@ -12,7 +12,16 @@
 #endif
 
 namespace dan::db {
+    /**
+     * Dumps text to console if there is a OpenGL error
+     * \return true if error
+     * */
     bool checkGLError();
+    /**
+     * Stringifys an OpenGL error
+     * \param error The error enum
+     * \return The string (literal)
+     * */
     const char *getGLErrorStr(int error);
 }
 

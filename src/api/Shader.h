@@ -2,6 +2,7 @@
 #define DANZUN_API_SHADER_H_INCLUDED
 
 #include <array>
+#include <memory>
 
 #include <sol/sol.hpp>
 
@@ -13,7 +14,7 @@ namespace dan::api {
      * */
     class Shader {
         /// The shader
-        ::dan::Shader shader;
+        std::shared_ptr<::dan::Shader> shader;
     public:
         /**
          * Construct a shader from files

@@ -14,16 +14,16 @@ dan::Context::Context(Engine *e):
 {
 }
 
-void dan::Context::setShader(Shader &s) {
-    if (currentShader != &s) {
-        currentShader = &s;
+void dan::Context::setShader(const std::shared_ptr<Shader> &s) {
+    if (currentShader != s) {
+        currentShader = s;
         currentShader->doUse();
     }
 }
 
 void dan::Context::clearShader() {
-    currentShader = nullptr;
     Shader::disuse();
+    currentShader.reset();
 }
 
 void dan::Context::setViewport(int w, int h) {
@@ -40,7 +40,7 @@ int dan::Context::getVPHeight() const {
 }
 
 dan::Shader &dan::Context::getShader() const {
-    DANZUN_ASSERT(currentShader != nullptr);
+    DANZUN_ASSERT(currentShader);
     return *currentShader;
 }
 

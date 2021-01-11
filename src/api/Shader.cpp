@@ -3,25 +3,26 @@
 #include "../core/Context.h"
 
 dan::api::Shader::Shader(sol::this_state l, const std::string &vertex, const std::string &fragment):
-    shader(Context::fromLua(l), vertex, fragment) {
+    shader(std::make_shared<::dan::Shader>(Context::fromLua(l), vertex, fragment)) {
 }
 
 void dan::api::Shader::setInt(const std::string &name, sol::variadic_args values, int) {
+    shader->use(shader);
     switch (values.size()) {
         // case 0: // Impossible
         case 1:
-            shader.set1i(name,
+            shader->set1i(name,
                 values.get<int>(0)
             );
             break;
         case 2:
-            shader.set2i(name,
+            shader->set2i(name,
                 values.get<int>(0),
                 values.get<int>(1)
             );
             break;
         case 3:
-            shader.set3i(name,
+            shader->set3i(name,
                 values.get<int>(0),
                 values.get<int>(1),
                 values.get<int>(2)
@@ -29,7 +30,7 @@ void dan::api::Shader::setInt(const std::string &name, sol::variadic_args values
             break;
         // case 4: // Fallthrough
         default: // In this case, ignore trailing values
-            shader.set4i(name,
+            shader->set4i(name,
                 values.get<int>(0),
                 values.get<int>(1),
                 values.get<int>(2),
@@ -40,21 +41,22 @@ void dan::api::Shader::setInt(const std::string &name, sol::variadic_args values
 }
 
 void dan::api::Shader::setFloat(const std::string &name, sol::variadic_args values, float) {
+    shader->use(shader);
     switch (values.size()) {
         // case 0: // Impossible
         case 1:
-            shader.set1f(name,
+            shader->set1f(name,
                 values.get<float>(0)
             );
             break;
         case 2:
-            shader.set2f(name,
+            shader->set2f(name,
                 values.get<float>(0),
                 values.get<float>(1)
             );
             break;
         case 3:
-            shader.set3f(name,
+            shader->set3f(name,
                 values.get<float>(0),
                 values.get<float>(1),
                 values.get<float>(2)
@@ -62,7 +64,7 @@ void dan::api::Shader::setFloat(const std::string &name, sol::variadic_args valu
             break;
         // case 4: // Fallthrough
         default: // In this case, ignore trailing values
-            shader.set4f(name,
+            shader->set4f(name,
                 values.get<float>(0),
                 values.get<float>(1),
                 values.get<float>(2),
@@ -73,15 +75,16 @@ void dan::api::Shader::setFloat(const std::string &name, sol::variadic_args valu
 }
 
 void dan::api::Shader::setMat4(const std::string &name, const std::array<float, 16> &values) {
-    shader.setMatrix4fv(name, values.data());
+    shader->use(shader);
+    shader->setMatrix4fv(name, values.data());
 }
 
 void dan::api::Shader::use() {
-    shader.use();
+    shader->use(shader);
 }
 
 bool dan::api::Shader::isFailed() {
-    return shader.isFailed();
+    return shader->isFailed();
 }
 
 // static members

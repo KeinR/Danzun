@@ -3,6 +3,10 @@
 #ifndef DANZUN_CONFIG_H_INCLUDED
 #define DANZUN_CONFIG_H_INCLUDED
 
+/**
+ * CMake configuration file
+ * */
+
 #define DANZUN_VERSION "${DANZUN_VERSION}"
 
 #endif
