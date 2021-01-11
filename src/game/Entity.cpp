@@ -34,6 +34,7 @@ std::shared_ptr<dan::Entity> dan::Entity::make(Game &g, sol::function hitCallbac
         const std::vector<symbolTable_t> &as)
 {
     std::shared_ptr<Entity> result = std::make_shared<Entity>(g, hitCallback, disp, equation, as);
+    // IMPORTANT
     result->self = result;
     return result;
 }
@@ -104,6 +105,7 @@ void dan::Entity::initEquation(Game &g, const std::vector<symbolTable_t> &as, co
     symbols.add_variable("display", display);
     symbols.add_variable("tangible", tangible);
 
+    // pi et al.
     symbols.add_constants();
 
     exp.register_symbol_table(symbols);
@@ -136,8 +138,7 @@ bool dan::Entity::isAutoGC() {
 }
 
 bool dan::Entity::isTangible() {
-    // return f2b(tangible);
-    return true; // TEMP
+    return f2b(tangible);
 }
 
 sol::function dan::Entity::getHitCallback() {

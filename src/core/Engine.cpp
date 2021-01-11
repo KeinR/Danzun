@@ -24,8 +24,6 @@
 dan::Engine::Engine(int msaa):
     window("Danzun", 500, 500, msaa),
     rc(this),
-    windowEventCallback(nullptr),
-    eventCallback(nullptr),
     audioDevice(NULL),
     audioContext(audioDevice),
     game(*this)
@@ -35,6 +33,7 @@ dan::Engine::Engine(int msaa):
     s.open_libraries();
     audioContext.bind();
 
+    // Create key mappings
     keyMappings["up"] = dan::keyt::UP;
     keyMappings["down"] = dan::keyt::DOWN;
     keyMappings["left"] = dan::keyt::LEFT;
@@ -72,46 +71,19 @@ dan::Engine::Engine(int msaa):
 }
 
 
-bool dan::Engine::callbackCallable() {
-    return windowEventCallback != nullptr;
-}
-
 void dan::Engine::keyPressed(const event::KeyPress &e) {
-    if (callbackCallable()) {
-        windowEventCallback->keyPressed(e);
-    }
 }
 void dan::Engine::mouseMoved(const event::MouseMove &e) {
-    if (callbackCallable()) {
-        windowEventCallback->mouseMoved(e);
-    }
 }
 void dan::Engine::mouseClicked(const event::MouseClick &e) {
-    if (callbackCallable()) {
-        windowEventCallback->mouseClicked(e);
-    }
 }
 void dan::Engine::mouseScrolled(const event::MouseScroll &e) {
-    if (callbackCallable()) {
-        windowEventCallback->mouseScrolled(e);
-    }
 }
 void dan::Engine::charInput(const event::CharInput &e) {
-    if (callbackCallable()) {
-        windowEventCallback->charInput(e);
-    }
 }
 
 dan::Engine::keyMappings_t &dan::Engine::getKeyMappings() {
     return keyMappings;
-}
-
-void dan::Engine::setWindowEventCallback(WindowEvent *e) {
-    windowEventCallback = e;
-}
-
-void dan::Engine::setEventCallback(EventCallback *e) {
-    eventCallback = e;
 }
 
 dan::Window &dan::Engine::getWindow() {
@@ -228,6 +200,7 @@ void dan::Engine::open(const std::filesystem::path &filePath) {
     // Register all the classes and functions
     api::manifest::openAll(s);
 
+    // Register singletons
     s["engine"] = api::Engine(*this);
     s["game"] = api::Game(game);
     s["player"] = api::Player(game.getPlayer());
@@ -248,6 +221,8 @@ void dan::Engine::start(const std::filesystem::path &filePath) {
 // Static members
 
 dan::Engine &dan::Engine::fromLua(sol::state_view lua) {
+    // It's assumed that engine was not modified by client code
+    // @TODO: Perhaps obfuscate the engine ref in case the client does something?
     api::Engine &engine = lua["engine"];
     return *engine.getHandle();
 }

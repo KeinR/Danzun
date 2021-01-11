@@ -6,6 +6,12 @@ namespace dan {
 }
 
 namespace dan {
+    /**
+     * A simple circle.
+     * The methods are not worth documenting,
+     * however do note that the x/y position is indeed
+     * the center if the circle
+     * */
     class Circle {
         float x;
         float y;
@@ -26,10 +32,6 @@ namespace dan {
         float getMaxX() const;
         float getMaxY() const;
 
-        // Does nothing
-        void load();
-        // Does nothing
-        void setRotation(float radians);
         bool intersects(const Circle &c) const;
         bool intersects(const Polygon &p) const;
     };

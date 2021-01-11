@@ -40,13 +40,6 @@ float dan::Circle::getMaxY() const {
     return y + radius;
 }
 
-void dan::Circle::load() {
-    // Do nothing; there's nothing to load...
-}
-
-void dan::Circle::setRotation(float radians) {
-    // Do nothing
-}
 bool dan::Circle::intersects(const Circle &c) const {
     return std::hypot(c.getX() - getX(), c.getY() - getY()) <= c.getRadius() + getRadius();
 }

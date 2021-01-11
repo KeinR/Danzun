@@ -4,6 +4,7 @@
 #include <adishavit/argh.h>
 
 #include <cmake/config.h>
+
 #include "../core/Engine.h"
 
 static const char *const usage =
@@ -25,14 +26,18 @@ static const char *const version = "Danzun " DANZUN_VERSION "\nCopyright (C) Ori
 
 int main(int argc, char **argv) {
 
-    argh::parser cmdl(argc, argv);
+    argh::parser cmdl;
+    cmdl.add_params({
+        "-s", "--msaa"
+    });
+    cmdl.parse(argc, argv);
 
-    if (cmdl({"-v", "--version"})) {
+    if (cmdl[{"-v", "--version"}]) {
         std::cout << version;
         return 0;
     }
 
-    if (cmdl({"-h", "--help"})) {
+    if (cmdl[{"-h", "--help"}]) {
         std::cout << usage;
         return 0;
     }

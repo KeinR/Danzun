@@ -58,6 +58,9 @@ void dan::Group::doUpdate() {
 }
 
 void dan::Group::test(Group &other, output_t &output) {
+    // Very important
+    // NOTE: this could be dangerous. What if someone tries to use
+    // hotboxes but doesn't want the game to be running? Eh...
     update();
     other.update();
 

@@ -14,7 +14,6 @@ Note that, at the time of writing this, other fancy shaders like geom are not su
 It is especially important to reiterate here that Danzun uses OpenGL 3.3 - which means that [the shader version should be 3.30](https://stackoverflow.com/a/27410925/10821333).
 
 \note This is being put here because it would be superfluous to put it at the end of each method: If the shader is not currently "used" when a uniform is set (through \ref shader_setint or whatevre), \ref shader_use will be called.
-\note IN ADDITION, after the call, the null shader is set (0), so there will be no current shader.
 
 \tableofcontents
 

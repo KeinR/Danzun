@@ -5,7 +5,7 @@
 #include "../game/Game.h"
 
 dan::api::Effect::Effect(sol::this_state l, sol::function callback, sol::variadic_args args):
-    effect(std::make_shared<::dan::Effect>(l, std::vector<sol::object>(args.begin(), args.end()), callback)),
+    effect(std::make_shared<::dan::Effect>(std::vector<sol::object>(args.begin(), args.end()), callback)),
     activated(false)
 {
     activate(l);

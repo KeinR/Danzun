@@ -6,9 +6,17 @@ namespace dan {
 }
 
 namespace dan {
+    /**
+     * A simple linear equation
+     * Not worth documenting extensively
+     * */
     template<typename T>
     class LineTpl {
+        /// y = mx + b
+        // Is NAN if line is vertical
         T m;
+        /// y = mx + b
+        // Is NAN if line is vertical
         T b;
         T domainMin;
         T domainMax;
@@ -37,12 +45,19 @@ namespace dan {
         bool inDomain(T x) const;
         bool inRange(T y) const;
 
-        // Vertical line: x = domainMin / x = domainMax
+        /// Vertical line: x = domainMin & x = domainMax
         bool isVertical() const;
 
+        /**
+         * Tests if the line crosses the circle
+         * \oaran c The circle
+         * \return true if yes
+         * */
         bool intersects(const Circle &c) const;
 
-        // Result is quiet NAN if line is vertical 
+        /**
+         * y = mx + b
+         * */
         T solveForY(T x) const;
     };
 

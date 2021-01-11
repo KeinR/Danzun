@@ -2,9 +2,11 @@
 
 #include "../game/Game.h"
 #include "../core/error.h"
+#include "../core/Context.h"
+#include "../core/Engine.h"
 
-dan::Effect::Effect(sol::state_view lua, args_t args, sol::function callback):
-    args(args), callback(callback), lua(lua), renderPriority(0), detached(false) {
+dan::Effect::Effect(args_t args, sol::function callback):
+    args(args), callback(callback), renderPriority(0), detached(false) {
 }
 
 void dan::Effect::setDetached(bool value) {
@@ -22,8 +24,11 @@ void dan::Effect::spawn(sol::object obj) {
     objects.push_back(obj);
 }
 void dan::Effect::render(Context &c) {
+    sol::state_view lua = c.getEngine().getState();
+    // Package parameters into single table
     sol::table params = lua.create_table();
     for (objects_t::iterator it = objects.begin(); it < objects.end();) {
+        // If the prop "done" is set to true, then delete
         auto p = (*it)["done"];
         bool done;
         switch (p.get_type()) {
@@ -52,6 +57,7 @@ void dan::Effect::render(Context &c) {
             ++it;
         }
     }
+    // Important that we forward the user parameters first for safety
     sol::function_result result = callback.call(sol::as_args(args), params);
     if (!result.valid()) {
         sol::error e = result;

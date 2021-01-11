@@ -55,16 +55,23 @@ void dan::Polygon::load() {
     typedef points_t::size_type size;
     // Number of lines equal to that of the number of points.
     lines.clear();
+    compPoints.clear();
     lines.reserve(points.size());
+    compPoints.reserve(points.size());
 
+    // TODO: Add reflection support
     glm::mat4 model = Matrix(x, y, pivotX, pivotY, scaleX, scaleY, rotation, false).getModel(false);
 
     for (size i = 0; i < points.size(); i++) {
-        size next = (i + 1) % points.size();
-        glm::vec4 p1(points[i].x, points[i].y, 0, 1);
-        glm::vec4 p2(points[next].x, points[next].y, 0, 1);
-        p1 = model * p1;
-        p2 = model * p2;
+        glm::vec4 p(points[i].x, points[i].y, 0, 1);
+        p = model * p;
+        compPoints.emplace_back(p.x, p.y);
+    }
+
+    for (size i = 0; i < compPoints.size(); i++) {
+        size next = (i + 1) % compPoints.size();
+        Point &p1 = compPoints[i];
+        Point &p2 = compPoints[next];
         lines.emplace_back(
             p1.x, p1.y,
             p2.x, p2.y
@@ -97,12 +104,12 @@ bool dan::Polygon::hasPoint(const Point &p) const {
 }
 
 bool dan::Polygon::intersects(const Polygon &pg) const {
-    for (const Point &p : pg.points) {
+    for (const Point &p : pg.compPoints) {
         if (this->hasPoint(p)) {
             return true;
         }
     }
-    for (const Point &p : this->points) {
+    for (const Point &p : this->compPoints) {
         if (pg.hasPoint(p)) {
             return true;
         }

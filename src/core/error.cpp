@@ -80,7 +80,9 @@ const char *dan::err::alErrStr(int err) {
 }
 
 std::string dan::err::trace(sol::state_view lua) {
-    static const char *const errMsg = "[stack trace unavailable]";
+    // Be very careful not to break anything
+
+    const char *const errMsg = "[stack trace unavailable]";
     
     auto debug = lua["debug"];
     if (debug.get_type() == sol::type::nil) return errMsg;
