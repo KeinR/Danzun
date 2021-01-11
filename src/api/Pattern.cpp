@@ -14,6 +14,7 @@ dan::api::Pattern::Pattern(sol::this_state l, const std::string &pattern, sol::v
         }
     }
 
+    // The global symbol table has the lowest priority
     expression.register_symbol_table(Game::fromLua(l).getGlobalSymbols());
 
     parser_t parser;
@@ -38,7 +39,7 @@ void dan::api::Pattern::newIndex(const std::string &name, float value) {
     }
 }
 void dan::api::Pattern::newIndexBool(const std::string &name, bool value) {
-    newIndexBool(name, static_cast<float>(value));
+    newIndex(name, static_cast<float>(value));
 }
 
 bool dan::api::Pattern::isFailed() {
