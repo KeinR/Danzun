@@ -11,8 +11,6 @@
 
 #include "../api/manifest.h"
 
-#include "EventCallback.h"
-
 #include <iostream>
 
 // FPS counter
@@ -165,9 +163,6 @@ void dan::Engine::run() {
 
         start = time;
         game.logic(deltaTime);
-        if (eventCallback != nullptr) {
-            eventCallback->onFrame(*this, deltaTime);
-        }
     }
 }
 
@@ -183,8 +178,6 @@ void dan::Engine::cCall(const std::string &functionGlobalName) {
 }
 
 void dan::Engine::open(const std::filesystem::path &filePath) {
-
-    std::filesystem::path t = std::filesystem::absolute(filePath);
 
     // IMPORTANT: Set working directory to that of the init script
     // so that clients can use I/O sanely

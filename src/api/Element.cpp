@@ -20,15 +20,20 @@ void dan::api::Element::render() {
 }
 
 void dan::api::Element::setRenderPriority(sol::this_state l, int value) {
-    deactivate(l);
+    bool swp = activated;
+    if (swp) {
+        deactivate(l);
+    }
     renderPriority = value;
-    activate(l);
+    if (swp) {
+        activate(l);
+    }
 }
 void dan::api::Element::activate(sol::this_state l) {
     if (!activated) {
         activated = true;
         Game::fromLua(l).submitRenderable(renderPriority, elem);
-    {
+    }
 }
 void dan::api::Element::deactivate(sol::this_state l) {
     if (activated) {

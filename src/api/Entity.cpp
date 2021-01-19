@@ -16,7 +16,7 @@ dan::api::Entity::Entity(const handle_t &v): handle(v) {
 }
 
 dan::api::Entity::Entity(
-    sol::this_state l,
+    sol::this_state l, int priority,
     sol::function hitCallback, const Element &disp,
     const std::string &equation, sol::variadic_args vars
 ) {
@@ -43,6 +43,7 @@ dan::api::Entity::Entity(
     );
     g.addEntity(handle);
 
+    handle->setRenderPriority(priority);
     activate(l);
 }
 
@@ -67,12 +68,12 @@ void dan::api::Entity::deactivate(sol::this_state l) {
     }
 }
 void dan::api::Entity::setRenderPriority(sol::this_state l, int value) {
-    bool swap = handle->isActivated();
-    if (swap) {
+    bool swp = handle->isActivated();
+    if (swp) {
         deactivate(l);
     }
     handle->setRenderPriority(value);
-    if (swap) {
+    if (swp) {
         activate(l);
     }
 }
@@ -127,7 +128,7 @@ void dan::api::Entity::newIndexBool(const std::string &name, bool value) {
 void dan::api::Entity::open(sol::state_view &lua) {
     sol::usertype<Entity> type = lua.new_usertype<Entity>("Entity",
         sol::constructors<Entity(sol::this_state,
-            sol::function,const Element&,
+            int,sol::function,const Element&,
             const std::string&,sol::variadic_args)>()
     );
 

@@ -4,6 +4,7 @@
 
 #include "../core/Engine.h"
 #include "../core/util.h"
+#include "../core/error.h"
 
 dan::api::Engine::Engine(::dan::Engine &handle): handle(&handle) {
 }

@@ -43,7 +43,7 @@ namespace dan::api {
          * \param equation Formula representing the path of the entity
          * \param vars Variable tables to regsiter with the expression 
          * */
-        Entity(sol::this_state l,
+        Entity(sol::this_state l, int priority,
             sol::function hitCallback, const Element &disp,
             const std::string &equation, sol::variadic_args vars);
 
