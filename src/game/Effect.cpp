@@ -5,8 +5,8 @@
 #include "../core/Context.h"
 #include "../core/Engine.h"
 
-dan::Effect::Effect(args_t args, sol::function callback):
-    args(args), callback(callback), renderPriority(0), detached(false) {
+dan::Effect::Effect(int priority, args_t args, sol::function callback):
+    args(args), callback(callback), renderPriority(priority), detached(false) {
 }
 
 void dan::Effect::setDetached(bool value) {
@@ -24,6 +24,10 @@ void dan::Effect::spawn(sol::object obj) {
     objects.push_back(obj);
 }
 void dan::Effect::render(Context &c) {
+    if (objects.empty()) {
+        return;
+    }
+
     sol::state_view lua = c.getEngine().getState();
     // Package parameters into single table
     sol::table params = lua.create_table();

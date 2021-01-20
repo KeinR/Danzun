@@ -85,3 +85,11 @@ void dan::Mesh::render() const {
     glDrawElements(GL_TRIANGLES, countIndices, GL_UNSIGNED_INT, 0);
     unbind();
 }
+
+void dan::Mesh::renderInstanced(unsigned int count) const {
+    bind();
+    glDrawElementsInstanced(GL_TRIANGLES, countIndices, GL_UNSIGNED_INT, 0, count);
+    unbind();
+}
+
+

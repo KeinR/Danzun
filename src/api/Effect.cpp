@@ -4,8 +4,8 @@
 
 #include "../game/Game.h"
 
-dan::api::Effect::Effect(sol::this_state l, sol::function callback, sol::variadic_args args):
-    effect(std::make_shared<::dan::Effect>(std::vector<sol::object>(args.begin(), args.end()), callback)),
+dan::api::Effect::Effect(sol::this_state l, int priority, sol::function callback, sol::variadic_args args):
+    effect(std::make_shared<::dan::Effect>(priority, std::vector<sol::object>(args.begin(), args.end()), callback)),
     activated(false)
 {
     activate(l);
@@ -40,7 +40,7 @@ void dan::api::Effect::deactivate(sol::this_state l) {
 
 void dan::api::Effect::open(sol::state_view lua) {
     sol::usertype<Effect> type = lua.new_usertype<Effect>("Effect",
-        sol::constructors<Effect(sol::this_state,sol::function,sol::variadic_args)>()
+        sol::constructors<Effect(sol::this_state,int,sol::function,sol::variadic_args)>()
     );
 
     type["spawn"] = &Effect::spawn;

@@ -48,6 +48,8 @@ namespace dan::api {
          * */
         void load(sol::this_state l);
 
+        sol::table getData(sol::this_state);
+
         /**
          * Registers this class with the given state
          * \param lua The state

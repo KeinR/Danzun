@@ -42,6 +42,11 @@ void dan::api::Mesh::render(sol::this_state l) {
     ut::checkGLError("api::Mesh::render", l);
 }
 
+void dan::api::Mesh::renderInstanced(sol::this_state l, unsigned int count) {
+    mesh.renderInstanced(count);
+    ut::checkGLError("api::Mesh::renderInstanced", l);
+}
+
 // Static members
 
 void dan::api::Mesh::open(sol::state_view &lua) {

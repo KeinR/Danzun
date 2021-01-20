@@ -44,7 +44,7 @@ namespace dan {
         /// the render loop
         typedef std::unordered_set<Renderable*> remRenderQueue_t;
         /// The render loop (queue), sorted by priority
-        typedef std::multimap<int, renderable_t, std::greater<int>> renderQueue_t;
+        typedef std::multimap<int, renderable_t, std::less<int>> renderQueue_t;
         /// The audio speaker type
         typedef std::shared_ptr<audio::Speaker> speaker_t;
         /// A set of speakers

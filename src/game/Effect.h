@@ -33,7 +33,7 @@ namespace dan {
          * \param args The arguments to forward to the callback
          * \param callback The callback
          * */
-        Effect(args_t args, sol::function callback);
+        Effect(int priority, args_t args, sol::function callback);
 
         /**
          * Set if the lua reference has been deleted

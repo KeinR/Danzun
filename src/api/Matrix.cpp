@@ -1,5 +1,7 @@
 #include "Matrix.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include <string>
 
 #include "../core/Context.h"
@@ -26,6 +28,17 @@ void dan::api::Matrix::load2(sol::this_state l, const std::string &name) {
     ut::checkGLError("api::Matrix::load2", l);
 }
 
+sol::table dan::api::Matrix::getData(sol::this_state l) {
+    sol::state_view lua = l;
+    sol::table result = lua.create_table();
+    glm::mat4 matrix = ::dan::Matrix(x, y, pivotXOfs, pivotYOfs, width, height, rotation, flipHorizontal).getData(Context::fromLua(l));
+    auto data = glm::value_ptr(matrix);
+    for (int i = 0; i < 4*4; i++) {
+        result.add(data[i]);
+    }
+    return result;
+}
+
 void dan::api::Matrix::open(sol::state_view &lua) {
     sol::usertype<Matrix> type = lua.new_usertype<Matrix>("Matrix",
         sol::constructors<Matrix(), Matrix(sol::table)>()
@@ -40,4 +53,6 @@ void dan::api::Matrix::open(sol::state_view &lua) {
     type["rotation"] = &Matrix::rotation;
     type["flipHorizontal"] = &Matrix::flipHorizontal;
     type["load"] = sol::overload(&Matrix::load, &Matrix::load2);
+    type["getData"] = &Matrix::getData;
 }
+

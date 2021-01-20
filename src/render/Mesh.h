@@ -35,6 +35,9 @@ namespace dan {
 
         // Render the indices
         void render() const;
+
+        // Render instaced
+        void renderInstanced(unsigned int count) const;
     };
 }
 

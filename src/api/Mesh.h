@@ -53,6 +53,13 @@ namespace dan::api {
         void render(sol::this_state l);
 
         /**
+         * Renders instanced
+         * \param l The current state
+         * \param count The number of instanced to render
+         * */
+        void renderInstanced(sol::this_state l, unsigned int count);
+
+        /**
          * Register this class with the given state
          * \param lua The state
          * */

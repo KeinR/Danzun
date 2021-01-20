@@ -34,6 +34,7 @@ namespace dan {
         Matrix(float x, float y, float pivotXOfs, float pivotYOfs, float width, float height, float rotation, bool reflectAcrossYAxis);
 
         glm::mat4 getModel(bool flipY);
+        glm::mat4 getData(Context &c);
 
         void load(Context &c, const std::string &location = "model");
     };

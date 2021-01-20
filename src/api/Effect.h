@@ -9,8 +9,7 @@
 
 namespace dan::api {
     /**
-     * Represents a single type of "effect".
-     * Instances are created through \ref spawn, and all instances
+     * Represents a single type of "effect".  Instances are created through \ref spawn, and all instances
      * are given to the callback as paramters, allowing for batch effect
      * processing.
      * The effect has its home in the master game class. It is only destructed after
@@ -30,7 +29,7 @@ namespace dan::api {
          * \param callback Callback to call as part of the effect
          * \param args Arguments to forward to the callback
          * */
-        Effect(sol::this_state l, sol::function callback, sol::variadic_args args);
+        Effect(sol::this_state l, int priority, sol::function callback, sol::variadic_args args);
         /**
          * Registers the effect as "detached",
          * telling it that it can expect no new effects and that it should

@@ -47,8 +47,7 @@ glm::mat4 dan::Matrix::getModel(bool flipY) {
     return trans * rot * scale;
 }
 
-void dan::Matrix::load(Context &c, const std::string &location) {
-
+glm::mat4 dan::Matrix::getData(Context &c) {
     glm::mat4 view(1.0f);
     view = glm::translate(view, glm::vec3(-1, 1, 0));
     view = glm::scale(view, glm::vec3(1.0f / c.getVPWidth(), 1.0f / c.getVPHeight(), 0));
@@ -56,6 +55,11 @@ void dan::Matrix::load(Context &c, const std::string &location) {
     glm::mat4 model = getModel(true);
     glm::mat4 matrix = view * model;
 
+    return matrix;
+}
+
+void dan::Matrix::load(Context &c, const std::string &location) {
+    glm::mat4 matrix = getData(c);
     c.getShader().setMatrix4fv(location, glm::value_ptr(matrix));
 }
 
