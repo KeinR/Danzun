@@ -8,6 +8,7 @@
 #include "../core/error.h"
 #include "../core/debug.h"
 #include "../render/Mesh.h"
+#include "../lib/opengl.h"
 
 // static constexpr int VERTEX_SIZE = 8;
 // Knock off colors and we get...
@@ -21,7 +22,12 @@ static int readInt(std::ifstream &file) {
             (static_cast<unsigned int>(file.get()) << 24);
 }
 
-dan::BffFont::BffFont(sol::state_view lua, const std::string &path) {
+dan::BffFont::BffFont(sol::state_view lua, const std::string &path): atlas({
+        GL_CLAMP_TO_EDGE,
+        GL_CLAMP_TO_EDGE,
+        GL_NEAREST,
+        GL_NEAREST
+}) {
 
     failed = true;
 
