@@ -66,6 +66,8 @@ namespace dan::api {
          * \param The height
          * */
         void setHeight(int h);
+        void setX(int x);
+        void setY(int y);
         /** set the gcFactor
          * \param f New factor
          * */
@@ -106,6 +108,8 @@ namespace dan::api {
          * \return The game height
          * */
         int getHeight();
+        int getX();
+        int getY();
         /** 
          * \return The gc factor
          * */
@@ -123,6 +127,7 @@ namespace dan::api {
          * */
         float getSpeed();
 
+        void render(sol::this_state l);
 
         /**
          * Registers this class with the given state

@@ -129,6 +129,8 @@ namespace dan {
         */
         void genMipmap();
 
+        void reserve(int type, int width, int height);
+
         /**
         * Resets the filtering and wrapping parameters to their defaults
         * @see defaultParams

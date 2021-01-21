@@ -28,6 +28,14 @@ bool dan::api::Window::keyDown(sol::this_state l, const std::string &name) {
     }
 }
 
+int dan::api::Window::getWidth() {
+    return handle->getWidth();
+}
+
+int dan::api::Window::getHeight() {
+    return handle->getHeight();
+}
+
 // Static members
 
 void dan::api::Window::open(sol::state_view lua) {
@@ -37,5 +45,7 @@ void dan::api::Window::open(sol::state_view lua) {
     type["setSize"] = &Window::setSize;
     type["setVisible"] = &Window::setVisible;
     type["keyDown"] = &Window::keyDown;
+    type["width"] = sol::property(&Window::getWidth);
+    type["height"] = sol::property(&Window::getHeight);
 
 }

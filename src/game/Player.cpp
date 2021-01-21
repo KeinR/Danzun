@@ -42,31 +42,31 @@ void dan::Player::move(Game &g, const dir &d, float deltaTime) {
     float m = speed * deltaTime;
     // If diagonal
     if ((d.up ^ d.down) && (d.left ^ d.right)) {
-        m *= std::sqrt(2) / 2;
+        m *= std::sqrt(2.0f) / 2.0f;
     }
     float &x = pos[0];
     float &y = pos[1];
     if (d.up) {
         y -= m;
-        if (y - semiMinor < 0) {
+        if (y - semiMinor - g.getY() < 0) {
             y = semiMinor;
         }
     }
     if (d.down) {
         y += m;
-        if (y + semiMinor > g.getHeight()) {
+        if (y + semiMinor > g.getHeight() + g.getY()) {
             y = g.getHeight() - semiMinor;
         }
     }
     if (d.left) {
         x -= m;
-        if (x - semiMajor < 0) {
+        if (x - semiMajor - g.getX() < 0) {
             x = semiMajor;
         }
     }
     if (d.right) {
         x += m;
-        if (x + semiMajor > g.getWidth()) {
+        if (x + semiMajor > g.getWidth() + g.getX()) {
             x = g.getWidth() - semiMajor;
         }
     }

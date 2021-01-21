@@ -28,6 +28,8 @@ dan::Game::Game(Engine &e):
     running(false),
     width(e.getWindow().getWidth()),
     height(e.getWindow().getHeight()),
+    x(0),
+    y(0),
     gcFactor(1.5),
     gcConstant(50),
     // Clean up entities every ~5 seconds
@@ -135,6 +137,12 @@ void dan::Game::setWidth(int w) {
 void dan::Game::setHeight(int h) {
     height = h;
 }
+void dan::Game::setX(int x) {
+    this->x = x;
+}
+void dan::Game::setY(int y) {
+    this->y = y;
+}
 void dan::Game::setGCFactor(float f) {
     gcFactor = f;
 }
@@ -155,6 +163,12 @@ int dan::Game::getWidth() {
 }
 int dan::Game::getHeight() {
     return height;
+}
+int dan::Game::getX() {
+    return x;
+}
+int dan::Game::getY() {
+    return y;
 }
 float dan::Game::getGCFactor() {
     return gcFactor;

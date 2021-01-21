@@ -17,6 +17,7 @@
 #include "Element.h"
 #include "util.h"
 #include "SpeakerConf.h"
+#include "Framebuffer.h"
 
 void dan::api::manifest::openAll(sol::state_view lua) {
     ::dan::api::Engine::open(lua);
@@ -36,4 +37,6 @@ void dan::api::manifest::openAll(sol::state_view lua) {
     ::dan::api::Element::open(lua);
     ::dan::api::util::open(lua);
     ::dan::api::SpeakerConf::open(lua);
+    ::dan::api::Framebuffer::open(lua);
 }
+

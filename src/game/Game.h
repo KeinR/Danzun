@@ -67,6 +67,9 @@ namespace dan {
         /// The height of the game area
         int height;
 
+        int x;
+        int y;
+
         /// Factor applied to the autoGC radius
         /// (before the constant is added)
         float gcFactor;
@@ -215,6 +218,8 @@ namespace dan {
          * */
         void setWidth(int w);
         void setHeight(int h);
+        void setX(int x);
+        void setY(int y);
         void setGCFactor(float f);
         void setGCConstant(float c);
         void setRunning(bool v);
@@ -228,6 +233,8 @@ namespace dan {
          * */
         int getWidth();
         int getHeight();
+        int getX();
+        int getY();
         float getGCFactor();
         float getGCConstant();
         bool isRunning();

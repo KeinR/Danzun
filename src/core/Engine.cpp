@@ -119,6 +119,8 @@ void dan::Engine::run() {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
+    rc.setViewport(window.getWidth(), window.getHeight());
+
     float start = glfwGetTime();
     float deltaTime = 0;
 
@@ -132,16 +134,12 @@ void dan::Engine::run() {
 #endif
 
     while (!window.shouldClose()) {
-        rc.setViewport(window.getWidth(), window.getHeight());
-        glClearColor(0, 0.4, 0.4, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
 
         sol::function_result mr = s["main"].call();
         if (!mr.valid()) {
             sol::error serr = mr;
             err("Engine::run", s) << "Main loop failed: \"" << serr.what();
         }
-        game.render(rc);
 
         window.swapBuffers();
 

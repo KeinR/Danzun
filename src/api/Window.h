@@ -18,8 +18,7 @@ namespace dan::api {
         ::dan::Window *handle;
     public:
         /**
-         * Create with window
-         * \param handle The window
+         * Create with window \param handle The window
          * */
         Window(::dan::Window &handle);
 
@@ -45,6 +44,9 @@ namespace dan::api {
          * \param name The name of the key
          * */
         bool keyDown(sol::this_state l, const std::string &name);
+
+        int getWidth();
+        int getHeight();
 
         /**
          * Registers this class with the given state

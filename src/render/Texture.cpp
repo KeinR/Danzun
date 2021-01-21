@@ -81,6 +81,12 @@ void dan::Texture::genMipmap() {
     unbind();
 }
 
+void dan::Texture::reserve(int type, int width, int height) {
+    bind();
+    glTexImage2D(TEXTURE_TYPE, 0, type, width, height, 0, type, GL_UNSIGNED_BYTE, NULL);
+    unbind();
+}
+
 void dan::Texture::setDefaultParams() {
     setParams(defaultParams);
 }
