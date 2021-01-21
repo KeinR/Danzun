@@ -1,7 +1,5 @@
 #ifndef DANZUN_BFFFONT_H_INCLUDED
-#define DANZUN_BFFFONT_H_INCLUDED
-
-#include <array>
+#define DANZUN_BFFFONT_H_INCLUDED #include <array>
 #include <string>
 #include <vector>
 
@@ -46,9 +44,12 @@ namespace dan {
 
         void bindAtlas();
 
+        bool isValidChar(unsigned char c) const;
+
         void getRenderData(
             std::vector<float> &vertices, std::vector<unsigned int> &indices,
-            const std::string &str
+            // Yes copy
+            std::string str
         ) const;
 
         // Will make newline when encountering \n char.

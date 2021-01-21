@@ -12,7 +12,6 @@
 #include "../api/manifest.h"
 
 #include <iostream>
-
 // FPS counter
 #include <chrono>
 #include <thread>

@@ -115,6 +115,9 @@ bool dan::BffFont::isFailed() {
 }
 
 int dan::BffFont::getWidth(char_t c) const {
+    if (!isValidChar(c)) {
+        return charWidths[0];
+    }
     return charWidths[c];
 }
 int dan::BffFont::getWidth(const std::string &str) const {
@@ -157,8 +160,18 @@ void dan::BffFont::bindAtlas() {
     atlas.bind();
 }
 
-void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsigned int> &indices, const std::string &str) const {
+bool dan::BffFont::isValidChar(unsigned char c) const {
+    return c >= startChar && c <= endChar;
+}
+
+void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsigned int> &indices, std::string str) const {
     DANZUN_ASSERT(str.size() > 0);
+
+    for (char &c : str) {
+        if (!isValidChar(c)) {
+            c = startChar;
+        }
+    }
 
     vertices.reserve(vertices.size() + str.size() * 4 * 2 + str.size() * 4);
     indices.reserve(indices.size() + str.size() * 3 * 2);
@@ -166,30 +179,33 @@ void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsig
     const int vWidth = getLinesWidth(str);
     const int vHeight = getLinesHeight(str);
 
-    const float scaleX = static_cast<float>(cellWidth) / vWidth;
-    const float scaleY = static_cast<float>(cellHeight) / vHeight;
-    const std::array<float, 8> quad = {
-        -scaleX, -scaleY,
-        -scaleX, scaleY,
-        scaleX, scaleY,
-        scaleX, -scaleY
-    };
+    const float scaleY = static_cast<float>(getHeight()) / vHeight;
 
-    const float nStartX = -1.0f + (getWidth(str[0]) + 0.5f) / vWidth;
-    const float nStartY = 1.0f - (getHeight() + 0.5f) / vHeight;
+    const float nStartX = -1.0f + (0.5f) / vWidth * 2;
+    const float nStartY = 1.0f - (getHeight() + 0.5f) / vHeight * 2;
 
-    float x = nStartX;
+    float x = nStartX + getWidth(str[0]) / vWidth * 2;
     float y = nStartY;
 
     const float yStep = static_cast<float>(cellHeight) / vHeight * 2 * -1;
 
-    for (unsigned char c : str) {
+    for (std::size_t i = 0; i < str.size(); i++) {
+        unsigned char c = str[i];
         if (c == '\n') {
-            x = nStartX;
-            y += yStep;
-        } else if (c < startChar || c > endChar) {
-            c = startChar;
+            if (i+1 < str.size() && isValidChar(str[i+1])) {
+                x = nStartX + getWidth(str[i+1]) / vWidth * 2;
+                y += yStep;
+            }
         } else {
+            int cw = getWidth(c);
+            const float scaleX = static_cast<float>(cw) / vWidth;
+            const std::array<float, 8> quad = {
+                -scaleX, -scaleY,
+                -scaleX, scaleY,
+                scaleX, scaleY,
+                scaleX, -scaleY
+            };
+
             unsigned int vert = vertices.size() / VERTEX_SIZE;
             int index = c - startChar;
             float tx = index % rowSize * texX;
@@ -197,8 +213,7 @@ void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsig
             for (int i = 0; i < 4; i++) {
                 vertices.insert(vertices.end(), {
                     quad[i * 2] + x, quad[i * 2 + 1] + y,
-                    texBase[i * 2] + tx, texBase[i * 2 + 1] + ty//,
-                    // color[0], color[1], color[2], color[3]
+                    texBase[i * 2] + tx, texBase[i * 2 + 1] + ty
                 });
             }
             indices.insert(indices.end(), {
@@ -206,7 +221,7 @@ void dan::BffFont::getRenderData(std::vector<float> &vertices, std::vector<unsig
                 vert + 0, vert + 2, vert + 3
             });
 
-            x += static_cast<float>(getWidth(c)) / vWidth * 2;
+            x += static_cast<float>(cw) / vWidth * 2;
         }
     }
 }
@@ -226,7 +241,6 @@ dan::Mesh dan::BffFont::genMesh(const std::string &str) const {
     mesh.setIndices(indices.size(), indices.data());
     mesh.setParam(0, 2, VERTEX_SIZE, 0); // Position
     mesh.setParam(1, 2, VERTEX_SIZE, 2); // Texture coords
-    // mesh.setParam(2, 4, VERTEX_SIZE, 4); // Color
 
     return mesh;
 }
