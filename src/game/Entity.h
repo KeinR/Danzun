@@ -95,6 +95,9 @@ namespace dan {
         /// If this entity has been added to the render loop
         bool activated;
 
+        sol::table luaTable;
+        bool tableInit;
+
         /***
          * Initializes the expession
          * */
@@ -183,6 +186,8 @@ namespace dan {
         bool isTangible();
         sol::function getHitCallback();
         /// @{
+
+        sol::table getLuaTable(sol::state_view lua);
 
         /**
          * \return The render priority

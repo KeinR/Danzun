@@ -123,6 +123,10 @@ void dan::api::Entity::newIndexBool(const std::string &name, bool value) {
     newIndex(name, static_cast<float>(value));
 }
 
+sol::table dan::api::Entity::getTable(sol::this_state l) {
+    return handle->getLuaTable(l);
+}
+
 // Static members
 
 void dan::api::Entity::open(sol::state_view &lua) {
@@ -142,5 +146,6 @@ void dan::api::Entity::open(sol::state_view &lua) {
     type["regCircle"] = &Entity::regCircle;
     type["regPolygon"] = &Entity::regPolygon;
     type["unregHitboxes"] = &Entity::unregHitboxes;
+    type["data"] = sol::property(&Entity::getTable);
 
 }

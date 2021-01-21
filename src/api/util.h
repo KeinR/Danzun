@@ -42,6 +42,12 @@ namespace dan::api::util {
     sol::table loadAsepriteJSONArray(sol::this_state l, const std::string &path);
 
     /**
+     * Loads exports from Free Texture Packer
+     * The result will be the same as the above, however this time there is no duration
+     * */
+    sol::table loadFTPJSONArray(sol::this_state l, const std::string &path);
+
+    /**
      * Registers the namespace with the given state
      * \param lua The state
      * */

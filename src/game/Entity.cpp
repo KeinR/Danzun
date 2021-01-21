@@ -24,7 +24,8 @@ dan::Entity::Entity(
     disp(disp),
     hitCallback(hitCallback),
     renderPriority(0),
-    activated(false)
+    activated(false),
+    tableInit(false)
 {
     initEquation(g, as, equation);
 }
@@ -143,6 +144,15 @@ bool dan::Entity::isTangible() {
 
 sol::function dan::Entity::getHitCallback() {
     return hitCallback;
+}
+
+sol::table dan::Entity::getLuaTable(sol::state_view lua) {
+    // Lazy init
+    if (!tableInit) {
+        tableInit = true;
+        luaTable = lua.create_table();
+    }
+    return luaTable;
 }
 
 void dan::Entity::run(sol::state_view lua) {

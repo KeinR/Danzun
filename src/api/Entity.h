@@ -116,6 +116,8 @@ namespace dan::api {
          * */
         void newIndexBool(const std::string &name, bool value);
 
+        sol::table getTable(sol::this_state l);
+
         /**
          * Registers this class with the given state
          * \param lua The state
